@@ -5,7 +5,7 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>tpd</groupId>
-	<artifactId>crj</artifactId>
+	<artifactId>crjg</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Centralny Rozkład Jazdy (graph)</name>
@@ -31,6 +31,12 @@
 		</plugins>
 	</build>
 	
+	<properties>
+		<spring.version>5.0.3.RELEASE</spring.version>
+		<spring.data.version>5.0.3.RELEASE</spring.data.version>
+		<jackson.version>2.9.4</jackson.version>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -43,6 +49,25 @@
 			<artifactId>javax.servlet.jsp-api</artifactId>
 			<version>2.3.0</version>
 			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-neo4j</artifactId>
+			<version>${spring.data.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 </project>
