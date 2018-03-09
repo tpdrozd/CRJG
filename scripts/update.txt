@@ -1,0 +1,21 @@
+MATCH (l:Locality) 
+WHERE exists(l.endonim)
+CREATE (e:Endonim { name: l.endonim, writing: l.endonimWriting, language: l.endonimLanguage, latin: l.endonimLatin })<-[:Has]-(l);
+
+MATCH (l:Locality)
+WHERE exists(l.endonim)
+REMOVE l.endonim, l.endonimWriting, l.endonimLanguage, l.endonimLatin;
+
+MATCH (l:Locality) WHERE l.gmina="Ryki" SET l.gmina="Ryki-miasto";
+
+MATCH (l:Locality)
+WHERE size(split(l.gmina, "-")) > 2
+RETURN l.gmina, reverse(tail(reverse(split(l.gmina, "-")))) AS nazwa, last(split(l.gmina, "-")) AS typ
+LIMIT 100;
+
+MATCH (l:Locality)
+RETURN l.gmina, last(split(l.gmina, "-")) AS typ, substring(l.gmina, 0, size(l.gmina) - size(last(split(l.gmina, "-"))) - 1) AS nazwa
+LIMIT 100;
+
+MATCH (l:Locality)
+SET l.gminaType = last(split(l.gmina, "-")), l.gmina = substring(l.gmina, 0, size(l.gmina) - size(last(split(l.gmina, "-"))) - 1);
