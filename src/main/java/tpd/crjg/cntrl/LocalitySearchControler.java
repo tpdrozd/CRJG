@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tpd.crjg.domain.Locality;
+import tpd.crjg.domain.LocalitySimple;
 import tpd.crjg.service.LocalitySearchService;
 import tpd.crjg.service.ResultsPage;
 
@@ -24,9 +24,9 @@ public class LocalitySearchControler {
 	
 	@GetMapping (	path = "/name/{name}/firstPage",
 					produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultsPage<Locality> firstPage ( @PathVariable String name ) {
+	public ResultsPage<LocalitySimple> firstPage ( @PathVariable String name ) {
 		log.info("firstPage");
-		ResultsPage<Locality> page = service.firstPage(name);
+		ResultsPage<LocalitySimple> page = service.firstPage(name);
 		return page;
 	}
 	

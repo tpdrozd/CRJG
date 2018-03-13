@@ -17,10 +17,10 @@ public class Locality {
 	private String		name;
 	
 	@Property (name = "nameStatus")
-	private String		nameStatus;			//2 typy: urzêdowa, niestandaryzowana
+	private String		nameStatus;			//2 typy: urzï¿½dowa, niestandaryzowana
 	
 	@Property (name = "type")
-	private String		type;				//26 typów
+	private String		type;				//26 typï¿½w
 	
 	@Property (name = "parentName")
 	private String		parentName;
@@ -29,7 +29,7 @@ public class Locality {
 	private String		gmina;
 	
 	@Property (name = "gminaType")
-	private String		gminaType;			//5 typów
+	private String		gminaType;			//5 typï¿½w
 	
 	@Property (name = "powiat")
 	private String		powiat;
@@ -54,6 +54,9 @@ public class Locality {
 	
 	@Property (name = "additNameLanguage")
 	private String		foreignLanguage;
+	
+	@Property (name = "additNameLatin")
+	private String		foreignLatin;
 	
 	@Property (name = "endonim")
 	private String		endonim;
@@ -221,6 +224,14 @@ public class Locality {
 	
 	public void setForeignLanguage ( String foreignLanguage ) {
 		this.foreignLanguage = foreignLanguage;
+	}
+	
+	public String getForeignLatin () {
+		return foreignLatin;
+	}
+	
+	public void setForeignLatin ( String foreignLatin ) {
+		this.foreignLatin = foreignLatin;
 	}
 	
 	public String getEndonim () {

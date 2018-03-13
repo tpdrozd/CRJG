@@ -14,37 +14,38 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.annotation.SessionScope;
 
 import tpd.crjg.cntrl.LocalitySearchControler;
-import tpd.crjg.domain.Locality;
+import tpd.crjg.domain.LocalityPlain;
+import tpd.crjg.domain.LocalitySimple;
 import tpd.crjg.repo.LocalityRepo;
 
 @Service
 @SessionScope
 public class LocalitySearchService {
 	
-	private static final int		PAGE_SIZE		= 12;
+	private static final int			PAGE_SIZE		= 12;
 	
-	private static final Sort		SORT_ORDER		= Sort.by("l.name", "l.wojewodztwo", "l.powiat", "l.gmina");
+	private static final Sort			SORT_ORDER		= Sort.by("l.name", "l.wojewodztwo", "l.powiat", "l.gmina");
 	
-	private static final Pageable	FIRST_PAGE_REQ	= PageRequest.of(0, PAGE_SIZE, SORT_ORDER);
+	private static final Pageable		FIRST_PAGE_REQ	= PageRequest.of(0, PAGE_SIZE, SORT_ORDER);
 	
-	private static Logger			log				= Logger.getLogger(LocalitySearchControler.class.getName());
+	private static Logger				log				= Logger.getLogger(LocalitySearchControler.class.getName());
 	
-	private String					nameKey;
+	private String						nameKey;
 	
-	private Page<Locality>			currentPage;
+	private Page<LocalitySimple>		currentPage;
 	
-	private List<Page<Locality>>	pages			= new ArrayList<Page<Locality>>();
+	private List<Page<LocalitySimple>>	pages			= new ArrayList<Page<LocalitySimple>>();
 	
 	@Autowired
-	private LocalityRepo			repo;
+	private LocalityRepo				repo;
 	
-	public ResultsPage<Locality> firstPage ( String name ) {
+	public ResultsPage<LocalitySimple> firstPage ( String name ) {
 		log.info("first page, name: " + name);
 		if ( areCriteriaDifferent(name) ) {
 			log.info("criteria are different");
 			releasePages();
 			nameKey = name;
-			currentPage = repo.findByName(nameKey, FIRST_PAGE_REQ);
+			currentPage = repo.findSimpleByName(nameKey, FIRST_PAGE_REQ);
 			pages.add(currentPage);
 		}
 		return PageConverter.convert(currentPage);
@@ -54,7 +55,7 @@ public class LocalitySearchService {
 		return (StringUtils.hasText(name) ? !name.equalsIgnoreCase(nameKey) : StringUtils.hasText(nameKey));
 	}
 	
-	public ResultsPage<Locality> nextPage () {
+	public ResultsPage<LocalitySimple> nextPage () {
 		if ( currentPage == null )
 			return null;
 		
@@ -65,14 +66,14 @@ public class LocalitySearchService {
 		
 		else if ( currentPage.hasNext() ) {
 			Pageable nextPageReq = currentPage.nextPageable();
-			currentPage = repo.findByName(nameKey, nextPageReq);
+			currentPage = repo.findSimpleByName(nameKey, nextPageReq);
 			pages.add(currentPage);
 		}
 		
 		return PageConverter.convert(currentPage);
 	}
 	
-	public ResultsPage<Locality> prevPage () {
+	public ResultsPage<LocalitySimple> prevPage () {
 		if ( currentPage == null )
 			return null;
 		
@@ -84,7 +85,7 @@ public class LocalitySearchService {
 		return PageConverter.convert(currentPage);
 	}
 	
-	public ResultsPage<Locality> currPage () {
+	public ResultsPage<LocalitySimple> currPage () {
 		return PageConverter.convert(currentPage);
 	}
 	
