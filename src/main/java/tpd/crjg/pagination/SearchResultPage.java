@@ -1,55 +1,55 @@
-package tpd.crjg.service;
+package tpd.crjg.pagination;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class ResultsPage<E> implements Serializable {
+public class SearchResultPage<E> implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
-
-	int		pagingSize;
+	private static final long	serialVersionUID	= 1L;
+	
+	int							pagingSize;
 	
 	/** Numer tej strony, liczony od 1. */
-	int		pageIndx;
+	int							pageNumber;
 	
-	int		totalPages;
+	int							totalPages;
 	
-	long	firstItemIndx;
+	long						firstItemNumber;
 	
-	long	lastItemIndx;
+	long						lastItemNumber;
 	
-	int		itemsCount;
+	int							itemsCount;
 	
-	long	totalItems;
+	long						totalItems;
 	
-	boolean	first;
+	boolean						first;
 	
-	boolean	last;
+	boolean						last;
 	
-	boolean	hasNext;
+	boolean						hasNext;
 	
-	boolean	hasPrev;
+	boolean						hasPrev;
 	
-	List<E>	items;
+	List<E>						items;
 	
 	public int getPagingSize () {
 		return pagingSize;
 	}
 	
-	public int getPageIndx () {
-		return pageIndx;
+	public int getPageNumber () {
+		return pageNumber;
 	}
 	
 	public int getTotalPages () {
 		return totalPages;
 	}
 	
-	public long getFirstItemIndx () {
-		return firstItemIndx;
+	public long getFirstItemNumber () {
+		return firstItemNumber;
 	}
 	
-	public long getLastItemIndx () {
-		return lastItemIndx;
+	public long getLastItemNumber () {
+		return lastItemNumber;
 	}
 	
 	public int getItemsCount () {
@@ -63,11 +63,11 @@ public class ResultsPage<E> implements Serializable {
 	public boolean isFirst () {
 		return first;
 	}
-
+	
 	public boolean isLast () {
 		return last;
 	}
-
+	
 	public boolean isHasNext () {
 		return hasNext;
 	}

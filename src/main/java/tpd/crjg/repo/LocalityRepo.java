@@ -28,7 +28,7 @@ public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 						  "WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
 						  "WITH l AS l, replace(names, '/ (', '(') AS names " +
 						  "RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
-								 "l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo, names AS otherNames")
+								 "names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
 	public Page<LocalitySimple> findSimpleByName ( @Param ("name") String name, Pageable pageable );
 	
 }

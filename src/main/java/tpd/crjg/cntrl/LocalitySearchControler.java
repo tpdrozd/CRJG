@@ -5,13 +5,14 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tpd.crjg.domain.LocalitySimple;
+import tpd.crjg.pagination.SearchResultPage;
+import tpd.crjg.service.LocalitySearchCriteria;
 import tpd.crjg.service.LocalitySearchService;
-import tpd.crjg.service.ResultsPage;
 
 @RestController
 @RequestMapping ("/locality/search")
@@ -20,13 +21,13 @@ public class LocalitySearchControler {
 	private static Logger	log	= Logger.getLogger(LocalitySearchControler.class.getName());
 	
 	@Autowired
-	LocalitySearchService	service;
+	private LocalitySearchService	service;
 	
-	@GetMapping (	path = "/name/{name}/firstPage",
+	@GetMapping (	path = "/firstPage",
 					produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResultsPage<LocalitySimple> firstPage ( @PathVariable String name ) {
+	public SearchResultPage<LocalitySimple> firstPage ( @ModelAttribute ("criteria") LocalitySearchCriteria criteria ) {
 		log.info("firstPage");
-		ResultsPage<LocalitySimple> page = service.firstPage(name);
+		SearchResultPage<LocalitySimple> page = service.firstPage(criteria);
 		return page;
 	}
 	
