@@ -1,5 +1,7 @@
 package tpd.crjg.repo;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.annotation.Query;
@@ -30,5 +32,11 @@ public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 						  "RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
 								 "names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
 	public Page<LocalitySimple> findSimpleByName ( @Param ("name") String name, Pageable pageable );
+
+	@Query ("MATCH (l:Locality) WHERE id(l) = {id} RETURN l")
+	public Locality byId ( @Param ("id") Long id );
+	
+	@Query ("MATCH (l:Locality) RETURN DISTINCT l.wojewodztwo AS wojew ORDER BY wojew")
+	public List<String> extractWojewodztwa ();
 	
 }

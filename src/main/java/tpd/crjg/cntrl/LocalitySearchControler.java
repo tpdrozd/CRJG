@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tpd.crjg.domain.Locality;
 import tpd.crjg.domain.LocalitySimple;
 import tpd.crjg.pagination.SearchResultPage;
+import tpd.crjg.repo.LocalityRepo;
 import tpd.crjg.service.LocalitySearchCriteria;
 import tpd.crjg.service.LocalitySearchService;
 
@@ -18,17 +21,44 @@ import tpd.crjg.service.LocalitySearchService;
 @RequestMapping ("/locality/search")
 public class LocalitySearchControler {
 	
-	private static Logger	log	= Logger.getLogger(LocalitySearchControler.class.getName());
+	private static Logger			log	= Logger.getLogger(LocalitySearchControler.class.getName());
 	
 	@Autowired
 	private LocalitySearchService	service;
 	
-	@GetMapping (	path = "/firstPage",
-					produces = MediaType.APPLICATION_JSON_VALUE)
+	@Autowired
+	private LocalityRepo			repo;
+	
+	@GetMapping (path = "/firstPage", produces = MediaType.APPLICATION_JSON_VALUE)
 	public SearchResultPage<LocalitySimple> firstPage ( @ModelAttribute ("criteria") LocalitySearchCriteria criteria ) {
-		log.info("firstPage");
-		SearchResultPage<LocalitySimple> page = service.firstPage(criteria);
-		return page;
+		return service.firstPage(criteria);
+	}
+	
+	@GetMapping (path = "/nextPage", produces = MediaType.APPLICATION_JSON_VALUE)
+	public SearchResultPage<LocalitySimple> nextPage () {
+		return service.nextPage();
+	}
+	
+	@GetMapping (path = "/prevPage", produces = MediaType.APPLICATION_JSON_VALUE)
+	public SearchResultPage<LocalitySimple> prevPage () {
+		return service.prevPage();
+	}
+	
+	@GetMapping (path = "/currPage", produces = MediaType.APPLICATION_JSON_VALUE)
+	public SearchResultPage<LocalitySimple> currPage () {
+		return service.currPage();
+	}
+	
+	@GetMapping (path = "/releasePages")
+	public void releasePages () {
+		service.releasePages();
+	}
+	
+	@GetMapping (path = "/details/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Locality details ( @PathVariable ("id") Long id ) {
+		log.info("id: " + id);
+		service.releasePages();
+		return repo.byId(id);
 	}
 	
 }

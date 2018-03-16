@@ -10,17 +10,19 @@ import org.neo4j.ogm.annotation.Property;
 public class Locality {
 	
 	@Id
-	@Property (name = "idPrng")
 	private Long		id;
+	
+	@Property (name = "idPrng")
+	private String		idPrng;
 	
 	@Property (name = "name")
 	private String		name;
 	
 	@Property (name = "nameStatus")
-	private String		nameStatus;			//2 typy: urz�dowa, niestandaryzowana
+	private String		nameStatus;			//2 typy: urzędowa, niestandaryzowana
 	
 	@Property (name = "type")
-	private String		type;				//26 typ�w
+	private String		type;				//26 typów
 	
 	@Property (name = "parentName")
 	private String		parentName;
@@ -29,7 +31,7 @@ public class Locality {
 	private String		gmina;
 	
 	@Property (name = "gminaType")
-	private String		gminaType;			//5 typ�w
+	private String		gminaType;			//5 typów
 	
 	@Property (name = "powiat")
 	private String		powiat;
@@ -112,6 +114,14 @@ public class Locality {
 	
 	public void setId ( Long id ) {
 		this.id = id;
+	}
+	
+	public String getIdPrng () {
+		return idPrng;
+	}
+	
+	public void setIdPrng ( String idPrng ) {
+		this.idPrng = idPrng;
 	}
 	
 	public String getName () {

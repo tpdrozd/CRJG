@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="t" %>
 
@@ -6,11 +6,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Centralny Rozkład Jazdy (graph)</title>
+		<title>Centralny Rozkład Jazdy (graph) - CRJG</title>
 	</head>
 
 	<body>
 		Hello World (graph).
 		<br/>
+		<t:url value="/locality/search.mvc" var="localitySearch"/>
+		<a href="${localitySearch}">Baza miejscowości - wyszukiwanie</a>
 	</body>
 </html>

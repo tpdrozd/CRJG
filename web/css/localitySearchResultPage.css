@@ -1,0 +1,179 @@
+/* LOCALITY SEARCH LIST */
+DIV.locSearchList {
+	position: absolute;
+	top: 22px;
+	left: 6px;
+	z-index: 100;
+	border: solid 1px maroon;
+	border-radius: 3px;
+	padding: 0px;
+	background: white;
+	box-shadow: 10px 10px 15px maroon;
+}
+
+/* STATUS BAR */
+DIV.locSearchList DIV {
+	padding: 2px 10px;
+	background-color: #b33c00;
+	color: #ffc184;
+	font-style: italic;
+	font-size: small;
+	font-weight: bold;
+}
+
+DIV.locSearchList DIV TABLE {
+	table-layout: auto;
+	margin: 0px;
+	border: none;
+	border-spacing: 0px;
+	width: 100%;
+	background-color: inherit;
+	color: inherit;
+	font: inherit;
+}
+DIV.locSearchList DIV TABLE TD {
+	padding: 0px;
+	color: inherit;
+	font: inherit;
+	white-space: nowrap;
+}
+DIV.locSearchList DIV TABLE TD:LAST-CHILD {
+	text-align: right;
+}
+
+DIV.locSearchList DIV SPAN {
+	font-family: monospace;
+	font-style: normal;
+	font-size: medium;
+}
+
+/* strona */
+DIV.locSearchList DIV SPAN.page {
+	display: inline-block;
+	width: 15px;
+	color: white;
+	text-align: right;
+}
+/* button */
+DIV.locSearchList DIV BUTTON {
+	border: 1px maroon solid;
+	border-radius: 3px;
+	background-color: #ee9344;
+	color: white;
+	font-weight: normal;
+}
+DIV.locSearchList DIV BUTTON:HOVER {
+	border-color: white;
+}
+/* ilość pozycji */
+DIV.locSearchList DIV SPAN.total {
+	padding-right: 2px;
+	color: white;
+}
+
+/* LISTA */
+DIV.locSearchList UL {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+
+DIV.locSearchList UL LI {
+	border-top: 1px dotted #b33c00;
+	padding: 2px 5px 2px 10px;
+	color: #b33c00;
+	text-align: left;
+	font-style: italic;
+	font-size: small;
+	white-space: nowrap;
+}
+
+DIV.locSearchList UL LI:NTH-OF-TYPE(2n+1) {
+	background-color: #ffe6cc;
+}
+
+/* podświetlenie */
+DIV.locSearchList UL LI:FIRST-OF-TYPE, 
+DIV.locSearchList UL LI:FIRST-OF-TYPE.active {
+	border-top: none;
+}
+
+DIV.locSearchList UL LI.active {
+	border-top: 1px solid maroon;
+	background-color: #ffc184;
+}
+
+DIV.locSearchList UL LI.active + LI {
+	border-top: 1px solid maroon;
+}
+
+/* nazwa */
+DIV.locSearchList UL LI SPAN {
+	color: maroon;
+	font-weight: bold;
+	font-style: normal;
+	font-size: small;
+	font-family: sans-serif;
+}
+/* typ */
+DIV.locSearchList UL LI SPAN.typ {
+	padding-left: 10px;
+	color: #b33c00;
+	font-style: italic;
+}
+/* parent */
+DIV.locSearchList UL LI SPAN.parent {
+	padding-left: 5px;
+}
+/* nazwy inne */
+DIV.locSearchList UL LI SPAN.other {
+	float: right;
+	padding: 0px 5px;
+	color: #b33c00;
+}
+DIV.locSearchList UL LI SPAN.other:BEFORE {
+	content: none;
+	color: #b33c00;
+	font-weight: normal;
+	font-style: italic;
+}
+/* nazwa historyczna */
+DIV.locSearchList UL LI SPAN.hist {
+	float: right;
+	padding-left: 10px;
+	color: #b33c00;
+}
+DIV.locSearchList UL LI SPAN.hist:BEFORE {
+	content: 'hist.';
+	color: #b33c00;
+	font-weight: normal;
+	font-style: italic;
+}
+
+/* gmina */
+DIV.locSearchList UL LI SPAN.gm {
+	display: inline-block;
+	width: 200px;
+	padding-right: 10px;
+	font-weight: normal;
+	font-size: large;
+	font-family: monospace;
+}
+/* powiat */
+DIV.locSearchList UL LI SPAN.pow {
+	display: inline-block;
+	width: 200px;
+	padding-right: 10px;
+	font-weight: normal;
+	font-size: large;
+	font-family: monospace;
+}
+/* województwo */
+DIV.locSearchList UL LI SPAN.woj {
+	display: inline-block;
+	width: 200px;
+	padding-right: 5px;
+	font-weight: normal;
+	font-size: large;
+	font-family: monospace;
+}

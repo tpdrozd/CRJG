@@ -71,6 +71,7 @@ public abstract class PaginationSearchService<C extends SearchCriteria<C>, D> {
 	}
 	
 	public void releasePages () {
+		log.info("release pages");
 		criteria = null;
 		nextPageReq = null;
 		currentPage = null;

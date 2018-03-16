@@ -1,0 +1,168 @@
+H3 {
+	margin: 5px;
+	color: maroon;
+	text-align: center;
+	font-family: cursive;
+}
+
+DIV.container {
+	display: flex;
+	flex-direction: row;
+	margin: 0px;
+	padding: 0px;
+}
+
+DIV.leftcolumn {
+	/* display: inline-block; */
+	margin: 0px 10px 0px 5px;
+	width: 600px;
+}
+
+/* TABLE - common */
+TABLE {
+	table-layout: fixed;
+	font-family: sans-serif;
+	background-color: #ffe6cc;
+	border-radius: 5px;
+	border-spacing: 0px;
+}
+
+/* TABLE - criteria */
+TABLE.criteria {
+	table-layout: fixed;
+	width: 100%;
+	border: 1px maroon dotted;
+}
+
+TABLE.criteria TD {
+	padding: 0px 5px 5px 5px;
+	text-align: left;
+	color: maroon;
+	font-weight: normal;
+	font-size: large;
+	font-family: monospace;
+}
+
+TABLE.criteria TD:NTH-OF-TYPE(3) {
+	padding-right: 0px;
+	vertical-align: bottom;
+}
+
+TABLE.criteria TD:NTH-OF-TYPE(4) {
+	padding-left: 2px;
+}
+
+TABLE.criteria INPUT[type='search'] {
+	display: block;
+	width: 100%;
+	border: 1px maroon solid;
+	border-radius: 3px;
+	color: maroon;
+	text-align: center;
+	font-style: normal;
+	font-weight: bold;
+	font-size: medium;
+	font-family: sans-serif;
+}
+
+TABLE.criteria SELECT {
+	border: 1px maroon solid;
+	border-radius: 3px;
+	height: 22px;
+	width: 100%;
+	padding: 1px;
+	color: maroon;
+	font-style: normal;
+	font-weight: bold;
+	font-size: medium;
+	font-family: sans-serif;
+}
+
+TABLE.criteria SELECT OPTGROUP {
+	color: #ffa346;
+	font-weight: bold;
+}
+
+TABLE.criteria SELECT OPTGROUP OPTION {
+	color: maroon;
+	font-weight: bold;
+}
+
+TABLE.criteria INPUT[type='checkbox'] {
+	width: 20px;
+	height: 20px;
+}
+
+/* TABLE - deteils */
+TABLE.details {
+	margin: 10px 0px;
+	width: 100%;
+	height: auto;
+	border: 1px maroon solid;
+}
+
+TABLE.details TD {
+	padding: 1px 2px 2px 2px;
+	text-align: center;
+	vertical-align: top;
+	color: maroon;
+	font-weight: bold;
+	font-size: medium; 
+	font-family: sans-serif;
+}
+
+TABLE.details TD+TD {
+	border-left: 1px #b33c00 solid;
+}
+
+TABLE.details TR+TR TD {
+	border-top: 1px #b33c00 solid;
+}
+
+TABLE.details TD DIV:FIRST-OF-TYPE {
+	min-height: 19px;
+	text-align: left;
+	color: #b33c00;
+	font-weight: normal;
+	font-size: large; 
+	font-family: monospace;
+}
+
+TABLE.details TD DIV:NTH-OF-TYPE(2) {
+	margin-top: 2px;
+	min-height: 18px;
+	font-weight: inherit;
+	font-size: inherit;
+	font-family: inherit;
+}
+
+TABLE.details TD DIV:LAST-CHILD {
+	margin-bottom: 4px;
+}
+
+TABLE.details TD DIV SPAN {
+	color: #b33c00;
+	font-style: italic;
+}
+
+TABLE.details TD>SPAN {
+	float: right;
+	margin: 2px 0px;
+	color: #b33c00;
+	font-size: small;
+	font-style: italic;
+}
+
+/* MAPA */
+DIV.map {
+	min-width: 307px;
+	width: 600px;
+	min-height: 307px;
+	height: 600px;
+	border: 2px maroon solid;
+	border-radius: 5px;
+	background-color: #ee9344;
+	color: maroon;
+	resize: both;
+	overflow: hidden;
+}
