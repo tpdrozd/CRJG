@@ -67,21 +67,22 @@
 											<tbody>
 												<tr>
 													<td>
-														Str.: <span class="page">{{page.pageNumber}}</span> z <span>{{page.totalPages}}</span>.
+														Pozycje: <span class="number">{{page.firstItemNumber}}</span> - <span class="number">{{page.lastItemNumber}}</span>
+														z <span class="total">{{page.totalItems}}</span>
 													</td>
 													<td>
-														<button title="Skrót klawiszowy - [PageUp]" ng-click="prevPage()">Poprzednia strona <b>&lt;&lt;</b></button>
-														<button title="Skrót klawiszowy - [PageDown]" ng-click="nextPage()"><b>&gt;&gt;</b> Następna strona</button>
+														Strona: <span class="page">{{page.pageNumber}}</span> z <span class="total">{{page.totalPages}}</span>
 													</td>
 													<td>
-														Znaleziono <span class="total">{{page.totalItems}}</span> pozycji.
+														<button title="Poprzednia strona - [PageUp]" ng-click="prevPage()">Poprzednia <b>&lt;&lt;</b></button>
+														<button title="Następna strona - [PageDown]" ng-click="nextPage()"><b>&gt;&gt;</b> Następna</button>
 													</td>
 												</tr>
 											</tbody>
 										</table>
 									</div>
 									<ul>
-										<li ng-repeat="item in page.items">
+										<li ng-repeat="item in page.items" ng-class="item.ngClass">
 											<span>{{item.name}}</span>
 											<span class="typ" title="Typ miejscowości">{{item.type}}</span>
 											<span class="parent" title="Miejscowość nadrzędna" ng-show="item.parentName.length > 0">{{item.parentName}}</span>

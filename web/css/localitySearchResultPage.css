@@ -37,6 +37,9 @@ DIV.locSearchList DIV TABLE TD {
 	font: inherit;
 	white-space: nowrap;
 }
+DIV.locSearchList DIV TABLE TD:NTH-CHILD(2) {
+	text-align: right;
+}
 DIV.locSearchList DIV TABLE TD:LAST-CHILD {
 	text-align: right;
 }
@@ -47,6 +50,18 @@ DIV.locSearchList DIV SPAN {
 	font-size: medium;
 }
 
+/* numery pozycji */
+DIV.locSearchList DIV SPAN.number {
+	display: inline-block;
+	width: 20px;
+	color: white;
+	text-align: right;
+}
+/* ilość pozycji, stron */
+DIV.locSearchList DIV SPAN.total {
+	padding-right: 2px;
+	color: white;
+}
 /* strona */
 DIV.locSearchList DIV SPAN.page {
 	display: inline-block;
@@ -64,11 +79,6 @@ DIV.locSearchList DIV BUTTON {
 }
 DIV.locSearchList DIV BUTTON:HOVER {
 	border-color: white;
-}
-/* ilość pozycji */
-DIV.locSearchList DIV SPAN.total {
-	padding-right: 2px;
-	color: white;
 }
 
 /* LISTA */
@@ -94,16 +104,16 @@ DIV.locSearchList UL LI:NTH-OF-TYPE(2n+1) {
 
 /* podświetlenie */
 DIV.locSearchList UL LI:FIRST-OF-TYPE, 
-DIV.locSearchList UL LI:FIRST-OF-TYPE.active {
+DIV.locSearchList UL LI:FIRST-OF-TYPE.selected {
 	border-top: none;
 }
 
-DIV.locSearchList UL LI.active {
+DIV.locSearchList UL LI.selected {
 	border-top: 1px solid maroon;
 	background-color: #ffc184;
 }
 
-DIV.locSearchList UL LI.active + LI {
+DIV.locSearchList UL LI.selected + LI {
 	border-top: 1px solid maroon;
 }
 
@@ -124,18 +134,13 @@ DIV.locSearchList UL LI SPAN.typ {
 /* parent */
 DIV.locSearchList UL LI SPAN.parent {
 	padding-left: 5px;
+	font-style: italic;
 }
 /* nazwy inne */
 DIV.locSearchList UL LI SPAN.other {
 	float: right;
 	padding: 0px 5px;
 	color: #b33c00;
-}
-DIV.locSearchList UL LI SPAN.other:BEFORE {
-	content: none;
-	color: #b33c00;
-	font-weight: normal;
-	font-style: italic;
 }
 /* nazwa historyczna */
 DIV.locSearchList UL LI SPAN.hist {
