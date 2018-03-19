@@ -145,14 +145,27 @@
 						
 						<tr> 
 							<td colspan="6">
-								<div>Nazwa oboczna:</div>
-								<div>{{locality.otherName}}</div>
-								<span>{{locality.otherNameNote}}</span>
-							</td>
-							<td colspan="6">
 								<div>Nazwa historyczna:</div>
 								<div>{{locality.historicalName}}</div>
 								<span>{{locality.historicalNameNote}}</span>
+							</td>
+							<td colspan="6">
+								<div>Nazwa oboczna:</div>
+								<div>{{locality.collateralName}}</div>
+								<span>{{locality.collateralNameNote}}</span>
+							</td>
+						</tr>
+						
+						<tr> 
+							<td colspan="6">
+								<div>Nazwa obca:</div>
+								<div>{{locality.foreignName}}</div>
+								<span>{{locality.foreignLatin}}</span>
+							</td>
+							<td colspan="6">
+								<div>Język:</div>
+								<div>{{locality.foreignLanguage}}</div>
+								<span>{{locality.foreignLanguageCode}}</span>
 							</td>
 						</tr>
 						
@@ -164,36 +177,47 @@
 										{{locality.role}}
 										<br/>
 									</span>
-									<span>{{locality.note}}</span>
+									<span>{{locality.mainNote}}</span>
 								</div>
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="6">
-								<div>ID:</div>
-								<div>{{locality.idAsStr}}</div>
+								<div>Dług. geogr.:</div>
+								<div>{{locality.longitude}}</div>
+								<span></span>
 							</td>
 							<td colspan="6">
-								<div>Dług. geogr.:</div>
-								<div></div>
-								<span>{{locality.geoLocation[0]}}</span>
+								<div>Szer. geogr.:</div>
+								<div>{{locality.latitude}}</div>
+								<span></span>
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="3">
-								<div>PRNG ID:</div>
-								<div>{{locality.prngId}}</div>
+								<div>ID:</div>
+								<div>{{locality.id}}</div>
 							</td>
 							<td colspan="3">
-								<div>TERYT:</div>
-								<div ng-show="locality.teryt > 0">{{locality.teryt}}</div>
+								<div>ID PRNG:</div>
+								<div>{{locality.idPrng}}</div>
 							</td>
-							<td colspan="6">
-								<div>Szer. geogr.:</div>
-								<div></div>
-								<span>{{locality.geoLocation[1]}}</span>
+							<td colspan="3">
+								<div>ID TERYT:</div>
+								<div>{{locality.idTeryt}}</div>
+							</td>
+							<td colspan="3">
+								<div>ID JPTK:</div>
+								<div>{{locality.idJptk}}</div>
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="12">
+								<div>ID IIP:</div>
+								<div>{{locality.idIip}}</div>
 							</td>
 						</tr>
 					</tbody>

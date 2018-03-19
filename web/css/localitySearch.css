@@ -43,13 +43,12 @@ TABLE.criteria TD {
 	font-family: monospace;
 }
 
-TABLE.criteria TD:NTH-OF-TYPE(3) {
-	padding-right: 0px;
-	vertical-align: bottom;
+TABLE.criteria FIELDSET {
+	border: 1px dashed maroon;
 }
 
-TABLE.criteria TD:NTH-OF-TYPE(4) {
-	padding-left: 2px;
+TABLE.criteria FIELDSET TD {
+	padding: 1px 3px;
 }
 
 TABLE.criteria INPUT[type='search'] {

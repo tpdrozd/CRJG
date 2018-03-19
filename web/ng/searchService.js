@@ -11,9 +11,8 @@ angular.module('searchService', [])
 
 function searchSrv($http, firstPage, nextPage, prevPage, currPage, release, details) {
 	return {
-		firstPage: function(name) {
-			var url = firstPage + '?name=' + name;
-			return $http.get(url);
+		firstPage: function(criteria) {
+			return $http.post(firstPage, criteria);
 		},
 		nextPage: function() {
 			return $http.get(nextPage);
@@ -28,8 +27,7 @@ function searchSrv($http, firstPage, nextPage, prevPage, currPage, release, deta
 			return $http.get(release);
 		},
 		details: function(id) {
-			var url = details + '?id=' + id;
-			return $http.get(url);
+			return $http.post(details, id);
 		}
 	}
 }

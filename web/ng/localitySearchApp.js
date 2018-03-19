@@ -22,7 +22,7 @@ function localitySearchCtrl($scope, searchSrv) {
 
 	$scope.change = function() {
 		if ($scope.criteria.name.length >= 3) {
-			searchSrv.firstPage($scope.criteria.name).then(
+			searchSrv.firstPage($scope.criteria).then(
 				function success(response) {
 					$scope.page = response.data;
 					index = -1;
@@ -91,8 +91,15 @@ function localitySearchCtrl($scope, searchSrv) {
 			
 			// enter
 			else if ($event.keyCode == 13) {
-				$scope.locality = $scope.page.items[index];
-				reset();
+				var id = $scope.page.items[index].id;
+				searchSrv.details(id).then(
+					function success(response) {
+						$scope.locality = response.data;
+						$scope.page = null;
+						index = -1;
+						$scope.showList = false;
+						$scope.showBar = false;
+					});
 				event.preventDefault();
 			}
 			

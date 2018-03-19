@@ -5,8 +5,8 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +29,9 @@ public class LocalitySearchControler {
 	@Autowired
 	private LocalityRepo			repo;
 	
-	@GetMapping (path = "/firstPage", produces = MediaType.APPLICATION_JSON_VALUE)
-	public SearchResultPage<LocalitySimple> firstPage ( @ModelAttribute ("criteria") LocalitySearchCriteria criteria ) {
+	@PostMapping (path = "/firstPage", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public SearchResultPage<LocalitySimple> firstPageP ( @RequestBody LocalitySearchCriteria criteria ) {
+		log.info("POST body: " + criteria.toString());
 		return service.firstPage(criteria);
 	}
 	
@@ -54,8 +55,8 @@ public class LocalitySearchControler {
 		service.releasePages();
 	}
 	
-	@GetMapping (path = "/details/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Locality details ( @PathVariable ("id") Long id ) {
+	@PostMapping (path = "/details", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Locality details ( @RequestBody Long id ) {
 		log.info("id: " + id);
 		service.releasePages();
 		return repo.byId(id);
