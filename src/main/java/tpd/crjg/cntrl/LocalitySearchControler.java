@@ -31,7 +31,7 @@ public class LocalitySearchControler {
 	private LocalityRepo			repo;
 	
 	@PostMapping (path = "/firstPage", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public SearchResultPage<LocalitySimple> firstPageP ( @RequestBody LocalitySearchCriteria criteria ) {
+	public SearchResultPage<LocalitySimple> firstPage ( @RequestBody LocalitySearchCriteria criteria ) {
 		log.info("POST body: " + criteria.toString());
 		return service.firstPage(criteria);
 	}

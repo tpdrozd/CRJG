@@ -23,7 +23,8 @@ public class LocalitySearchService extends PaginationSearchService<LocalitySearc
 	
 	@Override
 	protected Page<LocalitySimple> retrivePage ( LocalitySearchCriteria criteria, Pageable pageable ) {
-		return repo.findSimpleByName(criteria.getName(), pageable);
+		
+		return repo.findSimpleByCriteria(criteria.getName(), criteria.isHist(), criteria.isCollat(), criteria.isForeign(), criteria.getWojew(), pageable);
 	}
 	
 }

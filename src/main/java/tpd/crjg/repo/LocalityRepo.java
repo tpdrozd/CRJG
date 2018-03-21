@@ -30,9 +30,42 @@ public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 						  "WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
 						  "WITH l AS l, replace(names, '/ (', '(') AS names " +
 						  "RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
-								 "names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
+								"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
 	public Page<LocalitySimple> findSimpleByName ( @Param ("name") String name, Pageable pageable );
 
+	@Query (countQuery	= "MATCH (l:Locality) WHERE toLower(l.name) STARTS WITH toLower({name}) AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) RETURN count(l)",
+			value		= "MATCH (l:Locality) WHERE toLower(l.name) STARTS WITH toLower({name}) AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
+						  "WITH l AS l, [l.historicalName, l.otherName, l.additName, '('+l.additNameLatin+')', l.endonim] AS names " +
+						  "WITH l AS l, filter(n IN names WHERE n IS NOT NULL) AS names " +
+						  "WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
+						  "WITH l AS l, replace(names, '/ (', '(') AS names " +
+						  "RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
+								"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
+	public Page<LocalitySimple> findSimpleByNameAndWojew ( @Param ("name") String name, @Param("wojew") String wojew, Pageable pageable );
+
+	@Query (countQuery	= 
+				"MATCH (l:Locality) " +
+				"WHERE (toLower(l.name) STARTS WITH toLower({name}) " +
+						"OR ({hist} = false AND toLower(l.historicalName) STARTS WITH toLower({name})) " +
+						"OR ({collat} = false AND toLower(l.otherName) STARTS WITH toLower({name})) " +
+						"OR ({foreign} = false AND (toLower(l.additName) STARTS WITH toLower({name}) OR toLower(l.additNameLatin) STARTS WITH toLower({name})))) " +
+					"AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
+				"RETURN count(l)",
+			value		= 
+				"MATCH (l:Locality) " +
+				"WHERE (toLower(l.name) STARTS WITH toLower({name}) " +
+						"OR ({hist} = false AND toLower(l.historicalName) STARTS WITH toLower({name})) " +
+						"OR ({collat} = false AND toLower(l.otherName) STARTS WITH toLower({name})) " +
+						"OR ({foreign} = false AND (toLower(l.additName) STARTS WITH toLower({name}) OR toLower(l.additNameLatin) STARTS WITH toLower({name})))) " +
+					"AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
+				"WITH l AS l, [l.historicalName, l.otherName, l.additName, '('+l.additNameLatin+')', l.endonim] AS names " +
+				"WITH l AS l, filter(n IN names WHERE n IS NOT NULL) AS names " +
+				"WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
+				"WITH l AS l, replace(names, '/ (', '(') AS names " +
+				"RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
+					"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
+	public Page<LocalitySimple> findSimpleByCriteria ( @Param ("name") String name, @Param("hist") boolean hist, @Param("collat") boolean collat, @Param("foreign") boolean foreign, @Param("wojew") String wojew, Pageable pageable );
+	
 	@Query ("MATCH (l:Locality) WHERE id(l) = {id} RETURN l")
 	public Locality byId ( @Param ("id") Long id );
 	
