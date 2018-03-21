@@ -186,12 +186,12 @@
 							<td colspan="6">
 								<div>Dług. geogr.:</div>
 								<div>{{locality.longitude}}</div>
-								<span></span>
+								<span>{{locality.lon}}</span>
 							</td>
 							<td colspan="6">
 								<div>Szer. geogr.:</div>
 								<div>{{locality.latitude}}</div>
-								<span></span>
+								<span>{{locality.lat}}</span>
 							</td>
 						</tr>
 						

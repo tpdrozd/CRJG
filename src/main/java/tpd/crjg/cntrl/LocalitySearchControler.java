@@ -1,9 +1,10 @@
 package tpd.crjg.cntrl;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,23 +30,23 @@ public class LocalitySearchControler {
 	@Autowired
 	private LocalityRepo			repo;
 	
-	@PostMapping (path = "/firstPage", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping (path = "/firstPage", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public SearchResultPage<LocalitySimple> firstPageP ( @RequestBody LocalitySearchCriteria criteria ) {
 		log.info("POST body: " + criteria.toString());
 		return service.firstPage(criteria);
 	}
 	
-	@GetMapping (path = "/nextPage", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping (path = "/nextPage", produces = APPLICATION_JSON_VALUE)
 	public SearchResultPage<LocalitySimple> nextPage () {
 		return service.nextPage();
 	}
 	
-	@GetMapping (path = "/prevPage", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping (path = "/prevPage", produces = APPLICATION_JSON_VALUE)
 	public SearchResultPage<LocalitySimple> prevPage () {
 		return service.prevPage();
 	}
 	
-	@GetMapping (path = "/currPage", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping (path = "/currPage", produces = APPLICATION_JSON_VALUE)
 	public SearchResultPage<LocalitySimple> currPage () {
 		return service.currPage();
 	}
@@ -55,7 +56,7 @@ public class LocalitySearchControler {
 		service.releasePages();
 	}
 	
-	@PostMapping (path = "/details", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping (path = "/details", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public Locality details ( @RequestBody Long id ) {
 		log.info("id: " + id);
 		service.releasePages();

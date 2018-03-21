@@ -87,11 +87,17 @@ public class Locality {
 	@Property (name = "idJptk")
 	private String		idJptk;
 	
+	@Property (name = "longitude")
+	private String		longitude;
+	
+	@Property (name = "lon")
+	private Double		lon;
+	
 	@Property (name = "latitude")
 	private String		latitude;
 	
-	@Property (name = "longitude")
-	private String		longitude;
+	@Property (name = "lat")
+	private Double		lat;
 	
 	@Property (name = "introduceDate")
 	private LocalDate	introduceDate;
@@ -316,14 +322,6 @@ public class Locality {
 		this.idJptk = idJptk;
 	}
 	
-	public String getLatitude () {
-		return latitude;
-	}
-	
-	public void setLatitude ( String latitude ) {
-		this.latitude = latitude;
-	}
-	
 	public String getLongitude () {
 		return longitude;
 	}
@@ -332,6 +330,30 @@ public class Locality {
 		this.longitude = longitude;
 	}
 	
+	public Double getLon () {
+		return lon;
+	}
+	
+	public void setLon ( Double lon ) {
+		this.lon = lon;
+	}
+	
+	public String getLatitude () {
+		return latitude;
+	}
+	
+	public void setLatitude ( String latitude ) {
+		this.latitude = latitude;
+	}
+
+	public Double getLat () {
+		return lat;
+	}
+
+	public void setLat ( Double lat ) {
+		this.lat = lat;
+	}
+
 	public LocalDate getIntroduceDate () {
 		return introduceDate;
 	}

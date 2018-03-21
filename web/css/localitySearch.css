@@ -45,6 +45,7 @@ TABLE.criteria TD {
 
 TABLE.criteria FIELDSET {
 	border: 1px dashed maroon;
+	border-radius: 5px;
 }
 
 TABLE.criteria FIELDSET TD {

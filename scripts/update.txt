@@ -19,3 +19,20 @@ LIMIT 100;
 
 MATCH (l:Locality)
 SET l.gminaType = last(split(l.gmina, "-")), l.gmina = substring(l.gmina, 0, size(l.gmina) - size(last(split(l.gmina, "-"))) - 1);
+
+# uzupełnienie długosci i szerokości geograficznej o określenie: wschodnia (E), północna (N).
+MATCH (l:Locality)
+SET l.longitude = l.longitude + "E", l.latitude = l.latitude + "N";
+
+# obliczenie wartości liczbowych długosci i szerokości geograficznej
+MATCH (l:Locality)
+WITH substring(l.longitude, 0, 2) AS d, substring(l.longitude, 3, 2) AS dm, substring(l.longitude, 6, 2) AS ds, l AS l
+WITH substring(l.latitude, 0, 2) AS s, substring(l.latitude, 3, 2) AS sm, substring(l.latitude, 6, 2) AS ss, d AS d, dm AS dm, ds AS ds, l AS l
+WITH toFloat(d) AS D, toFloat(dm) AS DM, toFloat(ds) AS DS, toFloat(s) AS S, toFloat(sm) AS SM, toFloat(ss) AS SS, l AS l
+SET l.lat = S + SM/60 + SS/3600, l.lon = D + DM/60 + DS/3600;
+
+MATCH (l:Locality)
+WITH substring(l.longitude, 0, 2) AS d, substring(l.longitude, 3, 2) AS dm, substring(l.longitude, 6, 2) AS ds, l AS l
+WITH substring(l.latitude, 0, 2) AS s, substring(l.latitude, 3, 2) AS sm, substring(l.latitude, 6, 2) AS ss, d AS d, dm AS dm, ds AS ds, l AS l
+WITH toFloat(d) AS D, toFloat(dm) AS DM, toFloat(ds) AS DS, toFloat(s) AS S, toFloat(sm) AS SM, toFloat(ss) AS SS, l AS l
+RETURN l.longitude, D + DM/60 + DS/3600 AS lon, l.latitude, S + SM/60 + SS/3600 AS lat LIMIT 20;
