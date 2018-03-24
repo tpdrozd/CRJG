@@ -22,6 +22,10 @@ public class Locality {
 	@Property (name = "name")
 	private String		name;
 	
+	@Index
+	@Property (name = "_name")
+	private String		_name;
+	
 	@Property (name = "nameStatus")
 	private String		nameStatus;			//2 typy: urzędowa, niestandaryzowana
 	
@@ -52,12 +56,24 @@ public class Locality {
 	private String		historicalName;
 	
 	@Index
+	@Property (name = "_historicalName")
+	private String		_historicalName;
+	
+	@Index
 	@Property (name = "collateralName")
 	private String		collateralName;
 	
 	@Index
+	@Property (name = "_collateralName")
+	private String		_collateralName;
+	
+	@Index
 	@Property (name = "foreignName")
 	private String		foreignName;
+	
+	@Index
+	@Property (name = "_foreignName")
+	private String		_foreignName;
 	
 	@Property (name = "foreignLanguageCode")
 	private String		foreignLanguageCode;
@@ -68,6 +84,10 @@ public class Locality {
 	@Index
 	@Property (name = "foreignLatin")
 	private String		foreignLatin;
+	
+	@Index
+	@Property (name = "_foreignLatin")
+	private String		_foreignLatin;
 	
 	@Property (name = "mainNote")
 	private String		mainNote;

@@ -26,8 +26,6 @@ public class LocalityPlain {
 	
 	String	foreignLatin;
 	
-	String	endonim;
-	
 	String	gmina;
 	
 	String	powiat;
@@ -68,10 +66,6 @@ public class LocalityPlain {
 	
 	public String getForeignLatin () {
 		return foreignLatin;
-	}
-	
-	public String getEndonim () {
-		return endonim;
 	}
 	
 	public String getGmina () {

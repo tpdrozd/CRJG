@@ -53,3 +53,20 @@ SET l.foreignName = l.endonim, l.foreignLanguageCode = l.endonimWriting, l.forei
 
 MATCH (l:Locality) WHERE exists(l.endonim)
 REMOVE l.endonim, l.endonimWriting, l.endonimLanguage;
+
+
+# Dodanie pól do przechowywania nazw pisanych małą literą, do wyszukiwań typu 'ignore case'
+MATCH (l:Locality)
+SET l._name = toLower(l.name);
+
+MATCH (l:Locality) WHERE exists(l.historicalName)
+SET l._historicalName = toLower(l.historicalName);
+
+MATCH (l:Locality) WHERE exists(l.collateralName)
+SET l._collateralName = toLower(l.collateralName);
+
+MATCH (l:Locality) WHERE exists(l.foreignName)
+SET l._foreignName = toLower(l.foreignName);
+
+MATCH (l:Locality) WHERE exists(l.foreignLatin)
+SET l._foreignLatin = toLower(l.foreignLatin);

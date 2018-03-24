@@ -16,15 +16,15 @@ import tpd.crjg.domain.LocalitySimple;
 @Repository
 public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 	
-	@Query (countQuery	= "MATCH (l:Locality) WHERE toLower(l.name) STARTS WITH toLower({name}) RETURN count(l)",
-			value		= "MATCH (l:Locality) WHERE toLower(l.name) STARTS WITH toLower({name}) RETURN " +
+	@Query (countQuery	= "MATCH (l:Locality) WHERE l._name STARTS WITH toLower({name}) RETURN count(l)",
+			value		= "MATCH (l:Locality) WHERE l._name STARTS WITH toLower({name}) RETURN " +
 							"id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
 							"l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo, l.historicalName AS historicalName, " +
 							"l.collateralName AS collateralName, l.foreignName AS foreignName, l.foreignLatin AS foreignLatin")
 	public Page<LocalityPlain> findPlainByName ( @Param ("name") String name, Pageable pageable );
 	
-	@Query (countQuery	= "MATCH (l:Locality) WHERE toLower(l.name) STARTS WITH toLower({name}) RETURN count(l)",
-			value		= "MATCH (l:Locality) WHERE toLower(l.name) STARTS WITH toLower({name}) " +
+	@Query (countQuery	= "MATCH (l:Locality) WHERE l._name STARTS WITH toLower({name}) RETURN count(l)",
+			value		= "MATCH (l:Locality) WHERE l._name STARTS WITH toLower({name}) " +
 						  "WITH l AS l, [l.historicalName, l.collateralName, l.foreignName, '('+l.foreignLatin+')'] AS names " +
 						  "WITH l AS l, filter(n IN names WHERE n IS NOT NULL) AS names " +
 						  "WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
@@ -33,8 +33,8 @@ public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 								"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
 	public Page<LocalitySimple> findSimpleByName ( @Param ("name") String name, Pageable pageable );
 
-	@Query (countQuery	= "MATCH (l:Locality) WHERE toLower(l.name) STARTS WITH toLower({name}) AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) RETURN count(l)",
-			value		= "MATCH (l:Locality) WHERE toLower(l.name) STARTS WITH toLower({name}) AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
+	@Query (countQuery	= "MATCH (l:Locality) WHERE l._name STARTS WITH toLower({name}) AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) RETURN count(l)",
+			value		= "MATCH (l:Locality) WHERE l._name STARTS WITH toLower({name}) AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
 						  "WITH l AS l, [l.historicalName, l.collateralName, l.foreignName, '('+l.foreignLatin+')'] AS names " +
 						  "WITH l AS l, filter(n IN names WHERE n IS NOT NULL) AS names " +
 						  "WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
@@ -45,18 +45,18 @@ public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 
 	@Query (countQuery	= 
 				"MATCH (l:Locality) " +
-				"WHERE (toLower(l.name) STARTS WITH toLower({name}) " +
-						"OR ({hist} = false AND toLower(l.historicalName) STARTS WITH toLower({name})) " +
-						"OR ({collat} = false AND toLower(l.collateralName) STARTS WITH toLower({name})) " +
-						"OR ({foreign} = false AND (toLower(l.foreignName) STARTS WITH toLower({name}) OR toLower(l.foreignLatin) STARTS WITH toLower({name})))) " +
+				"WHERE (l._name STARTS WITH toLower({name}) " +
+						"OR ({hist} = false AND l._historicalName STARTS WITH toLower({name})) " +
+						"OR ({collat} = false AND l._collateralName STARTS WITH toLower({name})) " +
+						"OR ({foreign} = false AND (l._foreignName STARTS WITH toLower({name}) OR l._foreignLatin STARTS WITH toLower({name})))) " +
 					"AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
 				"RETURN count(l)",
 			value		= 
 				"MATCH (l:Locality) " +
-				"WHERE (toLower(l.name) STARTS WITH toLower({name}) " +
-						"OR ({hist} = false AND toLower(l.historicalName) STARTS WITH toLower({name})) " +
-						"OR ({collat} = false AND toLower(l.collateralName) STARTS WITH toLower({name})) " +
-						"OR ({foreign} = false AND (toLower(l.foreignName) STARTS WITH toLower({name}) OR toLower(l.foreignLatin) STARTS WITH toLower({name})))) " +
+				"WHERE (l._name STARTS WITH toLower({name}) " +
+						"OR ({hist} = false AND l._historicalName STARTS WITH toLower({name})) " +
+						"OR ({collat} = false AND l._collateralName STARTS WITH toLower({name})) " +
+						"OR ({foreign} = false AND (l._foreignName STARTS WITH toLower({name}) OR l._foreignLatin STARTS WITH toLower({name})))) " +
 					"AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
 				"WITH l AS l, [l.historicalName, l.collateralName, l.foreignName, '('+l.foreignLatin+')'] AS names " +
 				"WITH l AS l, filter(n IN names WHERE n IS NOT NULL) AS names " +
