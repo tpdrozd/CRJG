@@ -2,11 +2,14 @@ package tpd.crjg.domain;
 
 import java.time.LocalDate;
 
+import org.neo4j.ogm.annotation.CompositeIndex;
 import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
 @NodeEntity (label = "Locality")
+@CompositeIndex ({"name", "wojewodztwo"})
 public class Locality {
 	
 	@Id
@@ -15,6 +18,7 @@ public class Locality {
 	@Property (name = "idPrng")
 	private String		idPrng;
 	
+	@Index
 	@Property (name = "name")
 	private String		name;
 	
@@ -36,47 +40,43 @@ public class Locality {
 	@Property (name = "powiat")
 	private String		powiat;
 	
+	@Index
 	@Property (name = "wojewodztwo")
 	private String		wojewodztwo;
 	
 	@Property (name = "role")
 	private String		role;
 	
+	@Index
 	@Property (name = "historicalName")
 	private String		historicalName;
 	
-	@Property (name = "otherName")
+	@Index
+	@Property (name = "collateralName")
 	private String		collateralName;
 	
-	@Property (name = "additName")
+	@Index
+	@Property (name = "foreignName")
 	private String		foreignName;
 	
-	@Property (name = "additNameLanguageCode")
+	@Property (name = "foreignLanguageCode")
 	private String		foreignLanguageCode;
 	
-	@Property (name = "additNameLanguage")
+	@Property (name = "foreignLanguage")
 	private String		foreignLanguage;
 	
-	@Property (name = "additNameLatin")
+	@Index
+	@Property (name = "foreignLatin")
 	private String		foreignLatin;
 	
-	@Property (name = "endonim")
-	private String		endonim;
-	
-	@Property (name = "endonimWriting")
-	private String		endonimWriting;
-	
-	@Property (name = "endonimLanguage")
-	private String		endonimLanguage;
-	
-	@Property (name = "note")
+	@Property (name = "mainNote")
 	private String		mainNote;
 	
-	@Property (name = "historicalNameNote")
-	private String		historicalNameNote;
+	@Property (name = "historicalNote")
+	private String		historicalNote;
 	
-	@Property (name = "otherNameNote")
-	private String		collateralNameNote;
+	@Property (name = "collateralNote")
+	private String		collateralNote;
 	
 	@Property (name = "idTeryt")
 	private String		idTeryt;
@@ -250,30 +250,6 @@ public class Locality {
 		this.foreignLatin = foreignLatin;
 	}
 	
-	public String getEndonim () {
-		return endonim;
-	}
-	
-	public void setEndonim ( String endonim ) {
-		this.endonim = endonim;
-	}
-	
-	public String getEndonimWriting () {
-		return endonimWriting;
-	}
-	
-	public void setEndonimWriting ( String endonimWriting ) {
-		this.endonimWriting = endonimWriting;
-	}
-	
-	public String getEndonimLanguage () {
-		return endonimLanguage;
-	}
-	
-	public void setEndonimLanguage ( String endonimLanguage ) {
-		this.endonimLanguage = endonimLanguage;
-	}
-	
 	public String getMainNote () {
 		return mainNote;
 	}
@@ -282,20 +258,20 @@ public class Locality {
 		this.mainNote = mainNote;
 	}
 	
-	public String getHistoricalNameNote () {
-		return historicalNameNote;
+	public String getHistoricalNote () {
+		return historicalNote;
 	}
 	
-	public void setHistoricalNameNote ( String historicalNameNote ) {
-		this.historicalNameNote = historicalNameNote;
+	public void setHistoricalNote ( String historicalNote ) {
+		this.historicalNote = historicalNote;
 	}
 	
-	public String getCollateralNameNote () {
-		return collateralNameNote;
+	public String getCollateralNote () {
+		return collateralNote;
 	}
 	
-	public void setCollateralNameNote ( String collateralNameNote ) {
-		this.collateralNameNote = collateralNameNote;
+	public void setCollateralNote ( String collateralNote ) {
+		this.collateralNote = collateralNote;
 	}
 	
 	public String getIdTeryt () {
@@ -345,15 +321,15 @@ public class Locality {
 	public void setLatitude ( String latitude ) {
 		this.latitude = latitude;
 	}
-
+	
 	public Double getLat () {
 		return lat;
 	}
-
+	
 	public void setLat ( Double lat ) {
 		this.lat = lat;
 	}
-
+	
 	public LocalDate getIntroduceDate () {
 		return introduceDate;
 	}

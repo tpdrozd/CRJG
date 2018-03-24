@@ -34,6 +34,7 @@
 	<properties>
 		<spring.version>5.0.3.RELEASE</spring.version>
 		<spring.data.version>5.0.3.RELEASE</spring.data.version>
+		<neo4j.ogm.version>3.1.0</neo4j.ogm.version>
 		<jackson.version>2.9.4</jackson.version>
 	</properties>
 	
@@ -68,6 +69,31 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-neo4j</artifactId>
 			<version>${spring.data.version}</version>
+			<exclusions>
+				<exclusion>
+          			<groupId>org.neo4j</groupId>
+          			<artifactId>neo4j-ogm-core</artifactId>
+        		</exclusion>
+				<exclusion>
+          			<groupId>org.neo4j</groupId>
+          			<artifactId>neo4j-ogm-api</artifactId>
+        		</exclusion>
+				<exclusion>
+          			<groupId>org.neo4j</groupId>
+          			<artifactId>neo4j-ogm-bolt-driver</artifactId>
+        		</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-ogm-core</artifactId>
+			<version>${neo4j.ogm.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-ogm-bolt-driver</artifactId>
+			<version>${neo4j.ogm.version}</version>
 		</dependency>
 		
 		<dependency>

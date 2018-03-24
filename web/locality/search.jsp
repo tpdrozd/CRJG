@@ -147,12 +147,12 @@
 							<td colspan="6">
 								<div>Nazwa historyczna:</div>
 								<div>{{locality.historicalName}}</div>
-								<span>{{locality.historicalNameNote}}</span>
+								<span>{{locality.historicalNote}}</span>
 							</td>
 							<td colspan="6">
 								<div>Nazwa oboczna:</div>
 								<div>{{locality.collateralName}}</div>
-								<span>{{locality.collateralNameNote}}</span>
+								<span>{{locality.collateralNote}}</span>
 							</td>
 						</tr>
 						

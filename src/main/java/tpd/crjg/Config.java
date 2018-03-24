@@ -19,6 +19,7 @@ public class Config {
 		org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration.Builder()
 			.uri("bolt://localhost")
 			.credentials("crj", "crj")
+			.autoIndex("assert")
 			.build();
 		return config;
 	}
