@@ -74,6 +74,18 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 		this.wojew = wojew;
 	}
 	
+	public boolean isMatchingAtStart () {
+		return matching == Matching.START;
+	}
+	
+	public boolean isMatchingAtEnd () {
+		return matching == Matching.END;
+	}
+	
+	public boolean isMatchingEverywhere () {
+		return matching == Matching.EVERYWHERE;
+	}
+	
 	@Override
 	public String toString () {
 		StringBuffer sb = new StringBuffer();
