@@ -35,7 +35,7 @@ TABLE.criteria {
 }
 
 TABLE.criteria TD {
-	padding: 0px 5px 5px 5px;
+	padding: 2px 2px 5px 2px;
 	text-align: left;
 	color: maroon;
 	font-weight: normal;
@@ -43,13 +43,23 @@ TABLE.criteria TD {
 	font-family: monospace;
 }
 
+TABLE.criteria TD:first-child {
+	padding-left: 5px;
+}
+TABLE.criteria TD:last-child {
+	padding-right: 5px;
+}
+
 TABLE.criteria FIELDSET {
 	border: 1px dashed maroon;
 	border-radius: 5px;
+	padding: 5px;
 }
 
-TABLE.criteria FIELDSET TD {
-	padding: 1px 3px;
+TABLE.criteria FIELDSET TD,
+TABLE.criteria FIELDSET TD:first-child,
+TABLE.criteria FIELDSET TD:last-child {
+	padding: 1px;
 }
 
 TABLE.criteria INPUT[type='search'] {
@@ -88,7 +98,8 @@ TABLE.criteria SELECT OPTGROUP OPTION {
 	font-weight: bold;
 }
 
-TABLE.criteria INPUT[type='checkbox'] {
+TABLE.criteria INPUT[type='checkbox'],
+TABLE.criteria INPUT[type='radio'] {
 	width: 20px;
 	height: 20px;
 }

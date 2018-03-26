@@ -28,26 +28,76 @@
 						<tr>
 							<td colspan="5">
 								<fieldset>
-									<legend> Ignoruj: </legend>
+									<legend> Ignoruj nazwy: </legend>
 									<table>
 										<tr>
 											<td>
 												<input type="checkbox" ng-model="criteria.hist" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Nazwy historyczne
-											</td>
-											<td>
-												<input type="checkbox" ng-model="criteria.foreign" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Nazwy w obcych językach
+												Historyczne
 											</td>
 										</tr>
 										<tr>
 											<td>
 												<input type="checkbox" ng-model="criteria.collat" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Nazwy oboczne
+												Oboczne
 											</td>
+										</tr>
+										<tr>
+											<td title="Nazwy w językach obcych">
+												<input type="checkbox" ng-model="criteria.foreign" ng-change="change()" ng-keydown="keydown($event)"></input>
+												Obce
+											</td>
+										</tr>
+									</table>
+								</fieldset>
+							</td>
+							
+							<td colspan="5">
+								<fieldset>
+									<legend> Dopasuj do: </legend>
+									<table>
+										<tr>
 											<td>
-												<input type="checkbox" ng-model="criteria.depend" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Miejscowości niesamodzielne
+												<input type="radio" ng-model="criteria.matching" value="START" ng-change="change()" ng-keydown="keydown($event)"></input>
+												Początku nazwy
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<input type="radio"  ng-model="criteria.matching" value="END" ng-change="change()" ng-keydown="keydown($event)"></input>
+												Końca nazwy
+											</td>
+										</tr>
+										<tr>
+											<td title="Także w środku nazwy">
+												<input type="radio"  ng-model="criteria.matching" value="EVERYWHERE" ng-change="change()" ng-keydown="keydown($event)"></input>
+												Gdzie kolwiek
+											</td>
+										</tr>
+									</table>
+								</fieldset>
+							</td>
+							
+							<td colspan="5">
+								<fieldset>
+									<legend> Tylko miejscowości: </legend>
+									<table>
+										<tr>
+											<td>
+												<input type="radio" ng-model="criteria.kind" value="STANDALONE" ng-change="change()" ng-keydown="keydown($event)"></input>
+												Samodzielne
+											</td>
+										</tr>
+										<tr>
+											<td title="Będące częścią innych miejscowości">
+												<input type="radio" ng-model="criteria.kind" value="DEPENDENT" ng-change="change()" ng-keydown="keydown($event)"></input>
+												Niesamodzielne
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<input type="radio" ng-model="criteria.kind" value="ALL" ng-change="change()" ng-keydown="keydown($event)"></input>
+												Wszystkie
 											</td>
 										</tr>
 									</table>
@@ -56,8 +106,8 @@
 						</tr>
 							
 						<tr>
-							<td colspan="3" style="position: relative;">
-								Początek nazwy: <br/>
+							<td colspan="9" style="position: relative;">
+								Fragment nazwy: <br/>
 								<input type="search" name="name" ng-model="criteria.name" ng-change="change()" ng-keydown="keydown($event)" autofocus/>
 								
 								<!-- list of hints -->
@@ -96,7 +146,7 @@
 								</div><!-- end of list of hints -->
 							</td>
 
-							<td colspan="2">
+							<td colspan="6">
 								Województwo: <br/>
 								<f:select path="wojew" ng-model="criteria.wojew" ng-change="change()" ng-keydown="keydown($event)">
 									<option label="Cała Polska" value=""/>

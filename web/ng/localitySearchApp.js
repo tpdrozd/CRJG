@@ -9,7 +9,8 @@ function localitySearchCtrl($scope, searchSrv) {
 			hist: false,
 			collat: false,
 			foreign: false,
-			depend: false
+			matching: 'START',
+			kind: 'STANDALONE'
 	};
 	
 	$scope.page = null;

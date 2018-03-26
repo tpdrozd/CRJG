@@ -6,11 +6,13 @@ import tpd.crjg.pagination.SearchCriteria;
 
 public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCriteria> {
 	
-	private boolean	hist, collat, foreign, depend;
+	private boolean		hist, collat, foreign;
 	
-	private String	name;
+	private Matching	matching;
 	
-	private String	wojew;
+	private Kind		kind;
+	
+	private String		name, wojew;
 	
 	public boolean isHist () {
 		return hist;
@@ -36,12 +38,20 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 		this.foreign = foreign;
 	}
 	
-	public boolean isDepend () {
-		return depend;
+	public Matching getMatching () {
+		return matching;
 	}
 	
-	public void setDepend ( boolean depend ) {
-		this.depend = depend;
+	public void setMatching ( Matching matching ) {
+		this.matching = matching;
+	}
+	
+	public Kind getKind () {
+		return kind;
+	}
+	
+	public void setKind ( Kind kind ) {
+		this.kind = kind;
 	}
 	
 	public String getName () {
@@ -61,19 +71,53 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 	}
 	
 	@Override
+	public String toString () {
+		StringBuffer sb = new StringBuffer();
+		sb
+			.append("hist: ").append(hist)
+			.append(", collat: ").append(collat)
+			.append(", foreign: ").append(foreign)
+			.append("\n")
+			.append("matching: ").append(matching)
+			.append(", kind: ").append(kind)
+			.append("\n")
+			.append("name: ").append(name)
+			.append(", wojew: ").append(wojew);
+		
+		return sb.toString();
+	}
+	
+	@Override
 	public boolean differentThen ( LocalitySearchCriteria that ) {
+		boolean hasMatching = matching != null;
+		boolean hasKind = kind != null;
 		boolean hasName = StringUtils.hasText(name);
 		boolean hasWojew = StringUtils.hasText(wojew);
 		
 		if ( that == null )
-			return hasName || hasWojew || hist || collat || foreign || depend;
+			return hist || collat || foreign || hasMatching || hasKind || hasName || hasWojew;
 		else
-			return areDifferent(this.name, that.name)
-				|| areDifferent(this.wojew, that.wojew)
-				|| areDifferent(this.hist, that.hist)
+			return areDifferent(this.hist, that.hist)
 				|| areDifferent(this.collat, that.collat)
 				|| areDifferent(this.foreign, that.foreign)
-				|| areDifferent(this.depend, that.depend);
+				|| areDifferent(this.matching, that.matching)
+				|| areDifferent(this.kind, that.kind)
+				|| areDifferent(this.name, that.name)
+				|| areDifferent(this.wojew, that.wojew);
+	}
+	
+	private boolean areDifferent ( boolean b1, boolean b2 ) {
+		return b1 ^ b2;
+	}
+	
+	private <E extends Enum<E>> boolean areDifferent ( Enum<E> e1, Enum<E> e2 ) {
+		boolean hasE1 = e1 != null;
+		boolean hasE2 = e2 != null;
+		
+		if ( hasE1 && hasE2 )
+			return !e1.equals(e2);
+		else
+			return hasE1 || hasE2;
 	}
 	
 	private boolean areDifferent ( String s1, String s2 ) {
@@ -86,13 +130,12 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 			return hasS1 || hasS2;
 	}
 	
-	private boolean areDifferent ( boolean b1, boolean b2 ) {
-		return b1 ^ b2;
+	public static enum Matching {
+		START, END, EVERYWHERE;
 	}
 	
-	@Override
-	public String toString () {
-		return "name: " + name + ", wojew: " + wojew + ", hist: " + hist + ", collat: " + collat + ", foreign: " + foreign + ", depend: " + depend;
+	public static enum Kind {
+		STANDALONE, DEPENDENT, ALL;
 	}
 	
 }
