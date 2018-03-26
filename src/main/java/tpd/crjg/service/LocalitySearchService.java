@@ -8,23 +8,23 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import tpd.crjg.domain.LocalitySimple;
 import tpd.crjg.pagination.PaginationSearchService;
-import tpd.crjg.repo.LocalityRepo;
+import tpd.crjg.repo.LocalitySearchRepo;
 
 @Service
 @SessionScope
 public class LocalitySearchService extends PaginationSearchService<LocalitySearchCriteria, LocalitySimple> {
 	
 	@Autowired
-	private LocalityRepo repo;
+	private LocalitySearchRepo repo;
 	
 	public LocalitySearchService () {
 		super(12, "l.name", "l.wojewodztwo", "l.powiat", "l.gmina");
 	}
 	
 	@Override
-	protected Page<LocalitySimple> retrivePage ( LocalitySearchCriteria criteria, Pageable pageable ) {
+	protected Page<LocalitySimple> retrivePage ( LocalitySearchCriteria c, Pageable pageable ) {
 		
-		return repo.findSimpleByCriteria(criteria.getName(), criteria.isHist(), criteria.isCollat(), criteria.isForeign(), criteria.getKind(), criteria.getWojew(), pageable);
+		return repo.findSimpleByCriteria(c.getNameAsLowerCase(), c.isHist(), c.isCollat(), c.isForeign(), c.getKind(), c.getWojew(), pageable);
 	}
 	
 }

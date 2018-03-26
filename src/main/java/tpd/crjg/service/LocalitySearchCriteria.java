@@ -58,6 +58,10 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 		return name;
 	}
 	
+	public String getNameAsLowerCase () {
+		return name != null ? name.toLowerCase() : name;
+	}
+	
 	public void setName ( String name ) {
 		this.name = name;
 	}
