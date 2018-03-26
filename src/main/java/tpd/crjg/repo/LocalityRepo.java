@@ -49,6 +49,7 @@ public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 						"OR ({hist} = false AND l._historicalName STARTS WITH toLower({name})) " +
 						"OR ({collat} = false AND l._collateralName STARTS WITH toLower({name})) " +
 						"OR ({foreign} = false AND (l._foreignName STARTS WITH toLower({name}) OR l._foreignLatin STARTS WITH toLower({name})))) " +
+					"AND ({depend} = false OR NOT exists(l.parentName)) " +
 					"AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
 				"RETURN count(l)",
 			value		= 
@@ -57,6 +58,7 @@ public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 						"OR ({hist} = false AND l._historicalName STARTS WITH toLower({name})) " +
 						"OR ({collat} = false AND l._collateralName STARTS WITH toLower({name})) " +
 						"OR ({foreign} = false AND (l._foreignName STARTS WITH toLower({name}) OR l._foreignLatin STARTS WITH toLower({name})))) " +
+					"AND ({depend} = false OR NOT exists(l.parentName)) " +
 					"AND (size({wojew}) = 0 OR l.wojewodztwo = {wojew}) " +
 				"WITH l AS l, [l.historicalName, l.collateralName, l.foreignName, '('+l.foreignLatin+')'] AS names " +
 				"WITH l AS l, filter(n IN names WHERE n IS NOT NULL) AS names " +
@@ -64,7 +66,7 @@ public interface LocalityRepo extends Neo4jRepository<Locality, Long> {
 				"WITH l AS l, replace(names, '/ (', '(') AS names " +
 				"RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
 					"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
-	public Page<LocalitySimple> findSimpleByCriteria ( @Param ("name") String name, @Param("hist") boolean hist, @Param("collat") boolean collat, @Param("foreign") boolean foreign, @Param("wojew") String wojew, Pageable pageable );
+	public Page<LocalitySimple> findSimpleByCriteria ( @Param ("name") String name, @Param("hist") boolean hist, @Param("collat") boolean collat, @Param("foreign") boolean foreign, @Param("depend") boolean depend, @Param("wojew") String wojew, Pageable pageable );
 	
 	@Query ("MATCH (l:Locality) WHERE id(l) = {id} RETURN l")
 	public Locality byId ( @Param ("id") Long id );

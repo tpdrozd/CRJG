@@ -6,7 +6,7 @@ import tpd.crjg.pagination.SearchCriteria;
 
 public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCriteria> {
 	
-	private boolean	hist, collat, foreign;
+	private boolean	hist, collat, foreign, depend;
 	
 	private String	name;
 	
@@ -36,6 +36,14 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 		this.foreign = foreign;
 	}
 	
+	public boolean isDepend () {
+		return depend;
+	}
+	
+	public void setDepend ( boolean depend ) {
+		this.depend = depend;
+	}
+	
 	public String getName () {
 		return name;
 	}
@@ -58,13 +66,14 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 		boolean hasWojew = StringUtils.hasText(wojew);
 		
 		if ( that == null )
-			return hasName || hasWojew || hist || collat || foreign;
+			return hasName || hasWojew || hist || collat || foreign || depend;
 		else
 			return areDifferent(this.name, that.name)
 				|| areDifferent(this.wojew, that.wojew)
 				|| areDifferent(this.hist, that.hist)
 				|| areDifferent(this.collat, that.collat)
-				|| areDifferent(this.foreign, that.foreign);
+				|| areDifferent(this.foreign, that.foreign)
+				|| areDifferent(this.depend, that.depend);
 	}
 	
 	private boolean areDifferent ( String s1, String s2 ) {
@@ -83,7 +92,7 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 	
 	@Override
 	public String toString () {
-		return "name: " + name + ", wojew: " + wojew + ", hist: " + hist + ", collat: " + collat + ", foreign: " + foreign;
+		return "name: " + name + ", wojew: " + wojew + ", hist: " + hist + ", collat: " + collat + ", foreign: " + foreign + ", depend: " + depend;
 	}
 	
 }
