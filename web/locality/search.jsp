@@ -124,8 +124,8 @@
 														Strona: <span class="page">{{page.pageNumber}}</span> z <span class="total">{{page.totalPages}}</span>
 													</td>
 													<td>
-														<button title="Poprzednia strona - [PageUp]" ng-click="prevPage()">Poprzednia <b>&lt;&lt;</b></button>
-														<button title="Następna strona - [PageDown]" ng-click="nextPage()"><b>&gt;&gt;</b> Następna</button>
+														<button title="Poprzednia strona - [PageUp]" ng-disabled="page.first" ng-click="prevPage()" ng-keydown="keydown($event)">Poprzednia <b>&lt;&lt;</b></button>
+														<button title="Następna strona - [PageDown]" ng-disabled="page.last" ng-click="nextPage()" ng-keydown="keydown($event)"><b>&gt;&gt;</b> Następna</button>
 													</td>
 												</tr>
 											</tbody>

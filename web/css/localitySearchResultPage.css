@@ -71,14 +71,21 @@ DIV.locSearchList DIV SPAN.page {
 }
 /* button */
 DIV.locSearchList DIV BUTTON {
-	border: 1px maroon solid;
+	margin: 2px 0px;
+	border: 1px white dotted;
 	border-radius: 3px;
 	background-color: #ee9344;
 	color: white;
 	font-weight: normal;
 }
 DIV.locSearchList DIV BUTTON:HOVER {
-	border-color: white;
+	border-style: solid;
+	color: maroon;
+}
+DIV.locSearchList DIV BUTTON:DISABLED {
+	border: 1px white dotted;
+	background-color: #f2af73;
+	color: #ffe6cc;
 }
 
 /* LISTA */
