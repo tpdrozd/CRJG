@@ -1,6 +1,7 @@
 angular.module('localitySearchApp', ['searchService'])
 
-.controller('localitySearchCtrl', localitySearchCtrl);
+.controller('localitySearchCtrl', localitySearchCtrl)
+.directive('mouseWheel', mouseWheel);
 
 function localitySearchCtrl($scope, searchSrv) {
 	$scope.criteria = {
@@ -159,4 +160,17 @@ function localitySearchCtrl($scope, searchSrv) {
 		$scope.showBar = false;
 	}
 	
+}
+
+function mouseWheel() {
+	return {
+		link: function (scope, element, attrs) {
+			element.bind('wheel', function($event) {
+				if (event.deltaY > 0)
+					scope.nextPage();
+				else
+					scope.prevPage();
+			});
+		}
+	}
 }

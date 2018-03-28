@@ -111,7 +111,7 @@
 								<input type="search" name="name" ng-model="criteria.name" ng-change="change()" ng-keydown="keydown($event)" autofocus/>
 								
 								<!-- list of hints -->
-								<div class="locSearchList" style="top: 44px; left: 5px;" ng-show="showList">
+								<div class="locSearchList" style="top: 44px; left: 5px;" ng-show="showList" mouse-wheel>
 									<div ng-show="showBar">
 										<table>
 											<tbody>
