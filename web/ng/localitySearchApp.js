@@ -56,6 +56,24 @@ function localitySearchCtrl($scope, searchSrv) {
 		}
 	}
 	
+	$scope.enter = function() {
+		var id = $scope.page.items[index].id;
+		searchSrv.details(id).then(
+			function success(response) {
+				$scope.locality = response.data;
+				$scope.page = null;
+				index = -1;
+				$scope.showList = false;
+				$scope.showBar = false;
+			});
+	}
+	
+	$scope.select = function($index) {
+		unlight();
+		index = $index;
+		highlight();
+	}
+	
 	$scope.keydown = function($event) {
 		if (!$scope.showList) {
 			// w dół
@@ -80,27 +98,23 @@ function localitySearchCtrl($scope, searchSrv) {
 			
 			// w dół
 			else if ($event.keyCode == 40) {
-				incSelection();
+				unlight();
+				incrementIndex();
+				highlight();
 				event.preventDefault();
 			}
 			
 			// w górę
 			else if ($event.keyCode == 38) {
-				decSelection();
+				unlight();
+				decrementIndex();
+				highlight();
 				event.preventDefault();
 			}
 			
 			// enter
 			else if ($event.keyCode == 13) {
-				var id = $scope.page.items[index].id;
-				searchSrv.details(id).then(
-					function success(response) {
-						$scope.locality = response.data;
-						$scope.page = null;
-						index = -1;
-						$scope.showList = false;
-						$scope.showBar = false;
-					});
+				$scope.enter();
 				event.preventDefault();
 			}
 			
@@ -111,34 +125,24 @@ function localitySearchCtrl($scope, searchSrv) {
 		}
 	}
 	
-	function reset() {
-		searchSrv.release();
-		$scope.page = null;
-		index = -1;
-		$scope.showList = false;
-		$scope.showBar = false;
-	}
-
-	function incSelection() {
-		if (isIndexInRange())
-			$scope.page.items[index].ngClass = '';
-		
+	function incrementIndex() {
 		if ($scope.page != null	&& index < $scope.page.itemsCount - 1)
 			index = index + 1;
-		
+	}
+	
+	function decrementIndex() {
+		if ($scope.page != null	&& index > 0)
+			index = index - 1;
+	}
+	
+	function highlight() {
 		if (isIndexInRange())
 			$scope.page.items[index].ngClass = 'selected';
 	}
 	
-	function decSelection() {
+	function unlight() {
 		if (isIndexInRange())
 			$scope.page.items[index].ngClass = '';
-		
-		if ($scope.page != null	&& index > 0)
-			index = index - 1;
-		
-		if (isIndexInRange())
-			$scope.page.items[index].ngClass = 'selected';
 	}
 	
 	function isIndexInRange() {
@@ -147,4 +151,12 @@ function localitySearchCtrl($scope, searchSrv) {
 		index < $scope.page.itemsCount;
 	}
 
+	function reset() {
+		searchSrv.release();
+		$scope.page = null;
+		index = -1;
+		$scope.showList = false;
+		$scope.showBar = false;
+	}
+	
 }

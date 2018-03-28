@@ -132,7 +132,7 @@
 										</table>
 									</div>
 									<ul>
-										<li ng-repeat="item in page.items" ng-class="item.ngClass" >
+										<li ng-repeat="item in page.items" ng-class="item.ngClass" ng-mouseenter="select($index)" ng-click="enter()">
 											<span>{{item.name}}</span>
 											<span class="typ" title="Typ miejscowości">{{item.type}}</span>
 											<span class="parent" title="Miejscowość nadrzędna" ng-show="item.parentName.length > 0">{{item.parentName}}</span>
