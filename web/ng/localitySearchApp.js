@@ -1,4 +1,4 @@
-angular.module('localitySearchApp', ['searchService'])
+angular.module('localitySearchApp', ['searchService', 'gmap'])
 
 .controller('localitySearchCtrl', localitySearchCtrl)
 .directive('mouseWheel', mouseWheel);

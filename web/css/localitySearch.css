@@ -13,8 +13,7 @@ DIV.container {
 }
 
 DIV.leftcolumn {
-	/* display: inline-block; */
-	margin: 0px 10px 0px 5px;
+	margin: 0px 7px 0px 5px;
 	width: 600px;
 }
 
@@ -165,15 +164,19 @@ TABLE.details TD>SPAN {
 }
 
 /* MAPA */
+DIV.rightcolumn {
+	margin: 0px 5px 0px 7px;
+}
+
 DIV.map {
-	min-width: 307px;
-	width: 600px;
-	min-height: 307px;
-	height: 600px;
-	border: 2px maroon solid;
+	min-width: 300px;
+	min-height: 300px;
+	width: 750px;
+	height: 750px;
+	border: 1px maroon solid;
 	border-radius: 5px;
 	background-color: #ee9344;
 	color: maroon;
-	resize: both;
+	/* resize: both; */
 	overflow: hidden;
 }

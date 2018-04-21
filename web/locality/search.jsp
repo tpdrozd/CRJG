@@ -8,12 +8,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
 		<link href="<t:url value="/css/localitySearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 		<link href="<t:url value="/css/localitySearchResultPage.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo26SLCVE9QCiEZagBAB47907NjifNYMk&sensitive=false"></script>
+		
 		<script type="text/javascript" src="<t:url value="/ng/localitySearchApp.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/searchService.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/gmap.js"/>"></script>
 		
 		<title>CRJG - Wyszukiwanie w bazie miejscowości</title>
 	</head>
@@ -273,6 +277,10 @@
 					</tbody>
 				</table>
 			</div><!-- end of left column -->
+			
+			<div class="rightcolumn">
+				<gmap class="map"></gmap>
+			</div>
 		</div>
 	
 	</body>
