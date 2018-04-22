@@ -16,15 +16,16 @@
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo26SLCVE9QCiEZagBAB47907NjifNYMk&sensitive=false"></script>
 		
 		<script type="text/javascript" src="<t:url value="/ng/localitySearchApp.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/formModule.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/mapModule.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/searchService.js"/>"></script>
-		<script type="text/javascript" src="<t:url value="/ng/gmap.js"/>"></script>
 		
 		<title>CRJG - Wyszukiwanie w bazie miejscowości</title>
 	</head>
 	
 	<body>
-		<div class="container" ng-app="localitySearchApp" ng-controller="localitySearchCtrl">		
-			<div class="leftcolumn">
+		<div class="container" ng-app="localitySearchApp" ng-controller="mainCtrl">		
+			<div class="leftcolumn" ng-controller="formCtrl">
 				
 				<!-- search criteria -->
 				<table class="criteria">
@@ -278,8 +279,8 @@
 				</table>
 			</div><!-- end of left column -->
 			
-			<div class="rightcolumn">
-				<gmap class="map"></gmap>
+			<div class="rightcolumn" ng-controller="mapCtrl">
+				<gmap lat="51.764" lng="19.463" zoom="6" class="map"></gmap>
 			</div>
 		</div>
 	
