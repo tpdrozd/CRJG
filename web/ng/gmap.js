@@ -1,10 +1,6 @@
-angular.module('mapModule', [])
+angular.module('gmap', [])
 
-.controller('mapCtrl', mapCtrl)
 .directive('gmap', gmap);
-
-function mapCtrl($scope) {
-}
 
 function gmap() {
 	var gmap, infoMarker;
@@ -19,7 +15,7 @@ function gmap() {
 			gmap = initGmap(element, attrs);
 			infoMarker = new InfoMarker();
 			
-			scope.$on('LocalitySelected', function(event, locality) {
+			scope.$on('LocalityEntered', function(event, locality) {
 				showLocality(locality);
 			});
 		}/*end of link*/
