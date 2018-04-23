@@ -8,9 +8,9 @@ function gmap() {
 	
 	return {
 		restrict: 'E',
-		template: "<div></div>",
+		template: "<div class='gmap'></div>",
 		replace: true,
-		scope: false,
+		scope: true,
 		link: function(scope, element, attrs) {
 			gmap = initGmap(element, attrs);
 			infoMarker = new InfoMarker();

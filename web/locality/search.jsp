@@ -279,7 +279,7 @@
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">
-				<gmap lat="51.764" lng="19.463" zoom="6" class="map"></gmap>
+				<gmap lat="51.764" lng="19.463" zoom="6"></gmap>
 			</div>
 		</div>
 	
