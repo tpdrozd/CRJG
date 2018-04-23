@@ -4,28 +4,52 @@ angular.module('mapModule', [])
 .directive('gmap', gmap);
 
 function mapCtrl($scope) {
-	
-	$scope.gmap = null;
-	infoMarker = null;
-	
-	$scope.$on('LocalitySelected', function(event, locality) {
-		showLocality(locality);
-	});
-	
-	function showLocality (locality) {
-		// ustawienie markera
-		if (infoMarker == null) {
-			infoMarker = new InfoMarker($scope.gmap);
-			$scope.gmap.setZoom(10);
-		}
-		infoMarker.pointTo(locality);
+}
 
-		// wycentrowanie mapy
-		$scope.gmap.setCenter(infoMarker.position);
+function gmap() {
+	var gmap, infoMarker;
+	var unzoomed = true;
+	
+	return {
+		restrict: 'E',
+		template: "<div></div>",
+		replace: true,
+		scope: false,
+		link: function(scope, element, attrs) {
+			gmap = initGmap(element, attrs);
+			infoMarker = new InfoMarker();
+			
+			scope.$on('LocalitySelected', function(event, locality) {
+				showLocality(locality);
+			});
+		}/*end of link*/
+	}
+
+	function initGmap(elem, attrs) {
+		var lat = attrs['lat'];
+		var lng = attrs['lng'];
+		var zoom = parseInt(attrs['zoom']);
+		var option = {
+			center: new google.maps.LatLng(lat, lng), 
+			zoom: zoom
+		};
+		
+		var map = new google.maps.Map(elem[0], option);
+		google.maps.event.addListener(map, 'zoom_changed', function() {
+			unzoomed = false;
+		});
+		
+		return map;
 	}
 	
-	function InfoMarker(map) {
-		var gmap = map;
+	function showLocality (locality) {
+		infoMarker.pointTo(locality);
+		gmap.setCenter(infoMarker.position);
+		if (unzoomed)
+			gmap.setZoom(10);
+	}
+	
+	function InfoMarker() {
 		var marker = null;
 		var infoWn = null;
 		var opened = false;
@@ -82,28 +106,4 @@ function mapCtrl($scope) {
 			return content;
 		}
 	} // end of InfoMarker
-}
-
-function gmap() {
-	return {
-		restrict: 'E',
-		template: "<div></div>",
-		replace: true,
-		scope: false,
-		link: function(scope, element, attrs) {
-			scope.gmap = initGmap(element, attrs);
-		}/*end of link*/
-	}
-	
-	function initGmap(elem, attrs) {
-		var lat = attrs['lat'];
-		var lng = attrs['lng'];
-		var zoom = parseInt(attrs['zoom']);
-		
-		var option = {
-			center: new google.maps.LatLng(lat, lng), 
-			zoom: zoom
-		};
-		return new google.maps.Map(elem[0], option);
-	}
 }
