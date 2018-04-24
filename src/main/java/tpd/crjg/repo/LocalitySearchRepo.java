@@ -38,7 +38,7 @@ public interface LocalitySearchRepo extends Neo4jRepository<Locality, Long> {
 				"WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
 				"WITH l AS l, replace(names, '/ (', '(') AS names " +
 				"RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
-					"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
+					"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo, l.lat AS lat, l.lon AS lng")
 	public Page<LocalitySimple> findSimpleByStartsWith (
 		@Param ("name") String name,
 		@Param ("hist") boolean hist,
@@ -72,7 +72,7 @@ public interface LocalitySearchRepo extends Neo4jRepository<Locality, Long> {
 				"WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
 				"WITH l AS l, replace(names, '/ (', '(') AS names " +
 				"RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
-					"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
+					"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo, l.lat AS lat, l.lon AS lng")
 	public Page<LocalitySimple> findSimpleByEndsWith (
 		@Param ("name") String name,
 		@Param ("hist") boolean hist,
@@ -106,7 +106,7 @@ public interface LocalitySearchRepo extends Neo4jRepository<Locality, Long> {
 				"WITH l AS l, reduce(nms = head(names), n IN tail(names) | nms + ' / ' + n) AS names " +
 				"WITH l AS l, replace(names, '/ (', '(') AS names " +
 				"RETURN id(l) AS id, l.idTeryt AS idTeryt, l.name AS name, l.type AS type, l.parentName AS parentName, " +
-					"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo")
+					"names AS otherNames, l.gmina AS gmina, l.powiat AS powiat, l.wojewodztwo AS wojewodztwo, l.lat AS lat, l.lon AS lng")
 	public Page<LocalitySimple> findSimpleByContains (
 		@Param ("name") String name,
 		@Param ("hist") boolean hist,

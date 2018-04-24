@@ -26,6 +26,10 @@ public class LocalitySimple {
 	
 	String	wojewodztwo;
 	
+	double	lat;
+	
+	double	lng;
+	
 	public Long getId () {
 		return id;
 	}
@@ -62,4 +66,11 @@ public class LocalitySimple {
 		return wojewodztwo;
 	}
 	
+	public double getLat () {
+		return lat;
+	}
+	
+	public double getLng () {
+		return lng;
+	}
 }

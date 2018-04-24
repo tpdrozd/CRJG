@@ -30,6 +30,7 @@ function searchCtrl($scope, searchSrv) {
 					index = -1;
 					$scope.showList = $scope.page.itemsCount > 0;
 					$scope.showBar = $scope.page.totalPages > 1;
+					$scope.$broadcast('LocalityUnselected', null);
 				});
 		}
 		else if ($scope.showList) {
@@ -43,6 +44,7 @@ function searchCtrl($scope, searchSrv) {
 				function success(response) {
 					$scope.page = response.data;
 					index = -1;
+					$scope.$broadcast('LocalityUnselected', null);
 				});
 		}
 	}
@@ -53,6 +55,7 @@ function searchCtrl($scope, searchSrv) {
 				function success(response) {
 					$scope.page = response.data;
 					index = -1;
+					$scope.$broadcast('LocalityUnselected', null);
 				});
 		}
 	}
@@ -66,6 +69,7 @@ function searchCtrl($scope, searchSrv) {
 				index = -1;
 				$scope.showList = false;
 				$scope.showBar = false;
+				$scope.$broadcast('LocalityUnselected', null);
 				$scope.$broadcast('LocalityEntered', $scope.locality);
 			});
 	}
@@ -138,8 +142,10 @@ function searchCtrl($scope, searchSrv) {
 	}
 	
 	function highlight() {
-		if (isIndexInRange())
+		if (isIndexInRange()) {
 			$scope.page.items[index].ngClass = 'selected';
+			$scope.$broadcast('LocalitySelected', $scope.page.items[index]);
+		}
 	}
 	
 	function unlight() {
@@ -159,6 +165,7 @@ function searchCtrl($scope, searchSrv) {
 		index = -1;
 		$scope.showList = false;
 		$scope.showBar = false;
+		$scope.$broadcast('LocalityUnselected', null);
 	}
 }
 
