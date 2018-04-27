@@ -17,13 +17,14 @@
 		
 		<script type="text/javascript" src="<t:url value="/ng/localitySearchApp.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/searchService.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/hints.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/gmap.js"/>"></script>
 		
 		<title>CRJG - Wyszukiwanie w bazie miejscowości</title>
 	</head>
 	
 	<body>
-		<div class="container" ng-app="localitySearchApp" ng-controller="searchCtrl">		
+		<div class="container" ng-app="localitySearchApp" ng-controller="localitySearchCtrl">		
 			<div class="leftcolumn">
 				
 				<!-- search criteria -->
@@ -136,7 +137,7 @@
 										</table>
 									</div>
 									<ul>
-										<li ng-repeat="item in page.items" ng-class="item.ngClass" ng-mouseenter="select($index)" ng-click="enter()">
+										<li ng-repeat="item in page.items" hint ng-click="selectHint()">
 											<span>{{item.name}}</span>
 											<span class="typ" title="Typ miejscowości">{{item.type}}</span>
 											<span class="parent" title="Miejscowość nadrzędna" ng-show="item.parentName.length > 0">{{item.parentName}}</span>

@@ -111,16 +111,16 @@ DIV.locSearchList UL LI:NTH-OF-TYPE(2n+1) {
 
 /* podświetlenie */
 DIV.locSearchList UL LI:FIRST-OF-TYPE, 
-DIV.locSearchList UL LI:FIRST-OF-TYPE.selected {
+DIV.locSearchList UL LI:FIRST-OF-TYPE.marked {
 	border-top: none;
 }
 
-DIV.locSearchList UL LI.selected {
+DIV.locSearchList UL LI.marked {
 	border-top: 1px solid maroon;
 	background-color: #ffc184;
 }
 
-DIV.locSearchList UL LI.selected + LI {
+DIV.locSearchList UL LI.marked + LI {
 	border-top: 1px solid maroon;
 }
 
