@@ -1,0 +1,21 @@
+	<div ng-show="showBar">
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						Pozycje: <span class="number">{{hints.firstItemNumber}}</span> - <span class="number">{{hints.lastItemNumber}}</span>
+						z <span class="total">{{hints.totalItems}}</span>
+					</td>
+					<td>
+						Strona: <span class="page">{{hints.pageNumber}}</span> z <span class="total">{{hints.totalPages}}</span>
+					</td>
+					<td>
+						<button title="Poprzednia strona - [PageUp]" ng-disabled="hints.first" >Poprzednia <b>&lt;&lt;</b></button> <!-- ng-click="prevPage()" ng-keydown="keydown($event)" -->
+						<button title="Następna strona - [PageDown]" ng-disabled="hints.last" ><b>&gt;&gt;</b> Następna</button> <!-- ng-click="nextPage()" ng-keydown="keydown($event)" -->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<ul ng-transclude>
+	</ul>

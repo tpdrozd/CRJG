@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="<t:url value="/ng/localitySearchApp.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/searchService.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hints.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/hintService.js"/>"></script>
 		
 		<title>CRJG - Wyszukiwanie w bazie miejscowości</title>
 	</head>
@@ -109,41 +110,21 @@
 						<tr>
 							<td colspan="9" style="position: relative;">
 								Fragment nazwy: <br/>
-								<input type="search" name="name" ng-model="criteria.name" ng-change="change()" ng-keydown="keydown($event)" autofocus/>
+								<!-- <input type="search" name="name" ng-model="criteria.name" ng-change="change()" ng-keydown="keydown($event)" autofocus/> -->
+								<input hintable type="search" name="name" ng-model="criteria.name" autofocus auto-trigger="3" keydown-trigger="2"></input>
 								
 								<!-- list of hints -->
-								<div class="locSearchList" style="top: 44px; left: 5px;" ng-show="showList" mouse-wheel>
-									<div ng-show="showBar">
-										<table>
-											<tbody>
-												<tr>
-													<td>
-														Pozycje: <span class="number">{{page.firstItemNumber}}</span> - <span class="number">{{page.lastItemNumber}}</span>
-														z <span class="total">{{page.totalItems}}</span>
-													</td>
-													<td>
-														Strona: <span class="page">{{page.pageNumber}}</span> z <span class="total">{{page.totalPages}}</span>
-													</td>
-													<td>
-														<button title="Poprzednia strona - [PageUp]" ng-disabled="page.first" ng-click="prevPage()" ng-keydown="keydown($event)">Poprzednia <b>&lt;&lt;</b></button>
-														<button title="Następna strona - [PageDown]" ng-disabled="page.last" ng-click="nextPage()" ng-keydown="keydown($event)"><b>&gt;&gt;</b> Następna</button>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-									<ul>
-										<li ng-repeat="item in page.items" hint ng-click="selectHint()">
-											<span>{{item.name}}</span>
-											<span class="typ" title="Typ miejscowości">{{item.type}}</span>
-											<span class="parent" title="Miejscowość nadrzędna" ng-show="item.parentName.length > 0">{{item.parentName}}</span>
-											<span class="other" title="Nazwy historyczne, oboczne, itp." ng-show="item.otherNames.length > 0">{{item.otherNames}}</span>
-											<br/>
-											<span class="gm" title="Gmina">{{item.gmina}}</span>
-											<span class="pow" title="Powiat">{{item.powiat}}</span>
-											<span class="woj" title="Województwo">{{item.wojewodztwo}}</span>
-										</li>
-									</ul>
+								<div hints class="locSearchList" style="top: 44px; left: 5px;">
+									<li hint-item>
+										<span>{{hint.name}}</span>
+										<span class="typ" title="Typ miejscowości">{{hint.type}}</span>
+										<span class="parent" title="Miejscowość nadrzędna" ng-show="hint.parentName.length > 0">{{hint.parentName}}</span>
+										<span class="other" title="Nazwy historyczne, oboczne, itp." ng-show="hint.otherNames.length > 0">{{hint.otherNames}}</span>
+										<br/>
+										<span class="gm" title="Gmina">{{hint.gmina}}</span>
+										<span class="pow" title="Powiat">{{hint.powiat}}</span>
+										<span class="woj" title="Województwo">{{hint.wojewodztwo}}</span>
+									</li>
 								</div><!-- end of list of hints -->
 							</td>
 

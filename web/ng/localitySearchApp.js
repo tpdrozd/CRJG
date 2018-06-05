@@ -3,7 +3,7 @@ angular.module('localitySearchApp', ['searchService', 'hints'])
 .controller('localitySearchCtrl', localitySearchCtrl)
 .directive('mouseWheel', mouseWheel);
 
-function localitySearchCtrl($scope, searchSrv, hintHandler) {
+function localitySearchCtrl($scope, searchSrv) {
 	$scope.criteria = {
 		name: '',
 		wojew: '',
@@ -22,6 +22,7 @@ function localitySearchCtrl($scope, searchSrv, hintHandler) {
 	$scope.locality = {};
 
 	$scope.change = function() {
+		console.log('change criteria.name: ' + $scope.criteria.name);
 		if ($scope.criteria.name.length >= 3) {
 			firstPage($scope.criteria);
 		}
@@ -55,13 +56,13 @@ function localitySearchCtrl($scope, searchSrv, hintHandler) {
 			
 			// w dół
 			else if ($event.keyCode == 40) {
-				hintHandler.markNextHint();
+				//hintHandler.markNextHint();
 				event.preventDefault();
 			}
 			
 			// w górę
 			else if ($event.keyCode == 38) {
-				hintHandler.markPrevHint();
+				//hintHandler.markPrevHint();
 				event.preventDefault();
 			}
 			
@@ -77,44 +78,16 @@ function localitySearchCtrl($scope, searchSrv, hintHandler) {
 			}
 		}
 	} /* end of keydown */	
-	
-	function firstPage() {
-		searchSrv.firstPage($scope.criteria).then(
-			function success(response) {
-				hintHandler.reset();
-				$scope.page = response.data;
-				$scope.showList = $scope.page.itemsCount > 0;
-				$scope.showBar = $scope.page.totalPages > 1;
-			});
-	}
-	
-	$scope.nextPage = function() {
-		if($scope.page != null && $scope.page.hasNext) {
-			searchSrv.nextPage().then(
-				function success(response) {
-					hintHandler.reset();
-					$scope.page = response.data;
-				});
-		}
-	}
-	
-	$scope.prevPage = function() {
-		if ($scope.page != null && $scope.page.hasPrev) {
-			searchSrv.prevPage().then(
-				function success(response) {
-					hintHandler.reset();
-					$scope.page = response.data;
-				});
-		}
-	}
 
 	$scope.selectHint = function() {
-		if (hintHandler.isAnyHintMarked()) {
-			var index = hintHandler.getMarkedHintIndex();
+		//if (hintHandler.isAnyHintMarked()) {
+		if (true) {
+			//var index = hintHandler.getMarkedHintIndex();
+			var index = 0;
 			var id = $scope.page.items[index].id;
 			searchSrv.details(id).then(
 				function success(response) {
-					hintHandler.reset();
+					//hintHandler.reset();
 					$scope.locality = response.data;
 					$scope.page = null;
 					$scope.showList = false;
@@ -125,7 +98,7 @@ function localitySearchCtrl($scope, searchSrv, hintHandler) {
 	
 	function reset() {
 		searchSrv.release();
-		hintHandler.reset();
+		//hintHandler.reset();
 		$scope.page = null;
 		$scope.showList = false;
 		$scope.showBar = false;
