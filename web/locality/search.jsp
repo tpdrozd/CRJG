@@ -110,8 +110,7 @@
 						<tr>
 							<td colspan="9" style="position: relative;">
 								Fragment nazwy: <br/>
-								<!-- <input type="search" name="name" ng-model="criteria.name" ng-change="change()" ng-keydown="keydown($event)" autofocus/> -->
-								<input hintable type="search" name="name" ng-model="criteria.name" autofocus auto-trigger="3" keydown-trigger="2"></input>
+								<input type="search" name="name" autofocus ng-model="criteria.name" hints-trigger auto-trig="3" arrowdown-trig="2"></input>
 								
 								<!-- list of hints -->
 								<div hints class="locSearchList" style="top: 44px; left: 5px;">

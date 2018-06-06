@@ -1,33 +1,29 @@
 angular.module('hints', ['hintService'])
 
-.directive('hintable', Hintable)
+.directive('hintsTrigger', HintsTrigger)
 .directive('hints', Hints)
 .directive('hintItem', HintItem);
 
-function Hintable(hintService) {
+function HintsTrigger(hintService) {
 	return {
 		restrict: 'A',
 		require: 'ngModel',
 		scope: {},
-		controller: hintableCtrl,
+		controller: hintsTriggerCtrl,
 		link: function (scope, element, attrs, ctrl) {
-			scope.autoTrigger = attrs.autoTrigger;
-			scope.keydownTrigger = attrs.keydownTrigger;
+			scope.autoTrig = attrs.autoTrig;
+			scope.arrowdownTrig = attrs.arrowdownTrig;
 			
+			element.on('keydown', scope.onKeydown);
+			
+			element.on('keydown', scope.arrowdownTrigger);
 			element.on('keyup', function($event) {
-				if (scope.criteria.name != ctrl.$modelValue) {
-					scope.criteria.name = ctrl.$modelValue;
-					scope.change();
-				}
-			});
-			
-			element.on('keydown', function($event) {
-				scope.keydown($event);
+				scope.autoTrigger(ctrl.$modelValue);
 			});
 		}
 	}
 	
-	function hintableCtrl($scope, hintService) {
+	function hintsTriggerCtrl($scope, hintService) {
 		$scope.criteria = {
 			name: '',
 			wojew: '',
@@ -37,31 +33,32 @@ function Hintable(hintService) {
 			matching: 'START',
 			kind: 'STANDALONE'
 		};
-			
-		$scope.locality = {};
 		 
-		$scope.change = function() {
-			console.log('change name: ' + $scope.criteria.name);
-			
-			if ($scope.criteria.name.length >= $scope.autoTrigger) {
-				hintService.firstPage($scope.criteria);
-			}
-			else if (!hintService.isEmpty()) {
-				hintService.release();
+		$scope.autoTrigger = function(newValue) {
+			if (newValue != $scope.criteria.name) {
+				$scope.criteria.name = newValue;
+				console.log('change name: ' + $scope.criteria.name);
+				
+				if ($scope.criteria.name.length >= $scope.autoTrig) {
+					hintService.firstPage($scope.criteria);
+				}
+				else if (!hintService.isEmpty()) {
+					hintService.release();
+				}
 			}
 		}
 		
-		$scope.keydown = function($event) {
-			if (hintService.isEmpty()) {
-				// w dół
-				if ($event.keyCode == 40) {
-					if ($scope.criteria.name.length >= $scope.keydownTrigger)
-						hintService.firstPage($scope.criteria);
-					$event.preventDefault();
-				}
+		$scope.arrowdownTrigger = function($event) {
+			// strzałka w dół
+			if ($event.keyCode == 40 && hintService.isEmpty()) {
+				if ($scope.criteria.name.length >= $scope.arrowdownTrig)
+					hintService.firstPage($scope.criteria);
+				$event.preventDefault();
 			}
-			
-			else {
+		}
+		
+		$scope.onKeydown = function($event) {
+			if (!hintService.isEmpty()) {
 				// Page Down - następna strona
 				if ($event.keyCode == 34) {
 					hintService.nextPage();
@@ -74,13 +71,13 @@ function Hintable(hintService) {
 					$event.preventDefault();
 				}
 				
-				// w dół
+				// strzałka w dół
 				else if ($event.keyCode == 40) {
 					hintService.nextHint();
 					$event.preventDefault();
 				}
 				
-				// w górę
+				// strzałka w górę
 				else if ($event.keyCode == 38) {
 					hintService.prevHint();
 					$event.preventDefault();
@@ -95,11 +92,12 @@ function Hintable(hintService) {
 				// escape
 				else if ($event.keyCode == 27) {
 					hintService.release();
+					$event.preventDefault();
 				}
 			}
-		} // end of keydown
-	} // end of hintableCtrl
-} // end of Hintable directive
+		} // end of onKeydown
+	} // end of hintsTriggerCtrl
+} // end of directive HintsTrigger
 
 // Hints directive
 function Hints(hintService) {
@@ -114,14 +112,18 @@ function Hints(hintService) {
 			var watcherFn = function(watchScope) {
 				return watchScope.$eval('getHints()');
 			}
-			scope.$watch(watcherFn, function(newValue, oldValue) {
-				scope.render();
-			});
+			scope.$watch(watcherFn, scope.render);
+			
+			element.on('wheel', scope.onWheel);
 		}
 	}
 	
 	function hintsCtrl($scope, hintService) {
 		$scope.hints = {};
+		
+		$scope.getHints = function() {
+			return hintService.getHints();
+		}
 		
 		$scope.render = function() {
 			$scope.hints = hintService.getHints();
@@ -129,8 +131,13 @@ function Hints(hintService) {
 			$scope.showBar = $scope.hints.totalPages > 1;
 		}
 		
-		$scope.getHints = function() {
-			return hintService.getHints();
+		$scope.onWheel = function(event) {
+			if ($scope.showBar) {
+				if (event.deltaY > 0)
+					hintService.nextPage();
+				else
+					hintService.prevPage();
+			}
 		}
 	}
 } // end of Hints directive
@@ -145,28 +152,32 @@ function HintItem(hintService) {
 		scope: false,
 		controller: hintItemCtrl,
 		link: function (scope, element, attrs, ctrl, transclude) {
+			scope.node =  element;
+			scope.transclude = transclude;
 			var watcherFn = function(watchScope) {
 				return watchScope.$eval('getHints()');
 			}
-			scope.$watch(watcherFn, function(newValue, oldValue) {
-				var hints = hintService.getHints().items;
-				var prev = element;
-				for(var i = 0; i < hints.length; i++) {
-					var childScope = scope.$new();
-					childScope.hint = hints[i];
-					transclude(childScope, function(clone) {
-						prev.after(clone);
-						prev = clone;
-						hintService.addNode(prev);
-					});
-				}
-			});
+			scope.$watch(watcherFn, scope.render);
 		}
 	}
 	
 	function hintItemCtrl($scope, hintService) {
 		$scope.getHints = function() {
 			return hintService.getHints();
+		}
+		
+		$scope.render = function() {
+			var hints = hintService.getHints().items;
+			var node = $scope.node;
+			for(var i = 0; i < hints.length; i++) {
+				var childScope = $scope.$new();
+				childScope.hint = hints[i];
+				$scope.transclude(childScope, function(clone) {
+					node.after(clone);
+					node = clone;
+					hintService.addNode(node);
+				});
+			}
 		}
 	}
 }
