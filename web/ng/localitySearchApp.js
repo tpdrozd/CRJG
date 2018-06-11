@@ -5,12 +5,12 @@ angular.module('localitySearchApp', ['hints'])
 function localitySearchCtrl($scope, searchSrv) {
 	$scope.criteria = {
 		name: '',
-		wojew: '',
-		hist: false,
+		wojew: 'lubelskie',
+		hist: true,
 		collat: false,
 		foreign: false,
 		matching: 'START',
-		kind: 'STANDALONE'
+		kind: 'ALL'
 	};
 	
 	$scope.locality = {};

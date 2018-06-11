@@ -1,8 +1,23 @@
 angular.module('hintService', ['searchService'])
 
+.factory('criteriaService', criteriaService)
 .factory('hintService', hintService);
 
-function hintService(searchSrv) {
+function criteriaService() {
+	var criteria = {};
+	
+	return {
+		update: function (name, value) {
+			criteria[name] = value;
+			console.log('criteriaService.update ' + name + ': ' + value);
+		},
+		getCriteria: function() {
+			return criteria;
+		}
+	}
+} // end of criteriaService
+
+function hintService(searchSrv, criteriaService) {
 	var hints = {items: []};
 	var nodes = [];
 	var index = -1;
@@ -19,7 +34,8 @@ function hintService(searchSrv) {
 	}
 	
 	return {
-		firstPage: function(criteria) {
+		firstPage: function() {
+			var criteria = criteriaService.getCriteria();
 			searchSrv.firstPage(criteria).then(
 				function success(response) {
 					hints = response.data;

@@ -34,19 +34,19 @@
 									<table>
 										<tr>
 											<td>
-												<input type="checkbox" ng-model="criteria.hist" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="checkbox" ng-model="criteria.hist" hints-criteria="hist"></input>
 												Historyczne
 											</td>
 										</tr>
 										<tr>
 											<td>
-												<input type="checkbox" ng-model="criteria.collat" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="checkbox" checked="checked" hints-criteria="collat"></input>
 												Oboczne
 											</td>
 										</tr>
 										<tr>
 											<td title="Nazwy w językach obcych">
-												<input type="checkbox" ng-model="criteria.foreign" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="checkbox" hints-criteria="foreign"></input>
 												Obce
 											</td>
 										</tr>
@@ -60,20 +60,20 @@
 									<table>
 										<tr>
 											<td>
-												<input type="radio" ng-model="criteria.matching" value="START" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" name="matching" value="START" checked="checked" hints-criteria="matching"></input>
 												Początku nazwy
 											</td>
 										</tr>
 										<tr>
-											<td>
-												<input type="radio"  ng-model="criteria.matching" value="END" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Końca nazwy
+											<td title="Także w środku nazwy">
+												<input type="radio" name="matching" value="EVERYWHERE" hints-criteria="matching"></input>
+												Gdzie kolwiek
 											</td>
 										</tr>
 										<tr>
-											<td title="Także w środku nazwy">
-												<input type="radio"  ng-model="criteria.matching" value="EVERYWHERE" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Gdzie kolwiek
+											<td>
+												<input type="radio" name="matching" value="END" hints-criteria="matching"></input>
+												Końca nazwy
 											</td>
 										</tr>
 									</table>
@@ -86,20 +86,20 @@
 									<table>
 										<tr>
 											<td>
-												<input type="radio" ng-model="criteria.kind" value="STANDALONE" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" ng-model="criteria.kind" value="ALL" hints-criteria="kind" ng-change="change()" ng-keydown="keydown($event)"></input>
+												Wszystkie
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<input type="radio" ng-model="criteria.kind" value="STANDALONE" hints-criteria="kind" ng-change="change()" ng-keydown="keydown($event)"></input>
 												Samodzielne
 											</td>
 										</tr>
 										<tr>
 											<td title="Będące częścią innych miejscowości">
-												<input type="radio" ng-model="criteria.kind" value="DEPENDENT" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" ng-model="criteria.kind" value="DEPENDENT" hints-criteria="kind" ng-change="change()" ng-keydown="keydown($event)"></input>
 												Niesamodzielne
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<input type="radio" ng-model="criteria.kind" value="ALL" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Wszystkie
 											</td>
 										</tr>
 									</table>
@@ -110,7 +110,7 @@
 						<tr>
 							<td colspan="9" style="position: relative;">
 								Fragment nazwy: <br/>
-								<input type="search" name="name" autofocus ng-model="criteria.name" hints-trigger auto-trig="3" arrowdown-trig="2"></input>
+								<input type="search" name="name" ng-model="criteria.name" autofocus hints-criteria="name" hints-auto-trig="5" hints-arrdw-trig="3" hints-nav></input>
 								
 								<!-- list of hints -->
 								<div hints class="locSearchList" style="top: 44px; left: 5px;">
@@ -129,8 +129,8 @@
 
 							<td colspan="6">
 								Województwo: <br/>
-								<f:select path="wojew" ng-model="criteria.wojew" ng-change="change()" ng-keydown="keydown($event)">
-									<option label="Cała Polska" value=""/>
+								<f:select path="wojew" ng-model="criteria.wojew" hints-criteria="wojew" hints-auto-trig="0">
+									<option label="Cała Polska" value="" />
 									<f:options items="${wojews}" />
 								</f:select>
 							</td>

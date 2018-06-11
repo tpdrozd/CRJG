@@ -1,103 +1,225 @@
 angular.module('hints', ['hintService'])
 
-.directive('hintsTrigger', HintsTrigger)
+.factory('autoTrigService', trigService)
+.factory('arrdwTrigService', trigService)
+
+.directive('hintsCriteria', HintsCriteria)
+.directive('hintsAutoTrig', HintsAutoTrig)
+.directive('hintsArrdwTrig', HintsArrdwTrig)
+.directive('hintsNav', HintsNav)
+
 .directive('hints', Hints)
 .directive('hintItem', HintItem);
 
-function HintsTrigger(hintService) {
+function trigService (criteriaService) {
+	var trigLimits = {};
+	
+	return {
+		addTrigLimit: function (name, limit) {
+			trigLimits[name] = limit;
+			console.log('addTrigLimit: ' + name + ' = ' + limit);
+		},
+		isTrigAllowed: function() {
+			var result = true;
+			angular.forEach(trigLimits, function(value, key) {
+				if (this[key].length < value)
+					result = false;
+			}, criteriaService.getCriteria());
+			console.log('isTrigAllowed: ' + result);
+			return result;
+		}
+	}
+} // end of trigLimitService
+
+// directive
+function HintsCriteria (criteriaService) {
+	return {
+		restrict: 'A',
+		require: '?ngModel',
+		scope: true,
+		link: postLink,
+		controller: function($scope) {}
+	}
+
+	function postLink (scope, element, attrs, ctrl) {
+		scope.type = extractType();
+		scope.criteriaName = determineCriteriaName();
+	
+		// init
+		element.ready(function() {
+			scope.criteriaValue = getCriteriaValue();
+			if (scope.isRadio()) {
+				if (scope.isChecked())
+					criteriaService.update(scope.criteriaName, scope.criteriaValue);
+			}
+			else
+				criteriaService.update(scope.criteriaName, scope.criteriaValue);
+		});
+
+		// onchange
+		var onchangeListeners = [];
+		
+		scope.addOnchangeListener = function(listenerFn) {
+			if (hasOnchangeIssue())
+				onchangeListeners.push(listenerFn);
+			else
+				element.on('change', listenerFn);
+		};
+		
+		if (hasOnchangeIssue()) {
+			element.on('keyup', function($event) {
+				var newValue = getCriteriaValue();
+				if (newValue != scope.criteriaValue) {
+					scope.criteriaValue = newValue;
+					for (var i = 0; i < onchangeListeners.length; i++)
+						onchangeListeners[i] ($event);
+				}
+			});
+		}
+		else {
+			element.on('change', function($event) {
+				scope.criteriaValue = getCriteriaValue();
+			});
+		}
+
+		scope.addOnchangeListener(function ($event) {
+			criteriaService.update(scope.criteriaName, scope.criteriaValue);
+		});
+		
+		scope.isChecked = function() {
+			return angular.isDefined(element.attr('checked'));
+		}
+	
+		scope.isCheckbox = function() {
+			return angular.isDefined(scope.type) && scope.type == 'checkbox';
+		}
+		
+		scope.isRadio = function() {
+			return angular.isDefined(scope.type) && scope.type == 'radio';
+		}
+		
+		function extractType() {
+			var type = attrs.type;
+			return angular.isString(type) ? type.toLowerCase() : type;
+		}
+		
+		function determineCriteriaName() {
+			if (angular.isDefined(attrs.hintsCriteria))
+				return attrs.hintsCriteria;
+			else if (angular.isDefined(attrs.name))
+				return attrs.name;
+			else if (angular.isDefined(attrs.ngModel))
+				return attrs.ngModel;
+			else
+				return 'noname';
+		}
+		
+		function hasOnchangeIssue() {
+			return angular.isDefined(scope.type) && (scope.type == 'text' || scope.type == 'search');
+		}
+		
+		function getCriteriaValue() {
+			if (ctrl != null)
+				return ctrl.$modelValue;
+			else if (scope.isCheckbox())
+				return scope.isChecked();
+			else	
+				return element.val();
+		}
+	} // end of postLink
+} // end of directive HintsCriteria
+
+// directive
+function HintsAutoTrig (criteriaService, autoTrigService, hintService) {
+	return {
+		restrict: 'A',
+		require: 'hintsCriteria',
+		scope: true,
+		link: function (scope, element, attrs, ctrl) {
+			if (isFinite(attrs.hintsAutoTrig)) {
+				var limit = parseInt(attrs.hintsAutoTrig);
+				if (limit > 0)
+					autoTrigService.addTrigLimit(scope.criteriaName, limit);
+			}
+			
+			scope.addOnchangeListener(function($event) {
+				if (autoTrigService.isTrigAllowed())
+					hintService.firstPage();
+				else
+					hintService.release();
+			});
+		} // end of link
+	} // end of return
+} // end of directive HintsAutoTrig
+
+function HintsArrdwTrig (criteriaService, arrdwTrigService, hintService) {
+	return {
+		restrict: 'A',
+		require: 'hintsCriteria',
+		scope: true,
+		link: function (scope, element, attrs, ctrl) {
+			if (isFinite(attrs.hintsArrdwTrig)) {
+				var limit = parseInt(attrs.hintsArrdwTrig);
+				if (limit > 0)
+					arrdwTrigService.addTrigLimit(scope.criteriaName, limit);
+			}
+			
+			element.on('keydown', function($event) {
+				if (hintService.isEmpty() && $event.keyCode == 40 && arrdwTrigService.isTrigAllowed())
+					hintService.firstPage();
+			});
+		} // end of link
+	} // end of return
+} // end of directive HintsArrdwTrig
+
+function HintsNav(hintService) {
 	return {
 		restrict: 'A',
 		require: 'ngModel',
-		scope: {},
-		controller: hintsTriggerCtrl,
+		scope: true,
 		link: function (scope, element, attrs, ctrl) {
-			scope.autoTrig = attrs.autoTrig;
-			scope.arrowdownTrig = attrs.arrowdownTrig;
-			
-			element.on('keydown', scope.onKeydown);
-			
-			element.on('keydown', scope.arrowdownTrigger);
-			element.on('keyup', function($event) {
-				scope.autoTrigger(ctrl.$modelValue);
+			element.on('keydown', function($event) {
+				if (!hintService.isEmpty()) {
+					// Page Down - następna strona
+					if ($event.keyCode == 34) {
+						hintService.nextPage();
+						$event.preventDefault();
+					}
+					
+					// Page Up - poprzednia strona
+					else if ($event.keyCode == 33) {
+						hintService.prevPage();
+						$event.preventDefault();
+					}
+					
+					// strzałka w dół
+					else if ($event.keyCode == 40) {
+						hintService.nextHint();
+						$event.preventDefault();
+					}
+					
+					// strzałka w górę
+					else if ($event.keyCode == 38) {
+						hintService.prevHint();
+						$event.preventDefault();
+					}
+					
+					// enter
+					else if ($event.keyCode == 13) {
+						$scope.locality = hintService.selectHint();
+						$event.preventDefault();
+					}
+					
+					// escape
+					else if ($event.keyCode == 27) {
+						hintService.release();
+						$event.preventDefault();
+					}
+				}
 			});
-		}
-	}
-	
-	function hintsTriggerCtrl($scope, hintService) {
-		$scope.criteria = {
-			name: '',
-			wojew: '',
-			hist: false,
-			collat: false,
-			foreign: false,
-			matching: 'START',
-			kind: 'STANDALONE'
-		};
-		 
-		$scope.autoTrigger = function(newValue) {
-			if (newValue != $scope.criteria.name) {
-				$scope.criteria.name = newValue;
-				console.log('change name: ' + $scope.criteria.name);
-				
-				if ($scope.criteria.name.length >= $scope.autoTrig) {
-					hintService.firstPage($scope.criteria);
-				}
-				else if (!hintService.isEmpty()) {
-					hintService.release();
-				}
-			}
-		}
-		
-		$scope.arrowdownTrigger = function($event) {
-			// strzałka w dół
-			if ($event.keyCode == 40 && hintService.isEmpty()) {
-				if ($scope.criteria.name.length >= $scope.arrowdownTrig)
-					hintService.firstPage($scope.criteria);
-				$event.preventDefault();
-			}
-		}
-		
-		$scope.onKeydown = function($event) {
-			if (!hintService.isEmpty()) {
-				// Page Down - następna strona
-				if ($event.keyCode == 34) {
-					hintService.nextPage();
-					$event.preventDefault();
-				}
-				
-				// Page Up - poprzednia strona
-				else if ($event.keyCode == 33) {
-					hintService.prevPage();
-					$event.preventDefault();
-				}
-				
-				// strzałka w dół
-				else if ($event.keyCode == 40) {
-					hintService.nextHint();
-					$event.preventDefault();
-				}
-				
-				// strzałka w górę
-				else if ($event.keyCode == 38) {
-					hintService.prevHint();
-					$event.preventDefault();
-				}
-				
-				// enter
-				else if ($event.keyCode == 13) {
-					$scope.locality = hintService.selectHint();
-					$event.preventDefault();
-				}
-				
-				// escape
-				else if ($event.keyCode == 27) {
-					hintService.release();
-					$event.preventDefault();
-				}
-			}
-		} // end of onKeydown
-	} // end of hintsTriggerCtrl
-} // end of directive HintsTrigger
+		} // end of link
+	} // end of return
+} // end of directive HintsNav
 
 // Hints directive
 function Hints(hintService) {
