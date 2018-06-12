@@ -1,5 +1,5 @@
-/* LOCALITY SEARCH LIST */
-DIV.locSearchList {
+/* LOCALITY HINTS LIST */
+DIV.hints {
 	position: absolute;
 	top: 22px;
 	left: 6px;
@@ -12,7 +12,7 @@ DIV.locSearchList {
 }
 
 /* STATUS BAR */
-DIV.locSearchList DIV {
+DIV.hints DIV {
 	padding: 2px 10px;
 	background-color: #b33c00;
 	color: #ffc184;
@@ -21,7 +21,7 @@ DIV.locSearchList DIV {
 	font-weight: bold;
 }
 
-DIV.locSearchList DIV TABLE {
+DIV.hints DIV TABLE {
 	table-layout: auto;
 	margin: 0px;
 	border: none;
@@ -31,46 +31,46 @@ DIV.locSearchList DIV TABLE {
 	color: inherit;
 	font: inherit;
 }
-DIV.locSearchList DIV TABLE TD {
+DIV.hints DIV TABLE TD {
 	padding: 0px;
 	color: inherit;
 	font-size: large;
 	white-space: nowrap;
 }
-DIV.locSearchList DIV TABLE TD:NTH-CHILD(2) {
+DIV.hints DIV TABLE TD:NTH-CHILD(2) {
 	text-align: right;
 }
-DIV.locSearchList DIV TABLE TD:LAST-CHILD {
+DIV.hints DIV TABLE TD:LAST-CHILD {
 	text-align: right;
 }
 
-DIV.locSearchList DIV SPAN {
+DIV.hints DIV SPAN {
 	font-family: monospace;
 	font-style: normal;
 	font-size: large;
 }
 
 /* numery pozycji */
-DIV.locSearchList DIV SPAN.number {
+DIV.hints DIV SPAN.number {
 	display: inline-block;
 	width: 30px;
 	color: white;
 	text-align: center;
 }
 /* ilość pozycji, stron */
-DIV.locSearchList DIV SPAN.total {
+DIV.hints DIV SPAN.total {
 	padding-right: 2px;
 	color: white;
 }
 /* strona */
-DIV.locSearchList DIV SPAN.page {
+DIV.hints DIV SPAN.page {
 	display: inline-block;
 	width: 25px;
 	color: white;
 	text-align: right;
 }
 /* button */
-DIV.locSearchList DIV BUTTON {
+DIV.hints DIV BUTTON {
 	margin: 1px 0px 2px 0px;
 	border: 1px white dotted;
 	border-radius: 3px;
@@ -78,24 +78,24 @@ DIV.locSearchList DIV BUTTON {
 	color: white;
 	font-weight: normal;
 }
-DIV.locSearchList DIV BUTTON:HOVER {
+DIV.hints DIV BUTTON:HOVER {
 	border-style: solid;
 	color: maroon;
 }
-DIV.locSearchList DIV BUTTON:DISABLED {
+DIV.hints DIV BUTTON:DISABLED {
 	border: 1px white dotted;
 	background-color: #f2af73;
 	color: #ffe6cc;
 }
 
 /* LISTA */
-DIV.locSearchList UL {
+DIV.hints UL {
 	margin: 0px;
 	padding: 0px;
 	list-style-type: none;
 }
 
-DIV.locSearchList UL LI {
+DIV.hints UL LI {
 	border-top: 1px dotted #b33c00;
 	padding: 2px 5px 2px 10px;
 	color: #b33c00;
@@ -105,27 +105,27 @@ DIV.locSearchList UL LI {
 	white-space: nowrap;
 }
 
-DIV.locSearchList UL LI:NTH-OF-TYPE(2n+1) {
+DIV.hints UL LI:NTH-OF-TYPE(2n+1) {
 	background-color: #ffe6cc;
 }
 
 /* podświetlenie */
-DIV.locSearchList UL LI:FIRST-OF-TYPE, 
-DIV.locSearchList UL LI:FIRST-OF-TYPE.marked {
+DIV.hints UL LI:FIRST-OF-TYPE, 
+DIV.hints UL LI:FIRST-OF-TYPE.marked {
 	border-top: none;
 }
 
-DIV.locSearchList UL LI.marked {
+DIV.hints UL LI.marked {
 	border-top: 1px solid maroon;
 	background-color: #ffc184;
 }
 
-DIV.locSearchList UL LI.marked + LI {
+DIV.hints UL LI.marked + LI {
 	border-top: 1px solid maroon;
 }
 
 /* nazwa */
-DIV.locSearchList UL LI SPAN {
+DIV.hints UL LI SPAN {
 	color: maroon;
 	font-weight: bold;
 	font-style: normal;
@@ -133,24 +133,24 @@ DIV.locSearchList UL LI SPAN {
 	font-family: sans-serif;
 }
 /* typ */
-DIV.locSearchList UL LI SPAN.typ {
+DIV.hints UL LI SPAN.typ {
 	padding-left: 10px;
 	color: #b33c00;
 	font-style: italic;
 }
 /* parent */
-DIV.locSearchList UL LI SPAN.parent {
+DIV.hints UL LI SPAN.parent {
 	padding-left: 5px;
 	font-style: italic;
 }
 /* nazwy inne */
-DIV.locSearchList UL LI SPAN.other {
+DIV.hints UL LI SPAN.other {
 	float: right;
 	padding: 0px 5px;
 	color: #b33c00;
 }
 /* gmina */
-DIV.locSearchList UL LI SPAN.gm {
+DIV.hints UL LI SPAN.gm {
 	display: inline-block;
 	width: 200px;
 	padding-right: 10px;
@@ -159,7 +159,7 @@ DIV.locSearchList UL LI SPAN.gm {
 	font-family: monospace;
 }
 /* powiat */
-DIV.locSearchList UL LI SPAN.pow {
+DIV.hints UL LI SPAN.pow {
 	display: inline-block;
 	width: 200px;
 	padding-right: 10px;
@@ -168,7 +168,7 @@ DIV.locSearchList UL LI SPAN.pow {
 	font-family: monospace;
 }
 /* województwo */
-DIV.locSearchList UL LI SPAN.woj {
+DIV.hints UL LI SPAN.woj {
 	display: inline-block;
 	width: 200px;
 	padding-right: 5px;

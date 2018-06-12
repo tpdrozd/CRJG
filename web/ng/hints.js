@@ -43,7 +43,7 @@ function HintsCriteria (criteriaService) {
 
 	function postLink (scope, element, attrs, ctrl) {
 		scope.type = extractType();
-		scope.criteriaName = determineCriteriaName();
+		scope.criteriaName = attrs.hintsCriteria;
 	
 		// init
 		element.ready(function() {
@@ -101,17 +101,6 @@ function HintsCriteria (criteriaService) {
 		function extractType() {
 			var type = attrs.type;
 			return angular.isString(type) ? type.toLowerCase() : type;
-		}
-		
-		function determineCriteriaName() {
-			if (angular.isDefined(attrs.hintsCriteria))
-				return attrs.hintsCriteria;
-			else if (angular.isDefined(attrs.name))
-				return attrs.name;
-			else if (angular.isDefined(attrs.ngModel))
-				return attrs.ngModel;
-			else
-				return 'noname';
 		}
 		
 		function hasOnchangeIssue() {
@@ -175,7 +164,7 @@ function HintsArrdwTrig (criteriaService, arrdwTrigService, hintService) {
 function HintsNav(hintService) {
 	return {
 		restrict: 'A',
-		require: 'ngModel',
+		require: 'hintsCriteria',
 		scope: true,
 		link: function (scope, element, attrs, ctrl) {
 			element.on('keydown', function($event) {

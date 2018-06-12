@@ -9,7 +9,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="<t:url value="/css/localitySearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
-		<link href="<t:url value="/css/localitySearchResultPage.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
+		<link href="<t:url value="/css/hints.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 		<script type="text/javascript" src="<t:url value="/ng/localitySearchApp.js"/>"></script>
@@ -34,19 +34,19 @@
 									<table>
 										<tr>
 											<td>
-												<input type="checkbox" ng-model="criteria.hist" hints-criteria="hist"></input>
+												<input type="checkbox" hints-criteria="hist" hints-auto-trig></input>
 												Historyczne
 											</td>
 										</tr>
 										<tr>
 											<td>
-												<input type="checkbox" checked="checked" hints-criteria="collat"></input>
+												<input type="checkbox" hints-criteria="collat" hints-auto-trig></input>
 												Oboczne
 											</td>
 										</tr>
 										<tr>
 											<td title="Nazwy w językach obcych">
-												<input type="checkbox" hints-criteria="foreign"></input>
+												<input type="checkbox" hints-criteria="foreign" hints-auto-trig></input>
 												Obce
 											</td>
 										</tr>
@@ -60,19 +60,19 @@
 									<table>
 										<tr>
 											<td>
-												<input type="radio" name="matching" value="START" checked="checked" hints-criteria="matching"></input>
+												<input type="radio" name="matching" value="START" checked="checked" hints-criteria="matching" hints-auto-trig></input>
 												Początku nazwy
 											</td>
 										</tr>
 										<tr>
 											<td title="Także w środku nazwy">
-												<input type="radio" name="matching" value="EVERYWHERE" hints-criteria="matching"></input>
+												<input type="radio" name="matching" value="EVERYWHERE" hints-criteria="matching" hints-auto-trig></input>
 												Gdzie kolwiek
 											</td>
 										</tr>
 										<tr>
 											<td>
-												<input type="radio" name="matching" value="END" hints-criteria="matching"></input>
+												<input type="radio" name="matching" value="END" hints-criteria="matching" hints-auto-trig></input>
 												Końca nazwy
 											</td>
 										</tr>
@@ -86,19 +86,19 @@
 									<table>
 										<tr>
 											<td>
-												<input type="radio" ng-model="criteria.kind" value="ALL" hints-criteria="kind" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" name="kind" value="ALL" checked="checked" hints-criteria="kind" hints-auto-trig></input>
 												Wszystkie
 											</td>
 										</tr>
 										<tr>
 											<td>
-												<input type="radio" ng-model="criteria.kind" value="STANDALONE" hints-criteria="kind" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" name="kind" value="STANDALONE" hints-criteria="kind" hints-auto-trig></input>
 												Samodzielne
 											</td>
 										</tr>
 										<tr>
 											<td title="Będące częścią innych miejscowości">
-												<input type="radio" ng-model="criteria.kind" value="DEPENDENT" hints-criteria="kind" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" name="kind" value="DEPENDENT" hints-criteria="kind" hints-auto-trig></input>
 												Niesamodzielne
 											</td>
 										</tr>
@@ -110,10 +110,10 @@
 						<tr>
 							<td colspan="9" style="position: relative;">
 								Fragment nazwy: <br/>
-								<input type="search" name="name" ng-model="criteria.name" autofocus hints-criteria="name" hints-auto-trig="5" hints-arrdw-trig="3" hints-nav></input>
+								<input type="search" name="name" autofocus hints-criteria="name" hints-auto-trig="4" hints-arrdw-trig="3" hints-nav></input>
 								
 								<!-- list of hints -->
-								<div hints class="locSearchList" style="top: 44px; left: 5px;">
+								<div hints class="hints" style="top: 44px; left: 5px;">
 									<li hint-item>
 										<span>{{hint.name}}</span>
 										<span class="typ" title="Typ miejscowości">{{hint.type}}</span>
@@ -129,7 +129,7 @@
 
 							<td colspan="6">
 								Województwo: <br/>
-								<f:select path="wojew" ng-model="criteria.wojew" hints-criteria="wojew" hints-auto-trig="0">
+								<f:select path="wojew" hints-criteria="wojew" hints-auto-trig="x">
 									<option label="Cała Polska" value="" />
 									<f:options items="${wojews}" />
 								</f:select>
