@@ -1,4 +1,4 @@
-angular.module('hints', ['hintService'])
+angular.module('hints', ['hintService', 'searchService'])
 
 .factory('autoTrigService', trigService)
 .factory('arrdwTrigService', trigService)
@@ -211,7 +211,7 @@ function HintsNav(hintService) {
 } // end of directive HintsNav
 
 // Hints directive
-function Hints(hintService) {
+function Hints(hintService, searchSrv) {
 	return {
 		restrict: 'A',
 		templateUrl: 'hintsTemplate.html',
@@ -220,6 +220,8 @@ function Hints(hintService) {
 		scope: {},
 		controller: hintsCtrl,
 		link: function (scope, element, attrs, ctrl) {
+			searchSrv.setUrlBase(attrs.hints);
+			
 			var watcherFn = function(watchScope) {
 				return watchScope.$eval('getHints()');
 			}

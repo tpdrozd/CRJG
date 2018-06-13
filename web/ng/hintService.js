@@ -34,6 +34,9 @@ function hintService(searchSrv, criteriaService) {
 	}
 	
 	return {
+		setEndpoint: function(url) {
+			
+		},
 		firstPage: function() {
 			var criteria = criteriaService.getCriteria();
 			searchSrv.firstPage(criteria).then(

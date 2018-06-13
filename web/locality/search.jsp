@@ -113,7 +113,8 @@
 								<input type="search" name="name" autofocus hints-criteria="name" hints-auto-trig="4" hints-arrdw-trig="3" hints-nav></input>
 								
 								<!-- list of hints -->
-								<div hints class="hints" style="top: 44px; left: 5px;">
+								<t:url value="/locality/search" var="hintsSearchUrl"/>
+								<div hints="${hintsSearchUrl}" hints-paging-size="10" class="hints" style="top: 44px; left: 5px;">
 									<li hint-item>
 										<span>{{hint.name}}</span>
 										<span class="typ" title="Typ miejscowości">{{hint.type}}</span>
