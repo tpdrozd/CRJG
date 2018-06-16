@@ -21,6 +21,7 @@ function hintService(searchSrv, criteriaService) {
 	var hints = {items: []};
 	var nodes = [];
 	var index = -1;
+	var pagingSize = 9; // default value
 	
 	var isIndexInRange = function() {
 		return index >= 0 && index < nodes.length;
@@ -34,12 +35,15 @@ function hintService(searchSrv, criteriaService) {
 	}
 	
 	return {
-		setEndpoint: function(url) {
-			
+		setPagingSize: function(size) {
+			pagingSize = size;
 		},
 		firstPage: function() {
-			var criteria = criteriaService.getCriteria();
-			searchSrv.firstPage(criteria).then(
+			var request = {
+					pagingSize: pagingSize,
+					criteria: criteriaService.getCriteria()
+			};
+			searchSrv.firstPage(request).then(
 				function success(response) {
 					hints = response.data;
 					clearNodes();

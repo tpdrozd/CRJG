@@ -114,7 +114,7 @@
 								
 								<!-- list of hints -->
 								<t:url value="/locality/search" var="hintsSearchUrl"/>
-								<div hints="${hintsSearchUrl}" hints-paging-size="10" class="hints" style="top: 44px; left: 5px;">
+								<div hints="${hintsSearchUrl}" class="hints" style="top: 44px; left: 5px;">
 									<li hint-item>
 										<span>{{hint.name}}</span>
 										<span class="typ" title="Typ miejscowości">{{hint.type}}</span>

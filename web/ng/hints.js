@@ -222,6 +222,9 @@ function Hints(hintService, searchSrv) {
 		link: function (scope, element, attrs, ctrl) {
 			searchSrv.setUrlBase(attrs.hints);
 			
+			if (isFinite(attrs.hintsPagingSize))
+				hintService.setPagingSize(attrs.hintsPagingSize);
+			
 			var watcherFn = function(watchScope) {
 				return watchScope.$eval('getHints()');
 			}

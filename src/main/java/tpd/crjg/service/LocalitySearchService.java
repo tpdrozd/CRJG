@@ -18,7 +18,7 @@ public class LocalitySearchService extends PaginationSearchService<LocalitySearc
 	private LocalitySearchRepo repo;
 	
 	public LocalitySearchService () {
-		super(12, "l.name", "l.wojewodztwo", "l.powiat", "l.gmina");
+		super("l.name", "l.wojewodztwo", "l.powiat", "l.gmina");
 	}
 	
 	@Override
