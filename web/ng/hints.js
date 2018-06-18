@@ -9,6 +9,8 @@ angular.module('hints', ['hintService', 'searchService'])
 .directive('hintsNav', HintsNav)
 
 .directive('hints', Hints)
+.directive('hintsNext', HintsNext)
+.directive('hintsPrev', HintsPrev)
 .directive('hintItem', HintItem);
 
 function trigService (criteriaService) {
@@ -258,6 +260,44 @@ function Hints(hintService, searchSrv) {
 	}
 } // end of Hints directive
 
+function HintsNext(hintService) {
+	return {
+		restrict: 'A',
+		scope: false,
+		link: function (scope, element, attrs) {
+			element.on('click', function($event) {
+				hintService.nextPage();
+			});
+			
+			var watcherFn = function(watchScope) {
+				return watchScope.$eval('hints.last');
+			}
+			scope.$watch(watcherFn, function(newValue, oldValue) {
+				element.prop('disabled', newValue);
+			});
+		}
+	}
+} // end of HintsNext directive
+
+function HintsPrev(hintService) {
+	return {
+		restrict: 'A',
+		scope: false,
+		link: function (scope, element, attrs) {
+			element.on('click', function($event) {
+				hintService.prevPage();
+			});
+			
+			var watcherFn = function(watchScope) {
+				return watchScope.$eval('hints.first');
+			}
+			scope.$watch(watcherFn, function(newValue, oldValue) {
+				element.prop('disabled', newValue);
+			});
+		}
+	}
+} // end of HintsPrev directive
+
 // HintItem directive
 function HintItem(hintService) {
 	return {
@@ -288,12 +328,19 @@ function HintItem(hintService) {
 			for(var i = 0; i < hints.length; i++) {
 				var childScope = $scope.$new();
 				childScope.hint = hints[i];
+//				childScope.indx = i;
+
 				$scope.transclude(childScope, function(clone) {
 					node.after(clone);
+					
+					childScope.indx = hintService.addNode(clone);
+//					clone.on('mouseenter', function($event) {
+//						hintService.hintAt(childScope.indx);
+//					});
+					
 					node = clone;
-					hintService.addNode(node);
 				});
 			}
-		}
+		} // end of render
 	}
 }

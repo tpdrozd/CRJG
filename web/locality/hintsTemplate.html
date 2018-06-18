@@ -10,8 +10,8 @@
 						Strona: <span class="page">{{hints.pageNumber}}</span> z <span class="total">{{hints.totalPages}}</span>
 					</td>
 					<td>
-						<button title="Poprzednia strona - [PageUp]" ng-disabled="hints.first" >Poprzednia <b>&lt;&lt;</b></button> <!-- ng-click="prevPage()" ng-keydown="keydown($event)" -->
-						<button title="Następna strona - [PageDown]" ng-disabled="hints.last" ><b>&gt;&gt;</b> Następna</button> <!-- ng-click="nextPage()" ng-keydown="keydown($event)" -->
+						<button title="Poprzednia strona - [PageUp]" hints-prev >Poprzednia <b>&lt;&lt;</b></button> <!-- ng-keydown="keydown($event)" -->
+						<button title="Następna strona - [PageDown]" hints-next ><b>&gt;&gt;</b> Następna</button> <!-- ng-keydown="keydown($event)" -->
 					</td>
 				</tr>
 			</tbody>

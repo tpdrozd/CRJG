@@ -82,6 +82,14 @@ function hintService(searchSrv, criteriaService) {
 				nodes[index].addClass('marked');
 			}
 		},
+		hintAt: function(indx) {
+			if (isIndexInRange())
+				nodes[index].removeClass('marked');
+			index = indx;
+			if (isIndexInRange())
+				nodes[index].addClass('marked');
+
+		},
 		selectHint: function() {
 			if (isIndexInRange()) {
 				var id = hints.items[index].id;
@@ -109,6 +117,7 @@ function hintService(searchSrv, criteriaService) {
 		},
 		addNode: function(element) {
 			nodes.push(element);
+			return nodes.length - 1;
 		}
 	}
 }
