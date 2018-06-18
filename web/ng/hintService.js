@@ -9,7 +9,6 @@ function criteriaService() {
 	return {
 		update: function (name, value) {
 			criteria[name] = value;
-			console.log('criteriaService.update ' + name + ': ' + value);
 		},
 		getCriteria: function() {
 			return criteria;

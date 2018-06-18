@@ -27,7 +27,6 @@ function trigService (criteriaService) {
 				if (this[key].length < value)
 					result = false;
 			}, criteriaService.getCriteria());
-			console.log('isTrigAllowed: ' + result);
 			return result;
 		}
 	}
@@ -328,15 +327,19 @@ function HintItem(hintService) {
 			for(var i = 0; i < hints.length; i++) {
 				var childScope = $scope.$new();
 				childScope.hint = hints[i];
-//				childScope.indx = i;
+				childScope.indx = i;
 
-				$scope.transclude(childScope, function(clone) {
+				$scope.transclude(childScope, function(clone, scp) {
 					node.after(clone);
+					hintService.addNode(clone);
 					
-					childScope.indx = hintService.addNode(clone);
-//					clone.on('mouseenter', function($event) {
-//						hintService.hintAt(childScope.indx);
-//					});
+					clone.on('mouseenter', function($event) {
+						hintService.hintAt(scp.indx);
+					});
+					
+					clone.on('click', function($event) {
+						hintService.selectHint();
+					});
 					
 					node = clone;
 				});
