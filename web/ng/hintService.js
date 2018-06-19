@@ -18,8 +18,11 @@ function criteriaService() {
 
 function hintService(searchSrv, criteriaService) {
 	var hints = {items: []};
+	var selectedHint = {};
+	
 	var nodes = [];
 	var index = -1;
+	
 	var pagingSize = 9; // default value
 	
 	var isIndexInRange = function() {
@@ -96,12 +99,16 @@ function hintService(searchSrv, criteriaService) {
 					function success(response) {
 						hints = {items: []};
 						clearNodes();
-						return response.data;
+						selectedHint = response.data;
+						console.log('selectHint ' + selectedHint.name);
 				});
 			}
 			else {
 				console.log('selectHint index out of range');
 			}
+		},
+		getSelectedHint: function() {
+			return selectedHint;
 		},
 		release: function() {
 			searchSrv.release();

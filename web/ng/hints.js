@@ -19,7 +19,6 @@ function trigService (criteriaService) {
 	return {
 		addTrigLimit: function (name, limit) {
 			trigLimits[name] = limit;
-			console.log('addTrigLimit: ' + name + ' = ' + limit);
 		},
 		isTrigAllowed: function() {
 			var result = true;
@@ -196,7 +195,7 @@ function HintsNav(hintService) {
 					
 					// enter
 					else if ($event.keyCode == 13) {
-						$scope.locality = hintService.selectHint();
+						hintService.selectHint();
 						$event.preventDefault();
 					}
 					
