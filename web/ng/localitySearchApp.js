@@ -1,20 +1,12 @@
-angular.module('localitySearchApp', ['hints', 'hintService'])
+angular.module('localitySearchApp', ['hints'])
 
 .controller('localitySearchCtrl', localitySearchCtrl);
 
 function localitySearchCtrl($scope, hintService) {
 	$scope.locality = {name: 'asd'};
 	
-	// by event - tu skończyłem
-//	$scope.$on('selectHint', function(event, hint) {
-//		$scope.locality = hint;
-//	});
-	
-	// by watching
-	$scope.getSelectedHint = function() {
-		return hintService.getSelectedHint();
-	}
-	$scope.$watch('getSelectedHint()', function(newValue, oldValue) {
-		$scope.locality = newValue;
+	// by event
+	$scope.$on('selectHint', function(event, hint) {
+		$scope.locality = hint;
 	});
-} /* end of localitySearchCtrl */
+} // end of localitySearchCtrl

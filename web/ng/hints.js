@@ -225,12 +225,13 @@ function Hints(hintService, searchSrv) {
 			if (isFinite(attrs.hintsPagingSize))
 				hintService.setPagingSize(attrs.hintsPagingSize);
 			
-			var watcherFn = function(watchScope) {
-				return watchScope.$eval('getHints()');
-			}
-			scope.$watch(watcherFn, scope.render);
-			
 			element.on('wheel', scope.onWheel);
+			
+			scope.$watch('getHints()', scope.render);
+			
+			scope.$watch('getSelectedHint()', function(newHint, oldHint) {
+				scope.$emit('selectHint', newHint);
+			});
 		}
 	}
 	
@@ -239,6 +240,10 @@ function Hints(hintService, searchSrv) {
 		
 		$scope.getHints = function() {
 			return hintService.getHints();
+		}
+		
+		$scope.getSelectedHint = function() {
+			return hintService.getSelectedHint();
 		}
 		
 		$scope.render = function() {
