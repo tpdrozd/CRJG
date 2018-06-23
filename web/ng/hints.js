@@ -1,8 +1,5 @@
 angular.module('hints', ['hintService', 'searchService'])
 
-.factory('autoTrigService', trigService)
-.factory('arrdwTrigService', trigService)
-
 .directive('hintsCriteria', HintsCriteria)
 .directive('hintsAutoTrig', HintsAutoTrig)
 .directive('hintsArrdwTrig', HintsArrdwTrig)
@@ -12,24 +9,6 @@ angular.module('hints', ['hintService', 'searchService'])
 .directive('hintsNext', HintsNext)
 .directive('hintsPrev', HintsPrev)
 .directive('hintItem', HintItem);
-
-function trigService (criteriaService) {
-	var trigLimits = {};
-	
-	return {
-		addTrigLimit: function (name, limit) {
-			trigLimits[name] = limit;
-		},
-		isTrigAllowed: function() {
-			var result = true;
-			angular.forEach(trigLimits, function(value, key) {
-				if (this[key].length < value)
-					result = false;
-			}, criteriaService.getCriteria());
-			return result;
-		}
-	}
-} // end of trigLimitService
 
 // directive
 function HintsCriteria (criteriaService) {
@@ -161,7 +140,7 @@ function HintsArrdwTrig (criteriaService, arrdwTrigService, hintService) {
 	} // end of return
 } // end of directive HintsArrdwTrig
 
-function HintsNav(hintService) {
+function HintsNav(hintService, itemService) {
 	return {
 		restrict: 'A',
 		require: 'hintsCriteria',
@@ -183,13 +162,13 @@ function HintsNav(hintService) {
 					
 					// strzałka w dół
 					else if ($event.keyCode == 40) {
-						hintService.nextHint();
+						itemService.markNextItem();
 						$event.preventDefault();
 					}
 					
 					// strzałka w górę
 					else if ($event.keyCode == 38) {
-						hintService.prevHint();
+						itemService.markPrevItem();
 						$event.preventDefault();
 					}
 					
@@ -216,7 +195,6 @@ function Hints(hintService, searchSrv) {
 		restrict: 'A',
 		templateUrl: 'hintsTemplate.html',
 		transclude: true,
-		priority: 100,
 		scope: {},
 		controller: hintsCtrl,
 		link: function (scope, element, attrs, ctrl) {
@@ -224,11 +202,30 @@ function Hints(hintService, searchSrv) {
 			
 			if (isFinite(attrs.hintsPagingSize))
 				hintService.setPagingSize(attrs.hintsPagingSize);
+
+			// obsługa wyświetlenia nowej (pierwszej/następnej/poprzedniej) strony
+			scope.$watch('getHints()', function(newHints, oldHints) {
+				scope.hints = newHints;
+				
+				if (scope.hints.itemsCount == 0)
+					element.addClass('ng-hide');
+				else
+					element.removeClass('ng-hide');
+				
+				scope.showBar = scope.hints.totalPages > 1;
+			});
 			
-			element.on('wheel', scope.onWheel);
+			// obsługa przewijania stron kółkiem myszy
+			element.on('wheel', function(event) {
+				if (scope.showBar) {
+					if (event.deltaY > 0)
+						hintService.nextPage();
+					else
+						hintService.prevPage();
+				}
+			});
 			
-			scope.$watch('getHints()', scope.render);
-			
+			// obsługa wybrania konkretnego hintu
 			scope.$watch('getSelectedHint()', function(newHint, oldHint) {
 				scope.$emit('selectHint', newHint);
 			});
@@ -236,7 +233,7 @@ function Hints(hintService, searchSrv) {
 	}
 	
 	function hintsCtrl($scope, hintService) {
-		$scope.hints = {};
+		$scope.hints = {items: []};
 		
 		$scope.getHints = function() {
 			return hintService.getHints();
@@ -245,37 +242,20 @@ function Hints(hintService, searchSrv) {
 		$scope.getSelectedHint = function() {
 			return hintService.getSelectedHint();
 		}
-		
-		$scope.render = function() {
-			$scope.hints = hintService.getHints();
-			$scope.showList = $scope.hints.itemsCount > 0;
-			$scope.showBar = $scope.hints.totalPages > 1;
-		}
-		
-		$scope.onWheel = function(event) {
-			if ($scope.showBar) {
-				if (event.deltaY > 0)
-					hintService.nextPage();
-				else
-					hintService.prevPage();
-			}
-		}
-	}
+	} // end of hintsCtrl
 } // end of Hints directive
 
 function HintsNext(hintService) {
 	return {
 		restrict: 'A',
+		required: '^^hints',
 		scope: false,
 		link: function (scope, element, attrs) {
 			element.on('click', function($event) {
 				hintService.nextPage();
 			});
 			
-			var watcherFn = function(watchScope) {
-				return watchScope.$eval('hints.last');
-			}
-			scope.$watch(watcherFn, function(newValue, oldValue) {
+			scope.$watch('hints.last', function(newValue, oldValue) {
 				element.prop('disabled', newValue);
 			});
 		}
@@ -285,16 +265,14 @@ function HintsNext(hintService) {
 function HintsPrev(hintService) {
 	return {
 		restrict: 'A',
+		required: '^^hints',
 		scope: false,
 		link: function (scope, element, attrs) {
 			element.on('click', function($event) {
 				hintService.prevPage();
 			});
 			
-			var watcherFn = function(watchScope) {
-				return watchScope.$eval('hints.first');
-			}
-			scope.$watch(watcherFn, function(newValue, oldValue) {
+			scope.$watch('hints.first', function(newValue, oldValue) {
 				element.prop('disabled', newValue);
 			});
 		}
@@ -302,52 +280,46 @@ function HintsPrev(hintService) {
 } // end of HintsPrev directive
 
 // HintItem directive
-function HintItem(hintService) {
+function HintItem(hintService, itemService) {
 	return {
 		restrict: 'A',
 		required: '^^hints',
-		transclude: 'element',
-		priority: 150,
 		scope: false,
+		transclude: 'element',
 		controller: hintItemCtrl,
 		link: function (scope, element, attrs, ctrl, transclude) {
-			scope.node =  element;
-			scope.transclude = transclude;
-			var watcherFn = function(watchScope) {
-				return watchScope.$eval('getHints()');
-			}
-			scope.$watch(watcherFn, scope.render);
-		}
+			
+			scope.$watch('getItems()', function(newItems, oldItems) {
+				console.log('render');
+				itemService.removeItems();
+				var node = element;
+				for(var i = 0; i < newItems.length; i++) {
+					var childScope = scope.$new();
+					childScope.hint = newItems[i];
+					childScope.indx = i;
+
+					transclude(childScope, function(clone, scp) {
+						node.after(clone);
+						itemService.addItem(clone);
+						
+						clone.on('mouseenter', function($event) {
+							itemService.markItemAt(scp.indx);
+						});
+						
+						clone.on('click', function($event) {
+							hintService.selectHint();
+						});
+						
+						node = clone;
+					});
+				}
+			});
+		} // end of link
 	}
 	
 	function hintItemCtrl($scope, hintService) {
-		$scope.getHints = function() {
-			return hintService.getHints();
+		$scope.getItems = function() {
+			return hintService.getHints().items;
 		}
-		
-		$scope.render = function() {
-			var hints = hintService.getHints().items;
-			var node = $scope.node;
-			for(var i = 0; i < hints.length; i++) {
-				var childScope = $scope.$new();
-				childScope.hint = hints[i];
-				childScope.indx = i;
-
-				$scope.transclude(childScope, function(clone, scp) {
-					node.after(clone);
-					hintService.addNode(clone);
-					
-					clone.on('mouseenter', function($event) {
-						hintService.hintAt(scp.indx);
-					});
-					
-					clone.on('click', function($event) {
-						hintService.selectHint();
-					});
-					
-					node = clone;
-				});
-			}
-		} // end of render
 	}
 }

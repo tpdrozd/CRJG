@@ -1,7 +1,10 @@
 angular.module('hintService', ['searchService'])
 
 .factory('criteriaService', criteriaService)
-.factory('hintService', hintService);
+.factory('autoTrigService', trigService)
+.factory('arrdwTrigService', trigService)
+.factory('hintService', hintService)
+.factory('itemService', itemService);
 
 function criteriaService() {
 	var criteria = {};
@@ -16,25 +19,29 @@ function criteriaService() {
 	}
 } // end of criteriaService
 
-function hintService(searchSrv, criteriaService) {
+function trigService (criteriaService) {
+	var trigLimits = {};
+	
+	return {
+		addTrigLimit: function (name, limit) {
+			trigLimits[name] = limit;
+		},
+		isTrigAllowed: function() {
+			var result = true;
+			angular.forEach(trigLimits, function(value, key) {
+				if (this[key].length < value)
+					result = false;
+			}, criteriaService.getCriteria());
+			return result;
+		}
+	}
+} // end of trigLimitService
+
+function hintService(searchSrv, criteriaService, itemService) {
 	var hints = {items: []};
 	var selectedHint = {};
 	
-	var nodes = [];
-	var index = -1;
-	
-	var pagingSize = 9; // default value
-	
-	var isIndexInRange = function() {
-		return index >= 0 && index < nodes.length;
-	}
-	var clearNodes = function() {
-		for(var i = 0; i < nodes.length; i++) {
-			nodes[i].remove();
-		}
-		nodes = [];
-		index = -1;
-	}
+	var pagingSize = 10; // default value
 	
 	return {
 		setPagingSize: function(size) {
@@ -42,13 +49,12 @@ function hintService(searchSrv, criteriaService) {
 		},
 		firstPage: function() {
 			var request = {
-					pagingSize: pagingSize,
-					criteria: criteriaService.getCriteria()
+				pagingSize: pagingSize,
+				criteria: criteriaService.getCriteria()
 			};
 			searchSrv.firstPage(request).then(
 				function success(response) {
 					hints = response.data;
-					clearNodes();
 			});
 		},
 		nextPage: function() {
@@ -56,7 +62,6 @@ function hintService(searchSrv, criteriaService) {
 				searchSrv.nextPage().then(
 					function success(response) {
 						hints = response.data;
-						clearNodes();
 				});
 			}
 		},
@@ -65,55 +70,26 @@ function hintService(searchSrv, criteriaService) {
 				searchSrv.prevPage().then(
 					function success(response) {
 						hints = response.data;
-						clearNodes();
 				});
 			}
 		},
-		nextHint: function() {
-			if (index < nodes.length - 1) {
-				if (index >= 0)
-					nodes[index].removeClass('marked');
-				index++;
-				nodes[index].addClass('marked');
-			}
-		},
-		prevHint: function() {
-			if (index > 0 && index < nodes.length) {
-				nodes[index].removeClass('marked');
-				index--;
-				nodes[index].addClass('marked');
-			}
-		},
-		hintAt: function(indx) {
-			if (isIndexInRange())
-				nodes[index].removeClass('marked');
-			index = indx;
-			if (isIndexInRange())
-				nodes[index].addClass('marked');
-
-		},
 		selectHint: function() {
-			if (isIndexInRange()) {
-				var id = hints.items[index].id;
+			if (itemService.hasMarkedItem()) {
+				var indx = itemService.markedItemIndex();
+				var id = hints.items[indx].id;
 				searchSrv.details(id).then(
 					function success(response) {
-						hints = {items: []};
-						clearNodes();
 						selectedHint = response.data;
+						hints = {items: []};
 						console.log('selectHint ' + selectedHint.name);
 				});
 			}
-			else {
-				console.log('selectHint index out of range');
-			}
-		},
-		getSelectedHint: function() {
-			return selectedHint;
 		},
 		release: function() {
-			searchSrv.release();
-			hints = {items: []};
-			clearNodes();
+			searchSrv.release().then(
+				function success(response) {
+					hints = {items: []};
+			});
 		},
 		isEmpty: function() {
 			return hints.items.length == 0;
@@ -121,9 +97,58 @@ function hintService(searchSrv, criteriaService) {
 		getHints: function() {
 			return hints;
 		},
-		addNode: function(element) {
-			nodes.push(element);
-			return nodes.length - 1;
+		getSelectedHint: function() {
+			return selectedHint;
 		}
 	}
-}
+} // end of hintService
+
+function itemService() {
+	var items = [];
+	var index = -1;
+
+	var isIndexInRange = function() {
+		return index >= 0 && index < items.length;
+	}
+
+	return {
+		addItem: function(item) {
+			items.push(item);
+			return items.length - 1;
+		},
+		removeItems: function() {
+			while (items.length > 0)
+				items.pop().remove();
+			index = -1;
+		},
+		markNextItem: function() {
+			if (index < items.length - 1) {
+				if (index >= 0)
+					items[index].removeClass('marked');
+				index++;
+				items[index].addClass('marked');
+			}
+		},
+		markPrevItem: function() {
+			if (index > 0 && index < items.length) {
+				items[index].removeClass('marked');
+				index--;
+				items[index].addClass('marked');
+			}
+		},
+		markItemAt: function(indx) {
+			if (isIndexInRange())
+				items[index].removeClass('marked');
+			index = indx;
+			if (isIndexInRange())
+				items[index].addClass('marked');
+
+		},
+		hasMarkedItem: function() {
+			return isIndexInRange();
+		},
+		markedItemIndex: function() {
+			return index;
+		}
+	}
+} // end of itemService
