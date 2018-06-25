@@ -1,4 +1,4 @@
-angular.module('hints', ['hintService', 'searchService'])
+angular.module('hints', ['hintService'])
 
 .directive('hintsCriteria', HintsCriteria)
 .directive('hintsAutoTrig', HintsAutoTrig)
@@ -98,7 +98,7 @@ function HintsCriteria (criteriaService) {
 } // end of directive HintsCriteria
 
 // directive
-function HintsAutoTrig (criteriaService, autoTrigService, hintService) {
+function HintsAutoTrig (autoTrigService, hintService) {
 	return {
 		restrict: 'A',
 		require: 'hintsCriteria',
@@ -120,7 +120,7 @@ function HintsAutoTrig (criteriaService, autoTrigService, hintService) {
 	} // end of return
 } // end of directive HintsAutoTrig
 
-function HintsArrdwTrig (criteriaService, arrdwTrigService, hintService) {
+function HintsArrdwTrig (arrdwTrigService, hintService) {
 	return {
 		restrict: 'A',
 		require: 'hintsCriteria',
@@ -190,7 +190,7 @@ function HintsNav(hintService, itemService) {
 } // end of directive HintsNav
 
 // Hints directive
-function Hints(hintService, searchSrv) {
+function Hints(hintService) {
 	return {
 		restrict: 'A',
 		templateUrl: 'hintsTemplate.html',
@@ -198,10 +198,7 @@ function Hints(hintService, searchSrv) {
 		scope: {},
 		controller: hintsCtrl,
 		link: function (scope, element, attrs, ctrl) {
-			searchSrv.setUrlBase(attrs.hints);
-			
-			if (isFinite(attrs.hintsPagingSize))
-				hintService.setPagingSize(attrs.hintsPagingSize);
+			hintService.init(attrs.hints, attrs.hintsPagingSize);
 
 			// obsługa wyświetlenia nowej (pierwszej/następnej/poprzedniej) strony
 			scope.$watch('getHints()', function(newHints, oldHints) {

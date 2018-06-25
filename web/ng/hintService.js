@@ -1,10 +1,17 @@
-angular.module('hintService', ['searchService'])
+angular.module('hintService', [])
+
+.constant('firstPage', '/firstPage.mvc')
+.constant('nextPage', '/nextPage.mvc')
+.constant('prevPage', '/prevPage.mvc')
+.constant('currPage', '/currPage.mvc')
+.constant('releasePages', '/releasePages.mvc')
+.constant('details', '/details.mvc')
 
 .factory('criteriaService', criteriaService)
 .factory('autoTrigService', trigService)
 .factory('arrdwTrigService', trigService)
-.factory('hintService', hintService)
-.factory('itemService', itemService);
+.factory('itemService', itemService)
+.factory('hintService', hintService);
 
 function criteriaService() {
 	var criteria = {};
@@ -36,72 +43,6 @@ function trigService (criteriaService) {
 		}
 	}
 } // end of trigLimitService
-
-function hintService(searchSrv, criteriaService, itemService) {
-	var hints = {items: []};
-	var selectedHint = {};
-	
-	var pagingSize = 10; // default value
-	
-	return {
-		setPagingSize: function(size) {
-			pagingSize = size;
-		},
-		firstPage: function() {
-			var request = {
-				pagingSize: pagingSize,
-				criteria: criteriaService.getCriteria()
-			};
-			searchSrv.firstPage(request).then(
-				function success(response) {
-					hints = response.data;
-			});
-		},
-		nextPage: function() {
-			if (hints.hasNext) {
-				searchSrv.nextPage().then(
-					function success(response) {
-						hints = response.data;
-				});
-			}
-		},
-		prevPage: function() {
-			if (hints.hasPrev) {
-				searchSrv.prevPage().then(
-					function success(response) {
-						hints = response.data;
-				});
-			}
-		},
-		selectHint: function() {
-			if (itemService.hasMarkedItem()) {
-				var indx = itemService.markedItemIndex();
-				var id = hints.items[indx].id;
-				searchSrv.details(id).then(
-					function success(response) {
-						selectedHint = response.data;
-						hints = {items: []};
-						console.log('selectHint ' + selectedHint.name);
-				});
-			}
-		},
-		release: function() {
-			searchSrv.release().then(
-				function success(response) {
-					hints = {items: []};
-			});
-		},
-		isEmpty: function() {
-			return hints.items.length == 0;
-		},
-		getHints: function() {
-			return hints;
-		},
-		getSelectedHint: function() {
-			return selectedHint;
-		}
-	}
-} // end of hintService
 
 function itemService() {
 	var items = [];
@@ -152,3 +93,77 @@ function itemService() {
 		}
 	}
 } // end of itemService
+
+function hintService(criteriaService, itemService, $http, firstPage, nextPage, prevPage, releasePages, details) {
+	var hints = {items: []};
+	var selectedHint = {};
+	
+	var pagingSize = 10; // default value
+	var firstPageUrl, nextPageUrl, prevPageUrl, releasePagesUrl, detailsUrl;
+	
+	return {
+		init: function(urlBase, size) {
+			firstPageUrl	= urlBase + firstPage;
+			nextPageUrl		= urlBase + nextPage;
+			prevPageUrl		= urlBase + prevPage;
+			releasePagesUrl	= urlBase + releasePages;
+			detailsUrl		= urlBase + details;
+			
+			if (angular.isDefined(size) && isFinite(size) && size > 0)
+				pagingSize = size ;
+		},
+		firstPage: function() {
+			var request = {
+				pagingSize: pagingSize,
+				criteria: criteriaService.getCriteria()
+			};
+			$http.post(firstPageUrl, request).then(
+				function success(response) {
+					hints = response.data;
+			});
+		},
+		nextPage: function() {
+			if (hints.hasNext) {
+				$http.get(nextPageUrl).then(
+					function success(response) {
+						hints = response.data;
+				});
+			}
+		},
+		prevPage: function() {
+			if (hints.hasPrev) {
+				$http.get(prevPageUrl).then(
+					function success(response) {
+						hints = response.data;
+				});
+			}
+		},
+		selectHint: function() {
+			if (itemService.hasMarkedItem()) {
+				var indx = itemService.markedItemIndex();
+				var id = hints.items[indx].id;
+				$http.post(detailsUrl, id).then(
+					function success(response) {
+						selectedHint = response.data;
+						hints = {items: []};
+						console.log('selectHint ' + selectedHint.name);
+				});
+			}
+		},
+		release: function() {
+			$http.get(releasePagesUrl).then(
+				function success(response) {
+					hints = {items: []};
+			});
+		},
+		isEmpty: function() {
+			return hints.items.length == 0;
+		},
+		getHints: function() {
+			return hints;
+		},
+		getSelectedHint: function() {
+			return selectedHint;
+		}
+	}
+} // end of hintService
