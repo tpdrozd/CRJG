@@ -11,7 +11,7 @@ angular.module('hints', ['hintService'])
 .directive('hintItem', HintItem);
 
 // directive
-function HintsCriteria (criteriaService) {
+function HintsCriteria (criteriaService, autoTrigService, arrdwTrigService) {
 	return {
 		restrict: 'A',
 		require: '?ngModel',
@@ -21,10 +21,23 @@ function HintsCriteria (criteriaService) {
 	}
 
 	function postLink (scope, element, attrs, ctrl) {
-		scope.type = extractType();
 		scope.criteriaName = attrs.hintsCriteria;
+		
+		if (isFinite(attrs.hntAutoThrs)) {
+			var limit = parseInt(attrs.hntAutoThrs);
+			if (limit > 0)
+				autoTrigService.addTrigLimit(scope.criteriaName, limit);
+		}
+
+		if (isFinite(attrs.hntArrdwThrs)) {
+			var limit = parseInt(attrs.hntArrdwThrs);
+			if (limit > 0)
+				arrdwTrigService.addTrigLimit(scope.criteriaName, limit);
+		}
 	
-		// init
+		// init value
+		scope.type = extractType();
+		
 		element.ready(function() {
 			scope.criteriaValue = getCriteriaValue();
 			if (scope.isRadio()) {
@@ -35,7 +48,7 @@ function HintsCriteria (criteriaService) {
 				criteriaService.update(scope.criteriaName, scope.criteriaValue);
 		});
 
-		// onchange
+		// onchange listeners
 		var onchangeListeners = [];
 		
 		scope.addOnchangeListener = function(listenerFn) {
@@ -45,23 +58,19 @@ function HintsCriteria (criteriaService) {
 				element.on('change', listenerFn);
 		};
 		
+		// handle keyup event as onchange event
 		if (hasOnchangeIssue()) {
 			element.on('keyup', function($event) {
-				var newValue = getCriteriaValue();
-				if (newValue != scope.criteriaValue) {
-					scope.criteriaValue = newValue;
+				if (getCriteriaValue() != scope.criteriaValue) {
 					for (var i = 0; i < onchangeListeners.length; i++)
 						onchangeListeners[i] ($event);
 				}
 			});
 		}
-		else {
-			element.on('change', function($event) {
-				scope.criteriaValue = getCriteriaValue();
-			});
-		}
 
+		// add onchange listener
 		scope.addOnchangeListener(function ($event) {
+			scope.criteriaValue = getCriteriaValue();
 			criteriaService.update(scope.criteriaName, scope.criteriaValue);
 		});
 		
@@ -104,12 +113,6 @@ function HintsAutoTrig (autoTrigService, hintService) {
 		require: 'hintsCriteria',
 		scope: true,
 		link: function (scope, element, attrs, ctrl) {
-			if (isFinite(attrs.hintsAutoTrig)) {
-				var limit = parseInt(attrs.hintsAutoTrig);
-				if (limit > 0)
-					autoTrigService.addTrigLimit(scope.criteriaName, limit);
-			}
-			
 			scope.addOnchangeListener(function($event) {
 				if (autoTrigService.isTrigAllowed())
 					hintService.firstPage();
@@ -126,12 +129,6 @@ function HintsArrdwTrig (arrdwTrigService, hintService) {
 		require: 'hintsCriteria',
 		scope: true,
 		link: function (scope, element, attrs, ctrl) {
-			if (isFinite(attrs.hintsArrdwTrig)) {
-				var limit = parseInt(attrs.hintsArrdwTrig);
-				if (limit > 0)
-					arrdwTrigService.addTrigLimit(scope.criteriaName, limit);
-			}
-			
 			element.on('keydown', function($event) {
 				if (hintService.isEmpty() && $event.keyCode == 40 && arrdwTrigService.isTrigAllowed())
 					hintService.firstPage();

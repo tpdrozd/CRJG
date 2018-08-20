@@ -42,7 +42,7 @@ function trigService (criteriaService) {
 			return result;
 		}
 	}
-} // end of trigLimitService
+} // end of trigService
 
 function itemService() {
 	var items = [];
