@@ -201,12 +201,17 @@ function Hints(hintService) {
 			scope.$watch('getHints()', function(newHints, oldHints) {
 				scope.hints = newHints;
 				
-				if (scope.hints.itemsCount == 0)
+				if (hintService.isEmpty())
 					element.addClass('ng-hide');
 				else
 					element.removeClass('ng-hide');
 				
 				scope.showBar = scope.hints.totalPages > 1;
+			});
+			
+			// obsługa wybrania konkretnego hintu
+			scope.$watch('getSelectedHint()', function(newHint, oldHint) {
+				scope.$emit('selectHint', newHint);
 			});
 			
 			// obsługa przewijania stron kółkiem myszy
@@ -217,11 +222,6 @@ function Hints(hintService) {
 					else
 						hintService.prevPage();
 				}
-			});
-			
-			// obsługa wybrania konkretnego hintu
-			scope.$watch('getSelectedHint()', function(newHint, oldHint) {
-				scope.$emit('selectHint', newHint);
 			});
 		}
 	}
