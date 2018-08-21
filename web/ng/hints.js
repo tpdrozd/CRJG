@@ -6,6 +6,7 @@ angular.module('hints', ['hintService'])
 .directive('hintsNav', HintsNav)
 
 .directive('hints', Hints)
+.directive('hintsBar', HintsBar)
 .directive('hintsNext', HintsNext)
 .directive('hintsPrev', HintsPrev)
 .directive('hintItem', HintItem);
@@ -130,7 +131,7 @@ function HintsArrdwTrig (arrdwTrigService, hintService) {
 		scope: true,
 		link: function (scope, element, attrs, ctrl) {
 			element.on('keydown', function($event) {
-				if (hintService.isEmpty() && $event.keyCode == 40 && arrdwTrigService.isTrigAllowed())
+				if ($event.keyCode == 40 && hintService.hasNotContent() && arrdwTrigService.isTrigAllowed())
 					hintService.firstPage();
 			});
 		} // end of link
@@ -144,7 +145,7 @@ function HintsNav(hintService, itemService) {
 		scope: true,
 		link: function (scope, element, attrs, ctrl) {
 			element.on('keydown', function($event) {
-				if (!hintService.isEmpty()) {
+				if (hintService.hasContent()) {
 					// Page Down - następna strona
 					if ($event.keyCode == 34) {
 						hintService.nextPage();
@@ -193,7 +194,17 @@ function Hints(hintService) {
 		templateUrl: 'hintsTemplate.html',
 		transclude: true,
 		scope: {},
-		controller: hintsCtrl,
+		controller: function ($scope, hintService) {
+			$scope.hints;
+			
+			$scope.getHints = function() {
+				return hintService.getHints();
+			}
+			
+			$scope.getSelectedHint = function() {
+				return hintService.getSelectedHint();
+			}
+		},
 		link: function (scope, element, attrs, ctrl) {
 			hintService.init(attrs.hints, attrs.hintsPagingSize);
 
@@ -201,12 +212,10 @@ function Hints(hintService) {
 			scope.$watch('getHints()', function(newHints, oldHints) {
 				scope.hints = newHints;
 				
-				if (hintService.isEmpty())
-					element.addClass('ng-hide');
-				else
+				if (hintService.hasContent())
 					element.removeClass('ng-hide');
-				
-				scope.showBar = scope.hints.totalPages > 1;
+				else
+					element.addClass('ng-hide');
 			});
 			
 			// obsługa wybrania konkretnego hintu
@@ -216,7 +225,7 @@ function Hints(hintService) {
 			
 			// obsługa przewijania stron kółkiem myszy
 			element.on('wheel', function(event) {
-				if (scope.showBar) {
+				if (hintService.hasMoreContents()) {
 					if (event.deltaY > 0)
 						hintService.nextPage();
 					else
@@ -225,19 +234,23 @@ function Hints(hintService) {
 			});
 		}
 	}
-	
-	function hintsCtrl($scope, hintService) {
-		$scope.hints = {items: []};
-		
-		$scope.getHints = function() {
-			return hintService.getHints();
-		}
-		
-		$scope.getSelectedHint = function() {
-			return hintService.getSelectedHint();
-		}
-	} // end of hintsCtrl
 } // end of Hints directive
+
+function HintsBar(hintService) {
+	return {
+		restrict: 'A',
+		required: '^hints',
+		scope: false,
+		link: function (scope, element, attrs) {
+			scope.$watch('getHints()', function(newValue, oldValue) {
+				if (hintService.hasMoreContents())
+					element.removeClass('ng-hide');
+				else
+					element.addClass('ng-hide');
+			});
+		}
+	}
+} // end of HintsBar directive
 
 function HintsNext(hintService) {
 	return {
@@ -280,7 +293,11 @@ function HintItem(hintService, itemService) {
 		required: '^^hints',
 		scope: false,
 		transclude: 'element',
-		controller: hintItemCtrl,
+		controller: function ($scope, hintService) {
+			$scope.getItems = function() {
+				return hintService.getHints().items;
+			}
+		},
 		link: function (scope, element, attrs, ctrl, transclude) {
 			
 			scope.$watch('getItems()', function(newItems, oldItems) {
@@ -309,11 +326,5 @@ function HintItem(hintService, itemService) {
 				}
 			});
 		} // end of link
-	}
-	
-	function hintItemCtrl($scope, hintService) {
-		$scope.getItems = function() {
-			return hintService.getHints().items;
-		}
 	}
 }

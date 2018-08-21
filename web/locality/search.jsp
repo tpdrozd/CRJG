@@ -13,7 +13,6 @@
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 		<script type="text/javascript" src="<t:url value="/ng/localitySearchApp.js"/>"></script>
-		<script type="text/javascript" src="<t:url value="/ng/searchService.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hints.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hintService.js"/>"></script>
 		

@@ -95,13 +95,31 @@ function itemService() {
 } // end of itemService
 
 function hintService(criteriaService, itemService, $http, firstPage, nextPage, prevPage, releasePages, details) {
-	var hints = {items: []};
+	var hints = {};
 	var selectedHint = {};
 	
 	var pagingSize = 10; // default value
 	var firstPageUrl, nextPageUrl, prevPageUrl, releasePagesUrl, detailsUrl;
 	
+	var emptyHints = function() {
+		return {
+			pagingSize: pagingSize,
+			totalPages: 0,
+			pageNumber: 0,
+			first: true,
+			last: true,
+			hasNext: false,
+			hasPrev: false,
+			totalItems: 0,
+			itemsCount: 0,
+			firstItemNumber: 0,
+			lastItemNumber: 0,
+			items: []
+		};
+	}
+	
 	return {
+		// initialization purpose
 		init: function(urlBase, size) {
 			firstPageUrl	= urlBase + firstPage;
 			nextPageUrl		= urlBase + nextPage;
@@ -111,7 +129,11 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 			
 			if (angular.isDefined(size) && isFinite(size) && size > 0)
 				pagingSize = size ;
+			
+			hints = emptyHints();
 		},
+		
+		// searching purpose
 		firstPage: function() {
 			var request = {
 				pagingSize: pagingSize,
@@ -138,6 +160,8 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 				});
 			}
 		},
+
+		// ending search
 		selectHint: function() {
 			if (itemService.hasMarkedItem()) {
 				var indx = itemService.markedItemIndex();
@@ -145,7 +169,7 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 				$http.post(detailsUrl, id).then(
 					function success(response) {
 						selectedHint = response.data;
-						hints = {items: []};
+						hints = emptyHints();
 						console.log('selectHint ' + selectedHint.name);
 				});
 			}
@@ -153,12 +177,22 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 		release: function() {
 			$http.get(releasePagesUrl).then(
 				function success(response) {
-					hints = {items: []};
+					hints = emptyHints();
 			});
 		},
-		isEmpty: function() {
-			return hints.items.length == 0;
+
+		// check status
+		hasContent: function() {
+			return angular.isArray(hints.items) && hints.items.length > 0;
 		},
+		hasNotContent: function() {
+			return !this.hasContent();
+		},
+		hasMoreContents: function() {
+			return angular.isDefined(hints.totalPages) && hints.totalPages > 1;
+		},
+		
+		// for watching by directive purpose
 		getHints: function() {
 			return hints;
 		},
