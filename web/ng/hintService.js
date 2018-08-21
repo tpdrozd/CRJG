@@ -175,10 +175,12 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 			}
 		},
 		release: function() {
-			$http.get(releasePagesUrl).then(
-				function success(response) {
-					hints = emptyHints();
-			});
+			if (this.hasContent()) {
+				$http.get(releasePagesUrl).then(
+					function success(response) {
+						hints = emptyHints();
+				});
+			}
 		},
 
 		// check status
