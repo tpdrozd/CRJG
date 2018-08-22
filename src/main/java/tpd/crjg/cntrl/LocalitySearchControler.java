@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tpd.crjg.domain.Locality;
 import tpd.crjg.domain.LocalitySimple;
+import tpd.crjg.pagination.SearchRequest;
 import tpd.crjg.pagination.SearchResultPage;
 import tpd.crjg.repo.LocalityRepo;
 import tpd.crjg.service.LocalitySearchCriteria;
@@ -31,9 +32,9 @@ public class LocalitySearchControler {
 	private LocalityRepo			repo;
 	
 	@PostMapping (path = "/firstPage", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public SearchResultPage<LocalitySimple> firstPage ( @RequestBody LocalitySearchCriteria criteria ) {
-		log.info("POST body: " + criteria.toString());
-		return service.firstPage(criteria);
+	public SearchResultPage<LocalitySimple> firstPage ( @RequestBody SearchRequest<LocalitySearchCriteria> request ) {
+		log.info("POST body: " + request.toString());
+		return service.firstPage(request.getCriteria(), request.getPagingSize());
 	}
 	
 	@GetMapping (path = "/nextPage", produces = APPLICATION_JSON_VALUE)

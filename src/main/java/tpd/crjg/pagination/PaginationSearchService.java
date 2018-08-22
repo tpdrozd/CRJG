@@ -13,7 +13,7 @@ public abstract class PaginationSearchService<C extends SearchCriteria<C>, D> {
 	
 	private static Logger				log		= Logger.getLogger(PaginationSearchService.class.getName());
 	
-	private final Pageable				FIRST_PAGE_REQ;
+	private final Sort					SORT_ORDER;
 	
 	private C							criteria;
 	
@@ -23,16 +23,16 @@ public abstract class PaginationSearchService<C extends SearchCriteria<C>, D> {
 	
 	private List<SearchResultPage<D>>	pages	= new ArrayList<SearchResultPage<D>>();
 	
-	public PaginationSearchService ( int pagingSize, String... sortOrder ) {
-		FIRST_PAGE_REQ = PageRequest.of(0, pagingSize, Sort.by(sortOrder));
+	public PaginationSearchService ( String... sortOrder ) {
+		SORT_ORDER = Sort.by(sortOrder);
 	}
 	
-	public SearchResultPage<D> firstPage ( C newCriteria ) {
-		log.info("first page, criteria: " + newCriteria.toString());
+	public SearchResultPage<D> firstPage ( C newCriteria, int pagingSize ) {
+		log.info("first page, pagingSize: " + pagingSize + ", criteria: " + newCriteria.toString());
 		
 		if ( newCriteria.differentThen(this.criteria) ) {
 			criteria = newCriteria;
-			nextPageReq = FIRST_PAGE_REQ;
+			nextPageReq = PageRequest.of(0, pagingSize, SORT_ORDER);
 			pages.clear();
 			populatePage();
 		}

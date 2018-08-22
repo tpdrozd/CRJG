@@ -1,0 +1,21 @@
+	<div hints-bar>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						Pozycje: <span class="number">{{hints.firstItemNumber}}</span> - <span class="number">{{hints.lastItemNumber}}</span>
+						z <span class="total">{{hints.totalItems}}</span>
+					</td>
+					<td>
+						Strona: <span class="page">{{hints.pageNumber}}</span> z <span class="total">{{hints.totalPages}}</span>
+					</td>
+					<td>
+						<button title="Poprzednia strona - [PageUp]" hints-prev >Poprzednia <b>&lt;&lt;</b></button>
+						<button title="Następna strona - [PageDown]" hints-next ><b>&gt;&gt;</b> Następna</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<ul ng-transclude>
+	</ul>

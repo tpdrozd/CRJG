@@ -8,16 +8,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		
 		<link href="<t:url value="/css/localitySearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
-		<link href="<t:url value="/css/localitySearchResultPage.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
+		<link href="<t:url value="/css/hints.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo26SLCVE9QCiEZagBAB47907NjifNYMk&sensitive=false"></script>
 		
 		<script type="text/javascript" src="<t:url value="/ng/localitySearchApp.js"/>"></script>
-		<script type="text/javascript" src="<t:url value="/ng/searchService.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hints.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/hintService.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/gmap.js"/>"></script>
 		
 		<title>CRJG - Wyszukiwanie w bazie miejscowości</title>
@@ -37,19 +36,19 @@
 									<table>
 										<tr>
 											<td>
-												<input type="checkbox" ng-model="criteria.hist" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="checkbox" hints-criteria="hist" hints-auto-trig></input>
 												Historyczne
 											</td>
 										</tr>
 										<tr>
 											<td>
-												<input type="checkbox" ng-model="criteria.collat" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="checkbox" hints-criteria="collat" hints-auto-trig></input>
 												Oboczne
 											</td>
 										</tr>
 										<tr>
 											<td title="Nazwy w językach obcych">
-												<input type="checkbox" ng-model="criteria.foreign" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="checkbox" hints-criteria="foreign" hints-auto-trig></input>
 												Obce
 											</td>
 										</tr>
@@ -63,20 +62,20 @@
 									<table>
 										<tr>
 											<td>
-												<input type="radio" ng-model="criteria.matching" value="START" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" name="matching" value="START" checked="checked" hints-criteria="matching" hints-auto-trig></input>
 												Początku nazwy
 											</td>
 										</tr>
 										<tr>
-											<td>
-												<input type="radio"  ng-model="criteria.matching" value="END" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Końca nazwy
+											<td title="Także w środku nazwy">
+												<input type="radio" name="matching" value="EVERYWHERE" hints-criteria="matching" hints-auto-trig></input>
+												Gdzie kolwiek
 											</td>
 										</tr>
 										<tr>
-											<td title="Także w środku nazwy">
-												<input type="radio"  ng-model="criteria.matching" value="EVERYWHERE" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Gdzie kolwiek
+											<td>
+												<input type="radio" name="matching" value="END" hints-criteria="matching" hints-auto-trig></input>
+												Końca nazwy
 											</td>
 										</tr>
 									</table>
@@ -89,20 +88,20 @@
 									<table>
 										<tr>
 											<td>
-												<input type="radio" ng-model="criteria.kind" value="STANDALONE" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" name="kind" value="ALL" checked="checked" hints-criteria="kind" hints-auto-trig></input>
+												Wszystkie
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<input type="radio" name="kind" value="STANDALONE" hints-criteria="kind" hints-auto-trig></input>
 												Samodzielne
 											</td>
 										</tr>
 										<tr>
 											<td title="Będące częścią innych miejscowości">
-												<input type="radio" ng-model="criteria.kind" value="DEPENDENT" ng-change="change()" ng-keydown="keydown($event)"></input>
+												<input type="radio" name="kind" value="DEPENDENT" hints-criteria="kind" hints-auto-trig></input>
 												Niesamodzielne
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<input type="radio" ng-model="criteria.kind" value="ALL" ng-change="change()" ng-keydown="keydown($event)"></input>
-												Wszystkie
 											</td>
 										</tr>
 									</table>
@@ -113,48 +112,29 @@
 						<tr>
 							<td colspan="9" style="position: relative;">
 								Fragment nazwy: <br/>
-								<input type="search" name="name" ng-model="criteria.name" ng-change="change()" ng-keydown="keydown($event)" autofocus/>
+								<%-- <input type="search" name="name" autofocus hints-criteria="name" hints-auto-trig="4" hints-arrdw-trig="3" hints-nav></input> --%>
+								<input type="search" name="name" autofocus hints-criteria="name" hnt-auto-thrs="4" hnt-arrdw-thrs="3" hints-auto-trig hints-arrdw-trig hints-nav></input>
 								
 								<!-- list of hints -->
-								<div class="locSearchList" style="top: 44px; left: 5px;" ng-show="showList" mouse-wheel>
-									<div ng-show="showBar">
-										<table>
-											<tbody>
-												<tr>
-													<td>
-														Pozycje: <span class="number">{{page.firstItemNumber}}</span> - <span class="number">{{page.lastItemNumber}}</span>
-														z <span class="total">{{page.totalItems}}</span>
-													</td>
-													<td>
-														Strona: <span class="page">{{page.pageNumber}}</span> z <span class="total">{{page.totalPages}}</span>
-													</td>
-													<td>
-														<button title="Poprzednia strona - [PageUp]" ng-disabled="page.first" ng-click="prevPage()" ng-keydown="keydown($event)">Poprzednia <b>&lt;&lt;</b></button>
-														<button title="Następna strona - [PageDown]" ng-disabled="page.last" ng-click="nextPage()" ng-keydown="keydown($event)"><b>&gt;&gt;</b> Następna</button>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-									<ul>
-										<li ng-repeat="item in page.items" hint ng-click="selectHint()">
-											<span>{{item.name}}</span>
-											<span class="typ" title="Typ miejscowości">{{item.type}}</span>
-											<span class="parent" title="Miejscowość nadrzędna" ng-show="item.parentName.length > 0">{{item.parentName}}</span>
-											<span class="other" title="Nazwy historyczne, oboczne, itp." ng-show="item.otherNames.length > 0">{{item.otherNames}}</span>
-											<br/>
-											<span class="gm" title="Gmina">{{item.gmina}}</span>
-											<span class="pow" title="Powiat">{{item.powiat}}</span>
-											<span class="woj" title="Województwo">{{item.wojewodztwo}}</span>
-										</li>
-									</ul>
+								<t:url value="/locality/search" var="hintsSearchUrl"/>
+								<div hints="${hintsSearchUrl}" class="hints" style="top: 44px; left: 5px;">
+									<li hint-item>
+										<span>{{hint.name}}</span>
+										<span class="typ" title="Typ miejscowości">{{hint.type}}</span>
+										<span class="parent" title="Miejscowość nadrzędna" ng-show="hint.parentName.length > 0">{{hint.parentName}}</span>
+										<span class="other" title="Nazwy historyczne, oboczne, itp." ng-show="hint.otherNames.length > 0">{{hint.otherNames}}</span>
+										<br/>
+										<span class="gm" title="Gmina">{{hint.gmina}}</span>
+										<span class="pow" title="Powiat">{{hint.powiat}}</span>
+										<span class="woj" title="Województwo">{{hint.wojewodztwo}}</span>
+									</li>
 								</div><!-- end of list of hints -->
 							</td>
 
 							<td colspan="6">
 								Województwo: <br/>
-								<f:select path="wojew" ng-model="criteria.wojew" ng-change="change()" ng-keydown="keydown($event)">
-									<option label="Cała Polska" value=""/>
+								<f:select path="wojew" hints-criteria="wojew" hints-auto-trig="x">
+									<option label="Cała Polska" value="" />
 									<f:options items="${wojews}" />
 								</f:select>
 							</td>
