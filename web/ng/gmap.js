@@ -4,7 +4,7 @@ angular.module('gmap', [])
 .directive('gmap', gmap);
 
 function gmap(blueIcon) {
-	var gmap, selectedMarker, infoMarker;
+	var gmap, markedMarker, selectedMarker;
 	var unzoomed = true;
 	
 	return {
@@ -15,12 +15,12 @@ function gmap(blueIcon) {
 		link: function(scope, element, attrs) {
 			gmap = initGmap(element, attrs);
 			
-			selectedMarker = new google.maps.Marker({map: gmap, icon: blueIcon});
-			scope.$on('LocalitySelected', showSelected);
-			scope.$on('LocalityUnselected', hideSelected);
+			markedMarker = new google.maps.Marker({map: gmap, icon: blueIcon});
+			scope.$on('markLocality', showMarked);
+			scope.$on('unmarkLocality', hideMarked);
 			
-			infoMarker = new InfoMarker();
-			scope.$on('LocalityEntered', showEntered);
+			selectedMarker = new InfoMarker();
+			scope.$on('selectLocality', showSelected);
 		}/*end of link*/
 	}
 
@@ -41,22 +41,25 @@ function gmap(blueIcon) {
 		return map;
 	}
 	
-	function showSelected (event, locality) {
+	function showMarked (event, locality) {
 		var position = new google.maps.LatLng(locality.lat, locality.lng);
-		selectedMarker.setPosition(position);
-		selectedMarker.setTitle(locality.name);
-		selectedMarker.setVisible(true);
+		markedMarker.setPosition(position);
+		markedMarker.setTitle(locality.name);
+		markedMarker.setVisible(true);
 	}
 	
-	function hideSelected (event) {
-		selectedMarker.setVisible(false);
+	function hideMarked (event) {
+		markedMarker.setVisible(false);
 	}
 	
-	function showEntered (event, locality) {
-		infoMarker.pointTo(locality);
-		gmap.setCenter(infoMarker.position);
-		if (unzoomed)
-			gmap.setZoom(10);
+	function showSelected (event, locality) {
+		if (angular.isDefined(locality.name)) {
+			console.log('GMAP received selectLocality: ' + locality.name);
+			selectedMarker.pointTo(locality);
+			gmap.setCenter(selectedMarker.position);
+			if (unzoomed)
+				gmap.setZoom(10);
+		}
 	}
 	
 	function GoogleMap (element, attrs) {
