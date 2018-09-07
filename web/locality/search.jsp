@@ -260,7 +260,14 @@
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">
-				<gmap lat="51.764" lng="19.463" zoom="6"></gmap>
+				<div class="gmap" lat="51.764" lng="19.463" zoom="6">
+					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}">
+						<info-window>
+	 						<b>{{locality.name}}</b><br/>
+							<i>{{locality.type}}</i> {{locality.parentName}}
+						</info-window>
+					</marker>
+				</div>
 			</div>
 		</div>
 	

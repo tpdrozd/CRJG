@@ -220,7 +220,8 @@ function Hints(hintService) {
 			
 			// obsługa wybrania konkretnego hintu
 			scope.$watch('getSelectedHint()', function(newHint, oldHint) {
-				scope.$emit('selectHint', newHint);
+				if (angular.isDefined(newHint.name))
+					scope.$emit('selectHint', newHint);
 			});
 			
 			// obsługa przewijania stron kółkiem myszy

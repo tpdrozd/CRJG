@@ -1,138 +1,213 @@
 angular.module('gmap', [])
 
 .constant('blueIcon', 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
-.directive('gmap', gmap);
 
-function gmap(blueIcon) {
-	var gmap, markedMarker, selectedMarker;
-	var unzoomed = true;
-	
+.directive('gmap', Gmap)
+.directive('marker', Marker)
+.directive('infoWindow', InfoWindow);
+
+function Gmap() {
+	return {
+		restrict: 'AC',
+		template: '<ng-transclude/>',
+		transclude: true,
+		scope: true,
+		controller: function ($scope, $element, $attrs) {
+			this.$onInit = function () {
+				console.log('gmap $onInit');
+				
+				this.map = new google.maps.Map($element[0], {
+					center: new google.maps.LatLng($attrs.lat, $attrs.lng),
+					zoom: parseInt($attrs.zoom)
+				});
+				
+//				google.maps.event.addListener(this.map, 'zoom_changed', function() {
+//					zoom = this.map.getZoom();
+//					console.log('gmap zoom_changed ' + zoom);
+//				});
+			}
+			this.$postLink = function () {
+				console.log('gmap $postLink');
+			}
+			this.$onChanges = function (chng) {
+				if (angular.isDefined(chng))
+					console.log('gmap $onChanges');
+			}
+			this.$onDestroy = function () {
+				console.log('gmap $onDestroy');
+			}
+			this.zoomAt = function (center) {
+				this.map.setCenter(center);
+//				this.map.setZoom(zoom);
+			}
+		}, // end of controller
+		compile: function (tElement, tAttrs) {
+			console.log('gmap compile');
+			return {
+				pre: function (scope, element, attrs) {
+					console.log('gmap preLink');
+				},
+				post: function (scope, element, attrs) {
+					console.log('gmap postLink');
+				}
+			}
+		}
+	} // end of return
+} // end of Gmap
+
+function Marker(blueIcon) {
 	return {
 		restrict: 'E',
-		template: "<div class='gmap'></div>",
-		replace: true,
-		scope: true,
-		link: function(scope, element, attrs) {
-			gmap = initGmap(element, attrs);
+		require: '^^gmap',
+		transclude: false,
+		scope: {
+			title:	'@',
+			lat:	'@',
+			lng:	'@'
+		},
+		bindToController: true,
+		controllerAs: '$mrkCtrl',
+		controller: function ($scope, $element, $attrs) {
+			var $gmapCtrl;
 			
-			markedMarker = new google.maps.Marker({map: gmap, icon: blueIcon});
-			scope.$on('markLocality', showMarked);
-			scope.$on('unmarkLocality', hideMarked);
-			
-			selectedMarker = new InfoMarker();
-			scope.$on('selectLocality', showSelected);
-		}/*end of link*/
-	}
+			this.$onInit = function () {
+				console.log('marker $onInit');
+				this.marker = new google.maps.Marker({});
+			}
+			this.$postLink = function () {
+				console.log('marker $postLink');
+				$gmapCtrl = $scope.gmapCtrl;
+				this.marker.setMap($gmapCtrl.map);
+			}
+			this.$onChanges = function (chng) {
+				if (angular.isDefined(this.marker) && angular.isDefined(chng)) {
+					console.log('marker $onChanges');
+					var position = new google.maps.LatLng(chng.lat.currentValue, chng.lng.currentValue);
+					this.marker.setPosition(position);
+					this.marker.setTitle(chng.title.currentValue);
+					this.marker.setVisible(true);
+				}
+			}
+			this.$onDestroy = function () {
+				console.log('marker $onDestroy');
+			}
+		}, // end of controller
+		compile: function (tElement, tAttrs) {
+			console.log('marker compile');
+			return {
+				pre: function (scope, element, attrs, gmapCtrl) {
+					console.log('marker preLink');
+				},
+				post: function (scope, element, attrs, gmapCtrl) {
+					console.log('marker postLink');
+					scope.gmapCtrl = gmapCtrl;
+				}
+			}
+		} // end of compile
+	} // end of return
+} // end of Marker
 
-	function initGmap(elem, attrs) {
-		var lat = attrs['lat'];
-		var lng = attrs['lng'];
-		var zoom = parseInt(attrs['zoom']);
-		var option = {
-			center: new google.maps.LatLng(lat, lng), 
-			zoom: zoom
-		};
-		
-		var map = new google.maps.Map(elem[0], option);
-		google.maps.event.addListener(map, 'zoom_changed', function() {
-			unzoomed = false;
-		});
-		
-		return map;
-	}
-	
-	function showMarked (event, locality) {
-		var position = new google.maps.LatLng(locality.lat, locality.lng);
-		markedMarker.setPosition(position);
-		markedMarker.setTitle(locality.name);
-		markedMarker.setVisible(true);
-	}
-	
-	function hideMarked (event) {
-		markedMarker.setVisible(false);
-	}
-	
-	function showSelected (event, locality) {
-		if (angular.isDefined(locality.name)) {
-			console.log('GMAP received selectLocality: ' + locality.name);
-			selectedMarker.pointTo(locality);
-			gmap.setCenter(selectedMarker.position);
-			if (unzoomed)
-				gmap.setZoom(10);
-		}
-	}
-	
-	function GoogleMap (element, attrs) {
-		var initialPosition = new google.maps.LatLng(attrs.lat, attrs.lng);
-		var initialZoom = parseInt(attrs.zoom);
-		var initialOption = {
-			center: initialPosition,
-			zoom: initialZoom
-		};
-		
-		this.map = new google.maps.Map(element, initialOption);
-		
-		var userZoom;
-		google.maps.event.addListener(this.map, 'zoom_changed', function() {
-			userZoom = this.map.getZoom();
-		});
-	}
-	
-	function InfoMarker() {
-		var marker = null;
-		var infoWn = null;
-		var opened = false;
-		
-		this.position = null;
-		this.pointTo = function(locality) {
-			this.position = new google.maps.LatLng(locality.lat, locality.lon);
-			marker.setPosition(this.position);
-			marker.setTitle(locality.name);
-			infoWn.setContent(infoContent(locality));
-		}
-		
-		init();
-		
-		function init() {
-			// inicjalizacja markera
-			marker = new google.maps.Marker({map: gmap});
-			google.maps.event.addListener(marker, 'click', function() {
-				if (opened) {
-					infoWn.close();
-					opened = false;
+function InfoWindow() {
+	return {
+		restrict: 'E',
+		require: ['^^gmap', '^^?marker'],
+		scope: false,
+		controller: function ($scope, $element, $attrs) {
+			var $gmapCtrl;
+			var $mrkCtrl;
+			
+			this.$onInit = function () {
+				console.log('infoWindow $onInit');
+			}
+			this.$postLink = function () {
+				console.log('infoWindow $postLink');
+				$gmapCtrl = $scope.gmapCtrl;
+				$mrkCtrl = $scope.mrkCtrl;
+				var infoWn = new InfoWn($gmapCtrl.map, $mrkCtrl.marker);
+				infoWn.setContent('test');
+				
+				var callback = function (mutationList) {
+					console.log('infoWindow change content');
+					infoWn.setContent($element.html());
 				}
-				else {
-					infoWn.open(gmap, marker);
-					opened = true;
+
+				var observer = new MutationObserver(callback);
+				observer.observe($element[0], {
+					characterData: true,
+					subtree: true
+				})
+			}
+			this.$onChanges = function (chng) {
+				if (angular.isDefined(chng))
+					console.log('infoWindow $onChanges');
+			}
+			this.$onDestroy = function () {
+				console.log('infoWindow $onDestroy');
+			}
+		},
+		compile: function (tElement, tAttrs) {
+			console.log('infoWindow compile');
+			return {
+				pre: function (scope, element, attrs, ctrls) {
+					console.log('infoWindow preLink');
+				},
+				post: function (scope, element, attrs, ctrls) {
+					console.log('infoWindow postLink');
+					scope.gmapCtrl = ctrls[0];
+					scope.mrkCtrl = ctrls[1];
 				}
-			});
-			
-			// inicjalizacja infoWindow
-			infoWn = new google.maps.InfoWindow();
-			google.maps.event.addListener(infoWn, 'closeclick', function() {
-				opened = false;
-			});
-		} // end of init
-		
-		function infoContent(loc) {
-			// pierwszy wiersz
-			var content = "<b>" + loc.name + "</b>";
-			if (loc.collateralName)
-				content = content + " / <b><i>" + loc.collateralName + "</i></b>";
-			if (loc.historicalName)
-				content = content + " / <b><i>" + loc.historicalName + "</i></b>";
-			if (loc.foreignName)
-				content = content + " / <b><i>" + loc.foreignName + "</i></b>";
-			if (loc.foreignLatin)
-				content = content + " (<b><i>" + loc.foreignLatin + "</i></b>)";
-			
-			// drugi wiersz
-			content = content + "<br/>";
-			content = content + "<i>" + loc.type + "</i>";
-			if (loc.parentName)
-				content = content + " " + loc.parentName;
-			
-			return content;
+			}
+		} // end of compile
+	} // end of return
+} // end of InfoWindow
+
+function InfoWn (map, marker) {
+	var mapRef = map;
+	var markerRef = marker;
+	
+	var infoWindow = new google.maps.InfoWindow();
+	var opened = false;
+	
+	google.maps.event.addListener(infoWindow, 'closeclick', function() {
+		opened = false;
+	});
+	
+	google.maps.event.addListener(markerRef, 'click', function() {
+		if (opened) {
+			infoWindow.close();
+			opened = false;
 		}
-	} // end of InfoMarker
-}
+		else {
+			infoWindow.open(mapRef, markerRef);
+			opened = true;
+		}
+	});
+	
+	this.setContent = function (cnt) {
+		infoWindow.setContent(cnt);
+	}
+} // end of InfoWn
+
+function InfoMarker() {
+
+	function infoContent(loc) {
+		// pierwszy wiersz
+		var content = "<b>" + loc.name + "</b>";
+		if (loc.collateralName)
+			content = content + " / <b><i>" + loc.collateralName + "</i></b>";
+		if (loc.historicalName)
+			content = content + " / <b><i>" + loc.historicalName + "</i></b>";
+		if (loc.foreignName)
+			content = content + " / <b><i>" + loc.foreignName + "</i></b>";
+		if (loc.foreignLatin)
+			content = content + " (<b><i>" + loc.foreignLatin + "</i></b>)";
+		
+		// drugi wiersz
+		content = content + "<br/>";
+		content = content + "<i>" + loc.type + "</i>";
+		if (loc.parentName)
+			content = content + " " + loc.parentName;
+		
+		return content;
+	}
+} // end of InfoMarker
