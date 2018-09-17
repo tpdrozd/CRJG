@@ -68,6 +68,7 @@ function itemService() {
 					items[index].removeClass('marked');
 				index++;
 				items[index].addClass('marked');
+				return true;
 			}
 		},
 		markPrevItem: function() {
@@ -75,15 +76,19 @@ function itemService() {
 				items[index].removeClass('marked');
 				index--;
 				items[index].addClass('marked');
+				return true;
 			}
 		},
 		markItemAt: function(indx) {
-			if (isIndexInRange())
-				items[index].removeClass('marked');
-			index = indx;
-			if (isIndexInRange())
-				items[index].addClass('marked');
-
+			if (index != indx) {
+				if (isIndexInRange())
+					items[index].removeClass('marked');
+				index = indx;
+				if (isIndexInRange()) {
+					items[index].addClass('marked');
+					return true;
+				}
+			}
 		},
 		hasMarkedItem: function() {
 			return isIndexInRange();
@@ -150,6 +155,7 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 					function success(response) {
 						hints = response.data;
 				});
+				return true;
 			}
 		},
 		prevPage: function() {
@@ -158,6 +164,7 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 					function success(response) {
 						hints = response.data;
 				});
+				return true;
 			}
 		},
 
@@ -172,6 +179,7 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 						hints = emptyHints();
 						console.log('selectHint ' + selectedHint.name);
 				});
+				return true;
 			}
 		},
 		release: function() {
@@ -180,6 +188,7 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 					function success(response) {
 						hints = emptyHints();
 				});
+				return true;
 			}
 		},
 
@@ -197,6 +206,10 @@ function hintService(criteriaService, itemService, $http, firstPage, nextPage, p
 		// for watching by directive purpose
 		getHints: function() {
 			return hints;
+		},
+		getMarkedHint: function() {
+			var indx = itemService.markedItemIndex();
+			return hints.items[indx];
 		},
 		getSelectedHint: function() {
 			return selectedHint;

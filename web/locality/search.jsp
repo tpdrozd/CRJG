@@ -261,12 +261,19 @@
 			
 			<div class="rightcolumn">
 				<div class="gmap" lat="51.764" lng="19.463" zoom="6">
-					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}">
+					<!-- zaznaczane podpowiedzi (hinty) -->
+					<marker lat="{{a.lat}}" lng="{{a.lng}}" title="{{a.name}}" icon="green"></marker>
+
+					<!-- wybrana miejscowość -->
+ 					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}" icon="orange" label="5">
 						<info-window>
 	 						<b>{{locality.name}}</b><br/>
 							<i>{{locality.type}}</i> {{locality.parentName}}
 						</info-window>
 					</marker>
+
+					<!-- standardowy marker, dla porównania -->
+ 					<marker lat="50.90361111111111" lng="22.99277777777778" title="Suszeń"/>
 				</div>
 			</div>
 		</div>

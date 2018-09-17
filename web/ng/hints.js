@@ -115,10 +115,17 @@ function HintsAutoTrig (autoTrigService, hintService) {
 		scope: true,
 		link: function (scope, element, attrs, ctrl) {
 			scope.addOnchangeListener(function($event) {
-				if (autoTrigService.isTrigAllowed())
+				if (autoTrigService.isTrigAllowed()) {
 					hintService.firstPage();
-				else
-					hintService.release();
+					scope.$emit('unmarkHint');
+				}
+				else {
+					var changed = hintService.release();
+					if (changed) {
+						scope.$emit('unmarkHint');
+					}
+					
+				}
 			});
 		} // end of link
 	} // end of return
@@ -148,38 +155,58 @@ function HintsNav(hintService, itemService) {
 				if (hintService.hasContent()) {
 					// Page Down - następna strona
 					if ($event.keyCode == 34) {
-						hintService.nextPage();
 						$event.preventDefault();
+						var changed = hintService.nextPage();
+						if (changed) {
+							scope.$emit('unmarkHint');
+						}
 					}
 					
 					// Page Up - poprzednia strona
 					else if ($event.keyCode == 33) {
-						hintService.prevPage();
 						$event.preventDefault();
+						var changed = hintService.prevPage();
+						if (changed) {
+							scope.$emit('unmarkHint');
+						}
 					}
 					
 					// strzałka w dół
 					else if ($event.keyCode == 40) {
-						itemService.markNextItem();
 						$event.preventDefault();
+						var changed = itemService.markNextItem();
+						if (changed) {
+							var hint = hintService.getMarkedHint();
+							scope.$emit('markHint', hint);
+						}
 					}
 					
 					// strzałka w górę
 					else if ($event.keyCode == 38) {
-						itemService.markPrevItem();
 						$event.preventDefault();
+						var changed = itemService.markPrevItem();
+						if (changed) {
+							var hint = hintService.getMarkedHint();
+							scope.$emit('markHint', hint);
+						}
 					}
 					
 					// enter
 					else if ($event.keyCode == 13) {
-						hintService.selectHint();
 						$event.preventDefault();
+						var changed = hintService.selectHint();
+						if (changed) {
+							scope.$emit('unmarkHint', hint);
+						}
 					}
 					
 					// escape
 					else if ($event.keyCode == 27) {
-						hintService.release();
 						$event.preventDefault();
+						var changed = hintService.release();
+						if (changed) {
+							scope.$emit('unmarkHint', hint);
+						}
 					}
 				}
 			});
@@ -227,10 +254,18 @@ function Hints(hintService) {
 			// obsługa przewijania stron kółkiem myszy
 			element.on('wheel', function(event) {
 				if (hintService.hasMoreContents()) {
-					if (event.deltaY > 0)
-						hintService.nextPage();
-					else
-						hintService.prevPage();
+					if (event.deltaY > 0) {
+						var changed = hintService.nextPage();
+						if (changed) {
+							scope.$emit('unmarkHint');
+						}
+					}
+					else {
+						var changed = hintService.prevPage();
+						if (changed) {
+							scope.$emit('unmarkHint');
+						}
+					}
 				}
 			});
 		}
@@ -260,7 +295,10 @@ function HintsNext(hintService) {
 		scope: false,
 		link: function (scope, element, attrs) {
 			element.on('click', function($event) {
-				hintService.nextPage();
+				var changed = hintService.nextPage();
+				if (changed) {
+					scope.$emit('unmarkHint');
+				}
 			});
 			
 			scope.$watch('hints.last', function(newValue, oldValue) {
@@ -277,7 +315,10 @@ function HintsPrev(hintService) {
 		scope: false,
 		link: function (scope, element, attrs) {
 			element.on('click', function($event) {
-				hintService.prevPage();
+				var changed = hintService.prevPage();
+				if (changed) {
+					scope.$emit('unmarkHint');
+				}
 			});
 			
 			scope.$watch('hints.first', function(newValue, oldValue) {
@@ -302,7 +343,6 @@ function HintItem(hintService, itemService) {
 		link: function (scope, element, attrs, ctrl, transclude) {
 			
 			scope.$watch('getItems()', function(newItems, oldItems) {
-				console.log('render');
 				itemService.removeItems();
 				var node = element;
 				for(var i = 0; i < newItems.length; i++) {
@@ -315,7 +355,10 @@ function HintItem(hintService, itemService) {
 						itemService.addItem(clone);
 						
 						clone.on('mouseenter', function($event) {
-							itemService.markItemAt(scp.indx);
+							var changed = itemService.markItemAt(scp.indx);
+							if (changed) {
+								scope.$emit('markHint', scp.hint);
+							}
 						});
 						
 						clone.on('click', function($event) {
