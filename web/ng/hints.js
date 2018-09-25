@@ -218,7 +218,7 @@ function HintsNav(hintService, itemService) {
 function Hints(hintService) {
 	return {
 		restrict: 'A',
-		templateUrl: 'hintsTemplate.html',
+		templateUrl: '/crjg/template/hints.html',
 		transclude: true,
 		scope: {},
 		controller: function ($scope, hintService) {

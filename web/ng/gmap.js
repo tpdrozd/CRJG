@@ -197,9 +197,16 @@ function Marker(markerOptions) {
 			this.$onChanges = function (chng) {
 				if (angular.isDefined(this.marker) && angular.isDefined(chng)) {
 					console.log('marker $onChanges');
-					var position = new google.maps.LatLng(chng.lat.currentValue, chng.lng.currentValue);
+					var position = new google.maps.LatLng(this.lat, this.lng);
 					this.marker.setPosition(position);
 					this.marker.setTitle(this.title);
+					
+					if (angular.isDefined(chng.label)) {
+						var labelOpt = this.marker.getLabel();
+						labelOpt.text = chng.label.currentValue;
+						this.marker.setLabel(labelOpt);
+					}
+					
 					this.marker.setVisible(true);
 				}
 			}
@@ -210,6 +217,7 @@ function Marker(markerOptions) {
 			}
 			this.$onDestroy = function () {
 				console.log('marker $onDestroy');
+				this.marker.setVisible(false);
 			}
 		}, // end of controller
 		compile: function (tElement, tAttrs) {
@@ -235,6 +243,7 @@ function InfoWindow() {
 		controller: function ($scope, $element, $attrs) {
 			var $gmapCtrl;
 			var $mrkCtrl;
+			var infoWn;
 			
 			this.$onInit = function () {
 				console.log('infoWindow $onInit');
@@ -243,7 +252,7 @@ function InfoWindow() {
 				console.log('infoWindow $postLink');
 				$gmapCtrl = $scope.gmapCtrl;
 				$mrkCtrl = $scope.mrkCtrl;
-				var infoWn = new InfoWn($gmapCtrl.map, $mrkCtrl.marker);
+				infoWn = new InfoWn($gmapCtrl.map, $mrkCtrl.marker);
 				infoWn.setContent('test');
 				
 				var callback = function (mutationList) {
@@ -263,6 +272,7 @@ function InfoWindow() {
 			}
 			this.$onDestroy = function () {
 				console.log('infoWindow $onDestroy');
+				infoWn.close();
 			}
 		},
 		compile: function (tElement, tAttrs) {
@@ -305,6 +315,11 @@ function InfoWn (map, marker) {
 	
 	this.setContent = function (cnt) {
 		infoWindow.setContent(cnt);
+	}
+	
+	this.close = function () {
+		infoWindow.close();
+		opened = false;
 	}
 } // end of InfoWn
 

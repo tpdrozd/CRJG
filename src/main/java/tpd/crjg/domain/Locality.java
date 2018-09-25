@@ -1,12 +1,14 @@
 package tpd.crjg.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.neo4j.ogm.annotation.CompositeIndex;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity (label = "Locality")
 @CompositeIndex ({"name", "wojewodztwo"})
@@ -133,6 +135,9 @@ public class Locality {
 	
 	@Property (name = "typeElement")
 	private String		typeElement;
+	
+	@Relationship (type = "HAS")
+	private List<Depot>	depots;
 	
 	public Long getId () {
 		return id;
@@ -388,6 +393,14 @@ public class Locality {
 	
 	public void setTypeElement ( String typeElement ) {
 		this.typeElement = typeElement;
+	}
+
+	public List<Depot> getDepots () {
+		return depots;
+	}
+
+	public void setDepots ( List<Depot> depots ) {
+		this.depots = depots;
 	}
 	
 }

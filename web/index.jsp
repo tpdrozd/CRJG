@@ -12,7 +12,11 @@
 	<body>
 		Hello World (graph).
 		<br/>
+		
 		<t:url value="/locality/search.mvc" var="localitySearch"/>
-		<a href="${localitySearch}">Baza miejscowości - wyszukiwanie</a>
+		<a href="${localitySearch}">Baza miejscowości - wyszukiwanie</a> <br/>
+		
+		<t:url value="/route/new.mvc" var="routeNew"/>
+		<a href="${routeNew}">Trasa - tworzenie</a> <br/>
 	</body>
 </html>
