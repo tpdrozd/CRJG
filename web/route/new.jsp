@@ -223,15 +223,26 @@
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">
-				<div class="gmap" lat="51.764" lng="19.463" zoom="6">
+				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="addDepot(coord)" form-callback="saveDepot()">
 					<!-- zaznaczane podpowiedzi (hinty) -->
 					<marker lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
 
-					<!-- wybrana miejscowość -->
+					<!-- trasa (route) -->
  					<marker ng-repeat="stop in stops" lat="{{stop.lat}}" lng="{{stop.lon}}" title="{{stop.name}}" icon="orange" label="{{$index}}">
 						<info-window>
 	 						<b>{{stop.name}}</b><br/>
 							<i>{{stop.type}}</i> {{stop.parentName}}
+						</info-window>
+					</marker>
+					
+					<!-- przystanek (depot) -->
+					<marker lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{depot.name}}" icon="greenDark">
+						<info-window>
+							<form onsubmit="">
+								Nazwa przystanku: <br/>
+								<input type="text" ng-model="depotName"></input><br/>
+								<input type="submit" value="Zapisz" onclick="console.log('click form'); submitForm();"/>
+							</form>
 						</info-window>
 					</marker>
 				</div>

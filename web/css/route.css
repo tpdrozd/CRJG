@@ -11,6 +11,7 @@ LI.stop {
 	padding: 1px;
 	color: maroon;
 	background-color: #ffe6cc;
+	cursor: -webkit-grab;
 	list-style-type: none;
 }
 LI.stop:hover {

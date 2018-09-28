@@ -115,7 +115,10 @@ function Gmap() {
 		restrict: 'AC',
 		template: '<ng-transclude/>',
 		transclude: true,
-		scope: true,
+		scope: {
+			clickCallback: '&?',
+			formCallback: '&?'
+		},
 		controller: function ($scope, $element, $attrs) {
 			this.$onInit = function () {
 				console.log('gmap $onInit');
@@ -124,6 +127,13 @@ function Gmap() {
 					center: new google.maps.LatLng($attrs.lat, $attrs.lng),
 					zoom: parseInt($attrs.zoom)
 				});
+				
+				if (angular.isDefined($scope.clickCallback)) {
+					google.maps.event.addListener(this.map, 'click', function (event) {
+						console.log('click: ' + event.latLng.toString());
+						$scope.clickCallback({coord: event.latLng});
+					});
+				}
 			}
 			this.$postLink = function () {
 				console.log('gmap $postLink');
@@ -148,6 +158,9 @@ function Gmap() {
 				},
 				post: function (scope, element, attrs) {
 					console.log('gmap postLink');
+					scope.submitForm = function () {
+						console.log('submit form');
+					}
 				}
 			}
 		}
@@ -241,108 +254,59 @@ function InfoWindow() {
 		require: ['^^gmap', '^^?marker'],
 		scope: false,
 		controller: function ($scope, $element, $attrs) {
-			var $gmapCtrl;
-			var $mrkCtrl;
-			var infoWn;
+			var infoWindow;
+			var opened = false;
 			
 			this.$onInit = function () {
-				console.log('infoWindow $onInit');
-			}
-			this.$postLink = function () {
-				console.log('infoWindow $postLink');
-				$gmapCtrl = $scope.gmapCtrl;
-				$mrkCtrl = $scope.mrkCtrl;
-				infoWn = new InfoWn($gmapCtrl.map, $mrkCtrl.marker);
-				infoWn.setContent('test');
+				infoWindow = new google.maps.InfoWindow();
+				infoWindow.setContent($element.html());
 				
-				var callback = function (mutationList) {
-					console.log('infoWindow change content');
-					infoWn.setContent($element.html());
-				}
-
-				var observer = new MutationObserver(callback);
+				var observer = new MutationObserver(function (mutationList) {
+					infoWindow.setContent($element.html());
+				});
 				observer.observe($element[0], {
 					characterData: true,
 					subtree: true
 				})
+				
+				google.maps.event.addListener(infoWindow, 'closeclick', function() {
+					opened = false;
+				});
 			}
+
+			this.$postLink = function () {
+				var map = $scope.gmapCtrl.map;
+				
+				if (angular.isDefined($scope.markerCtrl)) {
+					var marker = $scope.markerCtrl.marker;
+					
+					google.maps.event.addListener(marker, 'click', function() {
+						if (opened) {
+							infoWindow.close();
+							opened = false;
+						}
+						else {
+							infoWindow.open(map, marker);
+							opened = true;
+						}
+					});
+				}
+			}
+
 			this.$onChanges = function (chng) {
 				if (angular.isDefined(chng))
 					console.log('infoWindow $onChanges');
 			}
+			
 			this.$onDestroy = function () {
-				console.log('infoWindow $onDestroy');
-				infoWn.close();
+				infoWindow.close();
+				opened = false;
 			}
 		},
-		compile: function (tElement, tAttrs) {
-			console.log('infoWindow compile');
-			return {
-				pre: function (scope, element, attrs, ctrls) {
-					console.log('infoWindow preLink');
-				},
-				post: function (scope, element, attrs, ctrls) {
-					console.log('infoWindow postLink');
-					scope.gmapCtrl = ctrls[0];
-					scope.mrkCtrl = ctrls[1];
-				}
-			}
-		} // end of compile
+		link: function (scope, element, attrs, ctrls) {
+			scope.gmapCtrl = ctrls[0];
+			if (ctrls.length > 1)
+				scope.markerCtrl = ctrls[1];
+		} // end of link
 	} // end of return
 } // end of InfoWindow
-
-function InfoWn (map, marker) {
-	var mapRef = map;
-	var markerRef = marker;
-	
-	var infoWindow = new google.maps.InfoWindow();
-	var opened = false;
-	
-	google.maps.event.addListener(infoWindow, 'closeclick', function() {
-		opened = false;
-	});
-	
-	google.maps.event.addListener(markerRef, 'click', function() {
-		if (opened) {
-			infoWindow.close();
-			opened = false;
-		}
-		else {
-			infoWindow.open(mapRef, markerRef);
-			opened = true;
-		}
-	});
-	
-	this.setContent = function (cnt) {
-		infoWindow.setContent(cnt);
-	}
-	
-	this.close = function () {
-		infoWindow.close();
-		opened = false;
-	}
-} // end of InfoWn
-
-function InfoMarker() {
-
-	function infoContent(loc) {
-		// pierwszy wiersz
-		var content = "<b>" + loc.name + "</b>";
-		if (loc.collateralName)
-			content = content + " / <b><i>" + loc.collateralName + "</i></b>";
-		if (loc.historicalName)
-			content = content + " / <b><i>" + loc.historicalName + "</i></b>";
-		if (loc.foreignName)
-			content = content + " / <b><i>" + loc.foreignName + "</i></b>";
-		if (loc.foreignLatin)
-			content = content + " (<b><i>" + loc.foreignLatin + "</i></b>)";
-		
-		// drugi wiersz
-		content = content + "<br/>";
-		content = content + "<i>" + loc.type + "</i>";
-		if (loc.parentName)
-			content = content + " " + loc.parentName;
-		
-		return content;
-	}
-} // end of InfoMarker
