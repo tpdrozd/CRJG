@@ -121,8 +121,6 @@ function Gmap() {
 		},
 		controller: function ($scope, $element, $attrs) {
 			this.$onInit = function () {
-				console.log('gmap $onInit');
-				
 				this.map = new google.maps.Map($element[0], {
 					center: new google.maps.LatLng($attrs.lat, $attrs.lng),
 					zoom: parseInt($attrs.zoom)
@@ -135,33 +133,22 @@ function Gmap() {
 					});
 				}
 			}
+			
 			this.$postLink = function () {
-				console.log('gmap $postLink');
 			}
+			
 			this.$onChanges = function (chng) {
 				if (angular.isDefined(chng))
 					console.log('gmap $onChanges');
 			}
+			
 			this.$onDestroy = function () {
-				console.log('gmap $onDestroy');
-			}
-			this.zoomAt = function (center) {
-				this.map.setCenter(center);
-//				this.map.setZoom(zoom);
 			}
 		}, // end of controller
-		compile: function (tElement, tAttrs) {
-			console.log('gmap compile');
-			return {
-				pre: function (scope, element, attrs) {
-					console.log('gmap preLink');
-				},
-				post: function (scope, element, attrs) {
-					console.log('gmap postLink');
-					scope.submitForm = function () {
-						console.log('submit form');
-					}
-				}
+		link: function (scope, element, attrs) {
+			console.log('gmap postLink');
+			scope.submitForm = function () {
+				console.log('submit form');
 			}
 		}
 	} // end of return
@@ -185,7 +172,6 @@ function Marker(markerOptions) {
 			var $gmapCtrl;
 			
 			this.$onInit = function () {
-				console.log('marker $onInit');
 				this.marker = new google.maps.Marker();
 
 				// icon
@@ -207,6 +193,7 @@ function Marker(markerOptions) {
 				// title
 				this.marker.setTitle(this.title);
 			}
+			
 			this.$onChanges = function (chng) {
 				if (angular.isDefined(this.marker) && angular.isDefined(chng)) {
 					console.log('marker $onChanges');
@@ -223,27 +210,18 @@ function Marker(markerOptions) {
 					this.marker.setVisible(true);
 				}
 			}
+			
 			this.$postLink = function () {
-				console.log('marker $postLink');
 				$gmapCtrl = $scope.gmapCtrl;
 				this.marker.setMap($gmapCtrl.map);
 			}
+			
 			this.$onDestroy = function () {
-				console.log('marker $onDestroy');
 				this.marker.setVisible(false);
 			}
 		}, // end of controller
-		compile: function (tElement, tAttrs) {
-			console.log('marker compile');
-			return {
-				pre: function (scope, element, attrs, gmapCtrl) {
-					console.log('marker preLink');
-				},
-				post: function (scope, element, attrs, gmapCtrl) {
-					console.log('marker postLink');
-					scope.gmapCtrl = gmapCtrl;
-				}
-			}
+		link: function (scope, element, attrs, gmapCtrl) {
+			scope.gmapCtrl = gmapCtrl;
 		} // end of compile
 	} // end of return
 } // end of Marker
