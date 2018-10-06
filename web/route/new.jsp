@@ -223,12 +223,12 @@
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">
-				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="addDepot(coord)" form-callback="saveDepot()">
+				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="markNewDepot(event.latLng)">
 					<!-- zaznaczane podpowiedzi (hinty) -->
-					<marker lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
+					<marker lat="hint.lat" lng="hint.lng" title="{{hint.name}}"></marker>
 
 					<!-- trasa (route) -->
- 					<marker ng-repeat="stop in stops" lat="{{stop.lat}}" lng="{{stop.lon}}" title="{{stop.name}}" icon="orange" label="{{$index}}">
+ 					<marker ng-repeat="stop in stops" icon="orange" lat="{{stop.lat}}" lng="{{stop.lon}}" label="{{$index}}" title="{{stop.name}}">
 						<info-window>
 	 						<b>{{stop.name}}</b><br/>
 							<i>{{stop.type}}</i> {{stop.parentName}}
@@ -236,12 +236,12 @@
 					</marker>
 					
 					<!-- przystanek (depot) -->
-					<marker lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{depot.name}}" icon="greenDark">
+					<marker  icon="greenDark" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
 						<info-window>
-							<form onsubmit="">
+							<form ng-submit="addDepot()">
 								Nazwa przystanku: <br/>
-								<input type="text" ng-model="depotName"></input><br/>
-								<input type="submit" value="Zapisz" onclick="console.log('click form'); submitForm();"/>
+								<input type="text" ng-model="depot.name"></input><br/>
+								<input type="submit" value="Zapisz"/>
 							</form>
 						</info-window>
 					</marker>

@@ -116,8 +116,7 @@ function Gmap() {
 		template: '<ng-transclude/>',
 		transclude: true,
 		scope: {
-			clickCallback: '&?',
-			formCallback: '&?'
+			clickCallback: '&?'
 		},
 		controller: function ($scope, $element, $attrs) {
 			this.$onInit = function () {
@@ -128,8 +127,7 @@ function Gmap() {
 				
 				if (angular.isDefined($scope.clickCallback)) {
 					google.maps.event.addListener(this.map, 'click', function (event) {
-						console.log('click: ' + event.latLng.toString());
-						$scope.clickCallback({coord: event.latLng});
+						$scope.clickCallback({event: event});
 					});
 				}
 			}
@@ -164,7 +162,9 @@ function Marker(markerOptions) {
 			lng:	'@',
 			title:	'@',
 			icon:	'@',
-			label:	'@'
+			label:	'@',
+			
+			dragendCallback: '&?'
 		},
 		bindToController: true,
 		controllerAs: '$mrkCtrl',
@@ -192,11 +192,21 @@ function Marker(markerOptions) {
 				
 				// title
 				this.marker.setTitle(this.title);
+				
+				// dragend-callback
+				if (angular.isFunction(this.dragendCallback)) {
+					this.marker.setDraggable(true);
+					var dragCalb = this.dragendCallback;
+					google.maps.event.addListener(this.marker, 'dragend', function (event) {
+						dragCalb({event: event});
+					});
+				}
 			}
 			
 			this.$onChanges = function (chng) {
+				console.log('marker $onChanges 1');
 				if (angular.isDefined(this.marker) && angular.isDefined(chng)) {
-					console.log('marker $onChanges');
+					console.log('marker $onChanges 2');
 					var position = new google.maps.LatLng(this.lat, this.lng);
 					this.marker.setPosition(position);
 					this.marker.setTitle(this.title);
@@ -226,7 +236,7 @@ function Marker(markerOptions) {
 	} // end of return
 } // end of Marker
 
-function InfoWindow() {
+function InfoWindow($compile) {
 	return {
 		restrict: 'E',
 		require: ['^^gmap', '^^?marker'],
@@ -237,7 +247,10 @@ function InfoWindow() {
 			
 			this.$onInit = function () {
 				infoWindow = new google.maps.InfoWindow();
-				infoWindow.setContent($element.html());
+				
+				var form = $compile($element.html())($scope);
+				infoWindow.setContent(form[0]);
+//				infoWindow.setContent($element.html());
 				
 				var observer = new MutationObserver(function (mutationList) {
 					infoWindow.setContent($element.html());

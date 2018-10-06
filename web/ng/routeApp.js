@@ -32,19 +32,19 @@ function routeCtrl($scope) {
 		});
 	};
 	
-	$scope.addDepot = function (coord) {
-		console.log('callback click: ' + coord.toString());
+	$scope.markNewDepot = function (coord) {
 		$scope.depot.lat = coord.lat();
 		$scope.depot.lng = coord.lng();
-		$scope.depot.name = '';
 		$scope.$apply('depot');
 	}
 	
-	$scope.saveDepot = function (name) {
-		console.log('save depot: ' + name);
+	$scope.addDepot = function () {
+		console.log('save depot: ' + $scope.depot.name + ' ' + $scope.depot.lat + ' ' + $scope.depot.lng);
+
+		// save depot to db
+		// ...
+		
+		$scope.depot = {};
 	}
 	
-	$scope.submitForm = function () {
-		console.log('App submit form');
-	}
 } // end of localitySearchCtrl
