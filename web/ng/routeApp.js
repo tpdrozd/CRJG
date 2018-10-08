@@ -47,4 +47,9 @@ function routeCtrl($scope) {
 		$scope.depot = {};
 	}
 	
+	$scope.cancelDepot = function () {
+		console.log('cancel depot');
+		$scope.depot = {};
+	}
+	
 } // end of localitySearchCtrl

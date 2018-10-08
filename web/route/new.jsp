@@ -241,6 +241,7 @@
 							<form ng-submit="addDepot()">
 								Nazwa przystanku: <br/>
 								<input type="text" ng-model="depot.name"></input><br/>
+								<input type="button" value="Anuluj" ng-click="cancelDepot()" />
 								<input type="submit" value="Zapisz"/>
 							</form>
 						</info-window>

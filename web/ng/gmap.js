@@ -204,20 +204,36 @@ function Marker(markerOptions) {
 			}
 			
 			this.$onChanges = function (chng) {
-				console.log('marker $onChanges 1');
-				if (angular.isDefined(this.marker) && angular.isDefined(chng)) {
-					console.log('marker $onChanges 2');
-					var position = new google.maps.LatLng(this.lat, this.lng);
-					this.marker.setPosition(position);
-					this.marker.setTitle(this.title);
+				if (angular.isDefined(this.marker)) {
 					
+					// label
 					if (angular.isDefined(chng.label)) {
 						var labelOpt = this.marker.getLabel();
 						labelOpt.text = chng.label.currentValue;
 						this.marker.setLabel(labelOpt);
 					}
 					
-					this.marker.setVisible(true);
+					// position
+					if (angular.isDefined(chng.lat) || angular.isDefined(chng.lng)) {
+						var lat = parseFloat(this.lat);
+						var lng = parseFloat(this.lng);
+
+						var inRange = 
+							!isNaN(lat) && lat >= -90 && lat <= 90 &&
+							!isNaN(lng) && lng >= -180 && lng <= 180;
+						
+						if (inRange) {
+							var position = new google.maps.LatLng(lat, lng);
+							this.marker.setPosition(position);
+						}
+						this.marker.setVisible(inRange);
+//						console.log('$onChanges position ' + this.lat + ': ' + isNaN(parseFloat(this.lat)));
+					}
+
+					// title
+					if (angular.isDefined(chng.title)) {
+						this.marker.setTitle(chng.title.currentValue);
+					}
 				}
 			}
 			
