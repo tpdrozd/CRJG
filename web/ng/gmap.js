@@ -186,9 +186,7 @@ function Marker(markerOptions) {
 				}
 				
 				// position
-				var position = new google.maps.LatLng(this.lat, this.lng);
-				this.marker.setPosition(position);
-				this.marker.setVisible(true);
+				this.renderPosition();
 				
 				// title
 				this.marker.setTitle(this.title);
@@ -215,19 +213,8 @@ function Marker(markerOptions) {
 					
 					// position
 					if (angular.isDefined(chng.lat) || angular.isDefined(chng.lng)) {
-						var lat = parseFloat(this.lat);
-						var lng = parseFloat(this.lng);
-
-						var inRange = 
-							!isNaN(lat) && lat >= -90 && lat <= 90 &&
-							!isNaN(lng) && lng >= -180 && lng <= 180;
-						
-						if (inRange) {
-							var position = new google.maps.LatLng(lat, lng);
-							this.marker.setPosition(position);
-						}
-						this.marker.setVisible(inRange);
-//						console.log('$onChanges position ' + this.lat + ': ' + isNaN(parseFloat(this.lat)));
+						this.renderPosition();
+						console.log('$onChanges position ' + this.lat + ' ' + this.lng);
 					}
 
 					// title
@@ -245,6 +232,22 @@ function Marker(markerOptions) {
 			this.$onDestroy = function () {
 				this.marker.setVisible(false);
 			}
+			
+			this.renderPosition = function () {
+				var lat = parseFloat(this.lat);
+				var lng = parseFloat(this.lng);
+
+				var isInRange = 
+					!isNaN(lat) && lat >= -90 && lat <= 90 &&
+					!isNaN(lng) && lng >= -180 && lng <= 180;
+				
+				if (isInRange) {
+					var position = new google.maps.LatLng(lat, lng);
+					this.marker.setPosition(position);
+				}
+				if (this.marker.getVisible() != isInRange)
+					this.marker.setVisible(isInRange);
+			}
 		}, // end of controller
 		link: function (scope, element, attrs, gmapCtrl) {
 			scope.gmapCtrl = gmapCtrl;
@@ -260,6 +263,16 @@ function InfoWindow($compile) {
 		controller: function ($scope, $element, $attrs) {
 			var infoWindow;
 			var opened = false;
+			var mapRef, markerRef;
+			
+			var close = function () {
+				infoWindow.close();
+				opened = false;
+			}
+			var open = function () {
+				infoWindow.open(mapRef, markerRef);
+				opened = true;
+			}
 			
 			this.$onInit = function () {
 				infoWindow = new google.maps.InfoWindow();
@@ -282,32 +295,36 @@ function InfoWindow($compile) {
 			}
 
 			this.$postLink = function () {
-				var map = $scope.gmapCtrl.map;
+				mapRef = $scope.gmapCtrl.map;
 				
 				if (angular.isDefined($scope.markerCtrl)) {
-					var marker = $scope.markerCtrl.marker;
+					markerRef = $scope.markerCtrl.marker;
+					var cls = this.close;
+					var opn = this.open;
 					
-					google.maps.event.addListener(marker, 'click', function() {
-						if (opened) {
-							infoWindow.close();
-							opened = false;
-						}
-						else {
-							infoWindow.open(map, marker);
-							opened = true;
-						}
+					// click listener
+					google.maps.event.addListener(markerRef, 'click', function() {
+						if (opened)
+							close();
+						else
+							open();
+					});
+					
+					// visible-changed listener
+					google.maps.event.addListener(markerRef, 'visible_changed', function () {
+						if (!markerRef.getVisible())
+							close();
+						else if ($attrs.visible == 'true')
+							open();
 					});
 				}
+				
+				if ($attrs.visible == 'true')
+					open();
 			}
 
-			this.$onChanges = function (chng) {
-				if (angular.isDefined(chng))
-					console.log('infoWindow $onChanges');
-			}
-			
 			this.$onDestroy = function () {
-				infoWindow.close();
-				opened = false;
+				close();
 			}
 		},
 		link: function (scope, element, attrs, ctrls) {

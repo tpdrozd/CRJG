@@ -225,7 +225,7 @@
 			<div class="rightcolumn">
 				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="markNewDepot(event.latLng)">
 					<!-- zaznaczane podpowiedzi (hinty) -->
-					<marker lat="hint.lat" lng="hint.lng" title="{{hint.name}}"></marker>
+					<marker lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
 
 					<!-- trasa (route) -->
  					<marker ng-repeat="stop in stops" icon="orange" lat="{{stop.lat}}" lng="{{stop.lon}}" label="{{$index}}" title="{{stop.name}}">
@@ -237,7 +237,7 @@
 					
 					<!-- przystanek (depot) -->
 					<marker  icon="greenDark" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
-						<info-window>
+						<info-window visible="true">
 							<form ng-submit="addDepot()">
 								Nazwa przystanku: <br/>
 								<input type="text" ng-model="depot.name"></input><br/>
