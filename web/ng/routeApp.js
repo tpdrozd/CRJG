@@ -6,6 +6,7 @@ function routeCtrl($scope) {
 	$scope.hint = {};
 	$scope.stops = [];
 	$scope.depot = {};
+	$scope.gmapCursor = 'default';
 
 	// mark hint
 	$scope.$on('markHint', function (event, hint) {
@@ -32,24 +33,51 @@ function routeCtrl($scope) {
 		});
 	};
 	
-	$scope.markNewDepot = function (coord) {
-		$scope.depot.lat = coord.lat();
-		$scope.depot.lng = coord.lng();
-		$scope.$apply('depot');
+	$scope.addDepotTo = function (locality) {
+		$scope.depot.localityId = locality.id;
+		$scope.depot.localityName = locality.name;
+		
+		$scope.addingDepot = true;
+		$scope.gmapCursor = 'crosshair';
+
+		console.log('add depot: '
+			+ $scope.depot.localityName + ' '
+			+ $scope.gmapCursor);
 	}
 	
-	$scope.addDepot = function () {
-		console.log('save depot: ' + $scope.depot.name + ' ' + $scope.depot.lat + ' ' + $scope.depot.lng);
-
+	$scope.markNewDepot = function (coord) {
+		if ($scope.addingDepot) {
+			$scope.depot.lat = coord.lat();
+			$scope.depot.lng = coord.lng();
+			$scope.gmapCursor = 'default';
+			$scope.$apply('depot');
+			
+			console.log('mark new depot: '
+				+ $scope.depot.localityName + ' ' 
+				+ $scope.depot.lat + ' '
+				+ $scope.depot.lng);
+		}
+	}
+	
+	$scope.saveDepot = function () {
+		console.log('save depot: '
+				+ $scope.depot.localityName + ' '
+				+ $scope.depot.lat + ' '
+				+ $scope.depot.lng + ' '
+				+ $scope.depot.name);
+		
 		// save depot to db
 		// ...
 		
 		$scope.depot = {};
+		$scope.addingDepot = false;
 	}
 	
 	$scope.cancelDepot = function () {
 		console.log('cancel depot');
+		
 		$scope.depot = {};
+		$scope.addingDepot = false;
 	}
 	
 } // end of localitySearchCtrl

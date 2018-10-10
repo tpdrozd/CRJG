@@ -4,52 +4,65 @@ import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity (label = "Depot")
 public class Depot {
-
-	@Id @GeneratedValue
-	private Long	id;
+	
+	@Id
+	@GeneratedValue
+	private Long		id;
 	
 	@Property
-	private String	name;
+	private String		name;
 	
 	@Property
-	private double	lat;
+	private double		lat;
 	
 	@Property
-	private double	lng;
-
+	private double		lng;
+	
+	@Relationship (type = "WITHIN")
+	private Locality	locality;
+	
 	public Long getId () {
 		return id;
 	}
-
+	
 	public void setId ( Long id ) {
 		this.id = id;
 	}
-
+	
 	public String getName () {
 		return name;
 	}
-
+	
 	public void setName ( String name ) {
 		this.name = name;
 	}
-
+	
 	public double getLat () {
 		return lat;
 	}
-
+	
 	public void setLat ( double lat ) {
 		this.lat = lat;
 	}
-
+	
 	public double getLng () {
 		return lng;
 	}
-
+	
 	public void setLng ( double lng ) {
 		this.lng = lng;
 	}
-		
+
+	public Locality getLocality () {
+		return locality;
+	}
+
+	public void setLocality ( Locality locality ) {
+		this.locality = locality;
+	}
+	
 }

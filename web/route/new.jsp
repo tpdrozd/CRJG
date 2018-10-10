@@ -216,6 +216,8 @@
 					<li ng-repeat="stop in stops" class="stop">
 						<span class="lp">{{$index}}</span>
 						<span class="x" title="Usuń" ng-click="remove($index)">&#9587;</span>
+						<span class="add" title="Dodaj przystanek" ng-click="addDepotTo(stop)">+</span>
+						
 						<span>{{stop.name}}</span> <span class="type">{{stop.type}}</span> <span class="parent">{{stop.parentName}}</span> <br/>
 						<span class="depot">Przystanek PKS</span>
 					</li>
@@ -223,7 +225,7 @@
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">
-				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="markNewDepot(event.latLng)">
+				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="markNewDepot(event.latLng)" cursor="{{gmapCursor}}">
 					<!-- zaznaczane podpowiedzi (hinty) -->
 					<marker lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
 
@@ -238,7 +240,7 @@
 					<!-- przystanek (depot) -->
 					<marker  icon="greenDark" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
 						<info-window visible="true">
-							<form ng-submit="addDepot()">
+							<form ng-submit="saveDepot()">
 								Nazwa przystanku: <br/>
 								<input type="text" ng-model="depot.name"></input><br/>
 								<input type="button" value="Anuluj" ng-click="cancelDepot()" />

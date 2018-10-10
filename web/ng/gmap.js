@@ -116,28 +116,41 @@ function Gmap() {
 		template: '<ng-transclude/>',
 		transclude: true,
 		scope: {
-			clickCallback: '&?'
+			clickCallback: '&?',
+			cursor: '@'
 		},
 		controller: function ($scope, $element, $attrs) {
 			this.$onInit = function () {
-				this.map = new google.maps.Map($element[0], {
+				var map = new google.maps.Map($element[0], {
 					center: new google.maps.LatLng($attrs.lat, $attrs.lng),
-					zoom: parseInt($attrs.zoom)
+					zoom: parseInt($attrs.zoom),
+					draggableCursor: 'auto',
+					draggingCursor: 'move'
 				});
 				
+				// cursors
+				if (angular.isDefined($scope.cursor)) {
+					map.setOptions({draggableCursor: $scope.cursor});
+					
+					$scope.$watch('cursor', function (newValue) {
+						map.setOptions({draggableCursor: newValue});
+					});
+				}
+				
+				// click-callback
 				if (angular.isDefined($scope.clickCallback)) {
-					google.maps.event.addListener(this.map, 'click', function (event) {
+					google.maps.event.addListener(map, 'click', function (event) {
 						$scope.clickCallback({event: event});
 					});
 				}
-			}
+				
+				this.map = map;
+			} // end of $onInit
 			
 			this.$postLink = function () {
 			}
 			
 			this.$onChanges = function (chng) {
-				if (angular.isDefined(chng))
-					console.log('gmap $onChanges');
 			}
 			
 			this.$onDestroy = function () {
@@ -194,8 +207,17 @@ function Marker(markerOptions) {
 				// dragend-callback
 				if (angular.isFunction(this.dragendCallback)) {
 					this.marker.setDraggable(true);
+					this.marker.setCursor('grab');
+					
+					var mrk = this.marker;
 					var dragCalb = this.dragendCallback;
+					
+					google.maps.event.addListener(this.marker, 'dragstart', function (event) {
+						mrk.setCursor('grabbing');
+					});
+					
 					google.maps.event.addListener(this.marker, 'dragend', function (event) {
+						mrk.setCursor('grab');
 						dragCalb({event: event});
 					});
 				}

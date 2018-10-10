@@ -11,7 +11,7 @@ LI.stop {
 	padding: 1px;
 	color: maroon;
 	background-color: #ffe6cc;
-	cursor: -webkit-grab;
+	cursor: grab;
 	list-style-type: none;
 }
 LI.stop:hover {
@@ -55,6 +55,28 @@ LI.stop SPAN.lp {
 }
 LI.stop:hover SPAN.lp {
 	color: white;
+}
+/* przycisk dodania przystanku */
+LI.stop SPAN.add {
+	width: 34px;
+	height: 34px;
+	float: right;
+	margin-right: 2px;
+	border: dotted 1px blue;
+	border-radius: 5px;
+	color: white;
+	background-color: skyblue;
+	text-align: center;
+	font-family: monospace;
+	font-size: xx-large;
+	font-weight: bolder;
+	cursor: pointer;
+}
+LI.stop SPAN.add:hover {
+	border-style: solid;
+	border-color: darkblue;
+	color: darkblue;
+	background-color: royalblue;
 }
 /* przycisk usuniêcia */
 LI.stop SPAN.x {
