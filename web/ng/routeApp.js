@@ -2,7 +2,7 @@ angular.module('routeApp', ['hints', 'gmap', angularDragula(angular)])
 
 .controller('routeCtrl', routeCtrl);
 
-function routeCtrl($scope) {
+function routeCtrl($scope, $http) {
 	$scope.hint = {};
 	$scope.stops = [];
 	$scope.depot = {};
@@ -34,15 +34,12 @@ function routeCtrl($scope) {
 	};
 	
 	$scope.addDepotTo = function (locality) {
-		$scope.depot.localityId = locality.id;
-		$scope.depot.localityName = locality.name;
+		$scope.depot.localityRefId = locality.id;
 		
 		$scope.addingDepot = true;
 		$scope.gmapCursor = 'crosshair';
 
-		console.log('add depot: '
-			+ $scope.depot.localityName + ' '
-			+ $scope.gmapCursor);
+		console.log('adding depot to: '	+ locality.name);
 	}
 	
 	$scope.markNewDepot = function (coord) {
@@ -53,21 +50,26 @@ function routeCtrl($scope) {
 			$scope.$apply('depot');
 			
 			console.log('mark new depot: '
-				+ $scope.depot.localityName + ' ' 
 				+ $scope.depot.lat + ' '
 				+ $scope.depot.lng);
 		}
 	}
 	
 	$scope.saveDepot = function () {
-		console.log('save depot: '
-				+ $scope.depot.localityName + ' '
+		console.log('saving depot: '
+				+ $scope.depot.name + ' '
 				+ $scope.depot.lat + ' '
-				+ $scope.depot.lng + ' '
-				+ $scope.depot.name);
+				+ $scope.depot.lng);
 		
 		// save depot to db
-		// ...
+		$http.put("/crjg/depot/save.mvc", $scope.depot).then(
+			function success (response) {
+				console.log('save depot success: ' + response.statusText);
+				// tu skończyłem
+			},
+			function error (response) {
+				console.log('save depot error: ' + response.statusText);
+			});
 		
 		$scope.depot = {};
 		$scope.addingDepot = false;
