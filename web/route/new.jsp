@@ -230,7 +230,7 @@
 					<marker lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
 
 					<!-- trasa (route) -->
- 					<marker ng-repeat="stop in stops" icon="orange" lat="{{stop.lat}}" lng="{{stop.lon}}" label="{{$index}}" title="{{stop.name}}">
+ 					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.lat}}" lng="{{stop.lon}}" label="{{$index}}" title="{{stop.name}}">
 						<info-window>
 	 						<b>{{stop.name}}</b><br/>
 							<i>{{stop.type}}</i> {{stop.parentName}}
@@ -238,7 +238,7 @@
 					</marker>
 					
 					<!-- przystanek (depot) -->
-					<marker  icon="greenDark" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
+					<marker  icon="dot.green" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
 						<info-window visible="true">
 							<form ng-submit="saveDepot()">
 								Nazwa przystanku: <br/>
