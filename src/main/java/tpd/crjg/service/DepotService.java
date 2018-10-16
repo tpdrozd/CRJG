@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import tpd.crjg.domain.Depot;
 import tpd.crjg.domain.Locality;
-import tpd.crjg.repo.DepotRepo;
 import tpd.crjg.repo.LocalityRepo;
 
 @Service
@@ -14,14 +13,12 @@ public class DepotService {
 	@Autowired
 	private LocalityRepo	localityRepo;
 	
-	@Autowired
-	private DepotRepo		depotRepo;
-	
-	public Depot save ( Depot depot ) {
-		Locality locality = localityRepo.byId(depot.getLocalityRefId());
-		depot.setLocality(locality);
-		Depot d = depotRepo.save(depot, 1);
-		return d;
+	public Locality save ( Depot depot ) {
+		Locality locality = localityRepo.findById(depot.getLocalityRefId()).get();
+		// TODO sprawdzić unikalność nazwy dodawanego przystanku
+		locality.getDepots().add(depot);
+		Locality l = localityRepo.save(locality, 1);
+		return l;
 	} // end of save
 	
 } // end of DepotService

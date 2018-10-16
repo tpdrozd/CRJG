@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.neo4j.ogm.annotation.CompositeIndex;
+import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -14,7 +15,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @CompositeIndex ({"name", "wojewodztwo"})
 public class Locality {
 	
-	@Id
+	@Id @GeneratedValue
 	private Long		id;
 	
 	@Property (name = "idPrng")

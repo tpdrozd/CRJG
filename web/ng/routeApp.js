@@ -4,6 +4,7 @@ angular.module('routeApp', ['hints', 'gmap', angularDragula(angular)])
 
 function routeCtrl($scope, $http) {
 	$scope.hint = {};
+	$scope.locality = {};
 	$scope.stops = [];
 	$scope.depot = {};
 	$scope.gmapCursor = 'default';
@@ -20,10 +21,16 @@ function routeCtrl($scope, $http) {
 		$scope.$apply('hint');
 	});
 	
-	// add stop
+	// select hint
 	$scope.$on('selectHint', function(event, hint) {
-		$scope.stops.push(hint);
+		$scope.locality = hint;
 	});
+	
+	$scope.addStop = function (depot) {
+		var stop = new StopWrapper($scope.locality, depot);
+		$scope.stops.push(stop);
+		$scope.$apply('stops');
+	}
 	
 	$scope.remove = function (index) {
 		console.log('remove ' + index);
@@ -82,4 +89,19 @@ function routeCtrl($scope, $http) {
 		$scope.addingDepot = false;
 	}
 	
-} // end of localitySearchCtrl
+} // end of routeCtrl
+
+function StopWrapper (locality, depot) {
+	var hasDepot = angular.isDefined(depot);
+	
+	var depotName = hasDepot ? depot.name : undefined;
+	var lat = hasDepot ? depot.lat : locality.lat;
+	var lng = hasDepot ? depot.lng : locality.lon;
+	
+	return {
+		locality: locality,
+		depot: depotName, 
+		lat: lat,
+		lng: lng
+	}
+}

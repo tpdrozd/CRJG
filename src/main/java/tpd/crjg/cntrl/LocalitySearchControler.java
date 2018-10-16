@@ -61,7 +61,7 @@ public class LocalitySearchControler {
 	public Locality details ( @RequestBody Long id ) {
 		log.info("id: " + id);
 		service.releasePages();
-		return repo.byId(id);
+		return repo.findById(id, 1).get();
 	}
 	
 }

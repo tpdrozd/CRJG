@@ -181,7 +181,8 @@ function Marker(markerOptions) {
 			icon:	'@',
 			label:	'@',
 			
-			dragendCallback: '&?'
+			dragendCallback: '&?',
+			dblclickCallback: '&?'
 		},
 		bindToController: true,
 		controllerAs: '$mrkCtrl',
@@ -192,7 +193,6 @@ function Marker(markerOptions) {
 				// icon
 				if (angular.isDefined(this.icon)) {
 					var options = markerOptions.getOptions(this.icon);
-					console.log('options: ' + angular.toJson(options));
 					this.marker = new google.maps.Marker(options);
 				}
 				else
@@ -226,6 +226,16 @@ function Marker(markerOptions) {
 					google.maps.event.addListener(this.marker, 'dragend', function (event) {
 						mrk.setCursor('grab');
 						dragCalb({event: event});
+					});
+				}
+				
+				// dblclick-callback
+				if (angular.isFunction(this.dblclickCallback)) {
+					console.log('marker adding dblclik listener');
+					var dbclkCalb = this.dblclickCallback;
+					google.maps.event.addListener(this.marker, 'dblclick', function (event) {
+						console.log('marker dblclik');
+						dbclkCalb({event: event});
 					});
 				}
 			}

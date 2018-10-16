@@ -99,3 +99,25 @@ LI.stop SPAN.x:hover {
 	color: maroon;
 	background-color: red;
 }
+
+/* INFO-WINDOW */
+/* nazwa */
+DIV.gm-style-iw SPAN.name {
+	font-weight: bold;
+}
+/* typ */
+DIV.gm-style-iw SPAN.type {
+	font-style: italic;
+}
+/* parent */
+DIV.gm-style-iw SPAN.parent {
+	font-weight: bold;
+	font-style: italic;
+}
+/* depot */
+DIV.gm-style-iw SPAN.depot {
+}
+/* punkt centralny */
+DIV.gm-style-iw SPAN.cp {
+	font-style: italic;
+}

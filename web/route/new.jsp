@@ -147,70 +147,6 @@
 					</tbody>
 				</table>
 				
-				<!-- details of choosed locality -->
-				<table class="details" style="display: none;">
-					<tbody>
-						<tr>
-							<td colspan="4">
-								<div>Nazwa:</div>
-								<div>{{locality.name}}</div>
-							</td>
-							<td colspan="4">
-								<div>Typ:</div>
-								<div>
-									<span>{{locality.type}}</span>
-								</div>
-							</td>
-							<td colspan="4">
-								<div>Miejsc. nadrz.:</div>
-								<div>{{locality.parentName}}</div>
-							</td>
-						</tr>
-						
-						<tr>
-							<td colspan="4">
-								<div>Gmina:</div>
-								<div>{{locality.gmina}}</div>
-								<span style="min-height: 15px;">{{locality.gminaType}}</span>
-							</td>
-							<td colspan="4">
-								<div>Powiat:</div>
-								<div>{{locality.powiat}}</div>
-							</td>
-							<td colspan="4">
-								<div>Województwo:</div>
-								<div>{{locality.wojewodztwo}}</div>
-							</td>
-						</tr>	
-						
-						<tr> 
-							<td colspan="6">
-								<div>Nazwa historyczna:</div>
-								<div>{{locality.historicalName}}</div>
-								<span>{{locality.historicalNote}}</span>
-							</td>
-							<td colspan="6">
-								<div>Nazwa oboczna:</div>
-								<div>{{locality.collateralName}}</div>
-								<span>{{locality.collateralNote}}</span>
-							</td>
-						</tr>
-						
-						<tr> 
-							<td colspan="6">
-								<div>Nazwa obca:</div>
-								<div>{{locality.foreignName}}</div>
-								<span>{{locality.foreignLatin}}</span>
-							</td>
-							<td colspan="6">
-								<div>Język:</div>
-								<div>{{locality.foreignLanguage}}</div>
-								<span>{{locality.foreignLanguageCode}}</span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				
 				<!-- route -->
 				<ol class="route" dragula='"route"' dragula-model="stops" dragula-scope="$parent">
 					<li ng-repeat="stop in stops" class="stop">
@@ -218,8 +154,8 @@
 						<span class="x" title="Usuń" ng-click="remove($index)">&#9587;</span>
 						<span class="add" title="Dodaj przystanek" ng-click="addDepotTo(stop)">+</span>
 						
-						<span>{{stop.name}}</span> <span class="type">{{stop.type}}</span> <span class="parent">{{stop.parentName}}</span> <br/>
-						<span class="depot">Przystanek PKS</span>
+						<span>{{stop.locality.name}}</span> <span class="type">{{stop.locality.type}}</span> <span class="parent">{{stop.locality.parentName}}</span> <br/>
+						<span class="depot">{{stop.depot}}</span>
 					</li>
 				</ol>
 			</div><!-- end of left column -->
@@ -229,15 +165,37 @@
 					<!-- zaznaczane podpowiedzi (hinty) -->
 					<marker lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
 
-					<!-- trasa (route) -->
- 					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.lat}}" lng="{{stop.lon}}" label="{{$index}}" title="{{stop.name}}">
+					<!-- wybrana miejscowość -->
+					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}" dblclick-callback="addStop()">
 						<info-window>
-	 						<b>{{stop.name}}</b><br/>
-							<i>{{stop.type}}</i> {{stop.parentName}}
+							<span class="name">{{locality.name}}</span> <span class="type">{{locality.type}}</span> <span class="parent" ng-show="locality.parentName.length > 0">{{locality.parentName}}</span> <br/>
+							<span class="cp">punkt centralny</span>
 						</info-window>
 					</marker>
 					
-					<!-- przystanek (depot) -->
+					<!-- przystanki w wybranej miejscowości -->
+					<marker ng-repeat="depot in locality.depots" icon="dot.red" lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{locality.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
+						<info-window>
+							<span class="name">{{locality.name}}</span>
+							<!-- <span class="type">{{locality.type}}</span>
+							<span class="parent" ng-show="locality.parentName.length > 0">{{locality.parentName}}</span> -->
+							<br/>
+							<span class="depot">{{depot.name}}</span>
+						</info-window>
+					</marker>
+
+					<!-- trasa (route) -->
+ 					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.lat}}" lng="{{stop.lng}}" label="{{$index}}" title="{{stop.locality.name}}, {{stop.depot}}">
+						<info-window>
+	 						<b>{{stop.locality.name}}</b>
+							<i>{{stop.locality.type}}</i>
+							{{stop.locality.parentName}}
+							<br/>
+							{{stop.depot}}
+						</info-window>
+					</marker>
+					
+					<!-- dodawany przystanek (depot) -->
 					<marker  icon="dot.green" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
 						<info-window visible="true">
 							<form ng-submit="saveDepot()">
