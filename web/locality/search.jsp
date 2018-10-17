@@ -262,10 +262,10 @@
 			<div class="rightcolumn">
 				<div class="gmap" lat="51.764" lng="19.463" zoom="6">
 					<!-- zaznaczane podpowiedzi (hinty) -->
-					<marker lat="{{a.lat}}" lng="{{a.lng}}" title="{{a.name}}" icon="green"></marker>
+					<marker lat="{{a.lat}}" lng="{{a.lng}}" title="{{a.name}}" icon="pure.green" label="?"></marker>
 
 					<!-- wybrana miejscowość -->
- 					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}" icon="orange" label="5">
+ 					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}" icon="dot.green">
 						<info-window>
 	 						<b>{{locality.name}}</b><br/>
 							<i>{{locality.type}}</i> {{locality.parentName}}
@@ -273,7 +273,7 @@
 					</marker>
 
 					<!-- standardowy marker, dla porównania -->
- 					<marker lat="50.90361111111111" lng="22.99277777777778" title="Suszeń"/>
+ 					<marker lat="50.90361111111111" lng="22.99277777777778" title="Suszeń" label="5"/>
 				</div>
 			</div>
 		</div>

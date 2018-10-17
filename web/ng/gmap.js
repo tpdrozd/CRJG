@@ -201,8 +201,12 @@ function Marker(markerOptions) {
 				// label
 				if (angular.isDefined(this.label)) {
 					var labelOpt = this.marker.getLabel();
-					labelOpt.text = this.label;
-					this.marker.setLabel(labelOpt);
+					if (angular.isDefined(labelOpt)) {
+						labelOpt.text = this.label;
+						this.marker.setLabel(labelOpt);
+					}
+					else
+						this.marker.setLabel(this.label);
 				}
 				
 				// position
@@ -246,8 +250,12 @@ function Marker(markerOptions) {
 					// label
 					if (angular.isDefined(chng.label)) {
 						var labelOpt = this.marker.getLabel();
-						labelOpt.text = chng.label.currentValue;
-						this.marker.setLabel(labelOpt);
+						if (angular.isDefined(labelOpt)) {
+							labelOpt.text = chng.label.currentValue;
+							this.marker.setLabel(labelOpt);
+						}
+						else
+							this.marker.setLabel(chng.label.currentValue);
 					}
 					
 					// position
