@@ -148,16 +148,39 @@
 				</table>
 				
 				<!-- route -->
-				<ol class="route" dragula='"route"' dragula-model="stops" dragula-scope="$parent">
-					<li ng-repeat="stop in stops" class="stop">
-						<span class="lp">{{$index}}</span>
-						<span class="x" title="Usuń" ng-click="remove($index)">&#9587;</span>
-						<span class="add" title="Dodaj przystanek" ng-click="addDepotTo(stop)">+</span>
-						
-						<span>{{stop.locality.name}}</span> <span class="type">{{stop.locality.type}}</span> <span class="parent">{{stop.locality.parentName}}</span> <br/>
-						<span class="depot">{{stop.depot}}</span>
-					</li>
-				</ol>
+				<table class="route">
+					<caption>Nowa trasa</caption>
+					<thead>
+						<tr>
+							<th>Lp.</th>
+							<th>
+								Miejscowość / Przystanek
+							</th>
+							<th>Dystans</th>
+							<th></th>
+						</tr>
+					</thead>
+					
+					<tbody dragula='"route"' dragula-model="stops" dragula-scope="$parent">
+						<tr ng-repeat="stop in stops" class="stop">
+							<td>{{$index}}</td>
+							<td>
+								<span>{{stop.locality.name}}</span>
+								<span class="type">{{stop.locality.type}}</span> <span class="parent">{{stop.locality.parentName}}</span>
+								<br />
+								<span class="depot">{{stop.depot}}</span>
+							</td>
+							<td>
+								<span class="distance">12,7 km</span> <br/>
+								<span class="totalDistance">32,4 km</span>
+							</td>
+							<td>
+								<!-- <span class="add" title="Dodaj przystanek" ng-click="addDepotTo(stop)">+</span> -->
+								<span class="x" title="Usuń" ng-click="remove($index)">&#9587;</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">

@@ -1,16 +1,148 @@
-OL.route {
-	padding-left: 0px;
-	list-style-type: none;
+/* TRASA */
+TABLE.route {
+	width: 100%;
+	max-width: 100%;
+	margin: 5px 0px;
+	border: none;
+	border-collapse: separate;
+	border-spacing: 0px 6px;
+	background-color: white;
+	table-layout: auto;
 }
+
+/* NAG£ÓWEK */
+TABLE.route TH {
+/*	width: 24px; 440px; 78px; 40px */
+	color: maroon;
+	font-size: 15px;
+}
+
+/* PRZYSTANEK */
+TR.stop {
+	cursor: grab;
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px #ee9344;
+}
+
+TR.stop:hover {
+	box-shadow: 2px 2px 2px maroon;
+}
+
+TR.stop TD {
+	/* width: 411px; */
+	border-top: 1px solid #ee9344;
+	border-bottom: 1px solid #ee9344;
+	padding: 1px;
+	background-color: #ffe6cc;
+	vertical-align: top;
+}
+TR.stop:hover TD {
+	border-top-color: maroon;
+	border-bottom-color: maroon;
+	background-color: #ffc184;
+}
+
+TR.stop TD:first-child {
+	width: 24px;
+/* 	height: 36px; */
+	border-left: 1px solid #ee9344;
+	border-radius: 5px 0px 0px 5px;
+	padding: 0px 6px 0px 4px;
+	color: #ee9344;
+	text-align: right;
+	font-family: sans-serif;
+	font-size: xx-large;
+}
+TR.stop:hover TD:first-child {
+	border-left-color: maroon;
+	color: maroon;
+}
+
+TR.stop TD:nth-child(2) {
+	width: 440px;
+}
+
+TR.stop TD:nth-child(3) {
+	width: 82px;
+	padding-right: 30px;
+	text-align: right;
+}
+
+TR.stop TD:last-child {
+	width: 36px;
+	border-right: 1px solid #ee9344;
+	border-radius: 0px 5px 5px 0px;
+	text-align: right;
+}
+TR.stop:hover TD:last-child {
+	border-right-color: maroon;
+}
+
+/* miejscowoœæ */
+TR.stop SPAN {
+	color: maroon;
+	font-family: sans-serif;
+	font-size: small;
+	font-weight: bold;
+	font-style: normal;
+}
+/* typ */
+TR.stop SPAN.type {
+	color: #b33c00;
+	font-weight: normal;
+	font-style: italic;
+}
+/* parent */
+TR.stop SPAN.parent {
+	color: #b33c00;
+	font-weight: bold;
+	font-style: italic;
+}
+/* przystanek */
+TR.stop SPAN.depot {
+	font-family: monospace;
+	font-size: 14.6px;
+	font-weight: normal;
+}
+/* dystans */
+TR.stop SPAN.distance {
+	color: #b33c00;
+	font-size: 14px;
+	font-weight: normal;
+	font-style: italic;
+}
+TR.stop SPAN.totalDistance {
+	font-family: monospace;
+	font-size: 14.6px;
+	font-weight: bold;
+}
+
+/* przycisk usuniêcia */
+TR.stop SPAN.x {
+	width: 33px;
+	height: 33px;
+	display: inline-block;
+	border: dotted 1px #b33c00;
+	border-radius: 5px;
+	color: white;
+	background-color: tomato;
+	text-align: center;
+	font-family: monospace;
+	font-size: x-large;
+	font-weight: bolder;
+	cursor: pointer;
+}
+TR.stop SPAN.x:hover {
+	border-style: solid;
+	border-color: maroon;
+	color: maroon;
+	background-color: red;
+}
+
 
 /* PRZYSTANEK */
 LI.stop {
 	margin: 5px 0px;
-	border: dotted 1px maroon;
-	border-radius: 5px;
-	padding: 1px;
-	color: maroon;
-	background-color: #ffe6cc;
 	cursor: grab;
 	list-style-type: none;
 }
@@ -44,7 +176,7 @@ LI.stop SPAN.depot {
 	font-weight: normal;
 }
 /* liczba porz¹dkowa */
-LI.stop SPAN.lp {
+LI.stop SPAN.lp: {
 	width: 36px;
 	height: 36px;
 	float: left;
