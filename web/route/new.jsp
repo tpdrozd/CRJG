@@ -162,7 +162,7 @@
 					</thead>
 					
 					<tbody dragula='"route"' dragula-model="stops" dragula-scope="$parent">
-						<tr ng-repeat="stop in stops" class="stop">
+						<tr ng-repeat="stop in stops" class="stop" ng-mousedown="mousedown($event)" ng-mouseup="mouseup($event)">
 							<td>{{$index}}</td>
 							<td>
 								<span>{{stop.locality.name}}</span>

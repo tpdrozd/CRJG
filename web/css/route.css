@@ -21,6 +21,7 @@ TABLE.route TH {
 TR.stop {
 	cursor: grab;
 	border-radius: 5px;
+	background-color: #ffe6cc;
 	box-shadow: 2px 2px 2px #ee9344;
 }
 
@@ -28,18 +29,20 @@ TR.stop:hover {
 	box-shadow: 2px 2px 2px maroon;
 }
 
+TR.drag, TR.gu-mirror {
+	cursor: grabbing !important;
+}
+
 TR.stop TD {
 	/* width: 411px; */
 	border-top: 1px solid #ee9344;
 	border-bottom: 1px solid #ee9344;
 	padding: 1px;
-	background-color: #ffe6cc;
 	vertical-align: top;
 }
 TR.stop:hover TD {
 	border-top-color: maroon;
 	border-bottom-color: maroon;
-	background-color: #ffc184;
 }
 
 TR.stop TD:first-child {

@@ -26,6 +26,22 @@ function routeCtrl($scope, $http) {
 		$scope.locality = hint;
 	});
 	
+	// obsługa kursora przy przeciaganiu
+	$scope.mousedown = function (event) {
+		if (event.button == 0)
+			event.currentTarget.classList.add('drag');
+	}
+	
+	$scope.mouseup = function (event) {
+		if (event.button == 0)
+			event.currentTarget.classList.remove('drag');
+	}
+	
+	$scope.$parent.$on('route.drag', function (el, source) {
+		source.removeClass('drag');
+	});
+
+	// edycja trasy
 	$scope.addStop = function (depot) {
 		var stop = new StopWrapper($scope.locality, depot);
 		$scope.stops.push(stop);
