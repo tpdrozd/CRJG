@@ -186,18 +186,24 @@
 			<div class="rightcolumn">
 				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="markNewDepot(event.latLng)" cursor="{{gmapCursor}}">
 					<!-- zaznaczane podpowiedzi (hinty) -->
-					<marker lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
+					<marker icon="dot.red" lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
 
 					<!-- wybrana miejscowość -->
 					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}" dblclick-callback="addStop()">
-						<info-window>
+						<info-window visible="true">
 							<span class="name">{{locality.name}}</span> <span class="type">{{locality.type}}</span> <span class="parent" ng-show="locality.parentName.length > 0">{{locality.parentName}}</span> <br/>
-							<span class="cp">punkt centralny</span>
+							<span class="cp">punkt centralny</span> <br/>
+							<span title="Dodaj do trasy jako kolejny przystanek">
+								<button type="button" ng-click="addStop()">Do trasy</button>
+							</span>
+							<span title="Utwórz nowy przystanek w tej miejscowości">
+								<button type="button" ng-click="addDepotTo(locality)">Nowy przystanek</button>
+							</span>
 						</info-window>
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in locality.depots" icon="dot.red" lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{locality.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
+					<marker ng-repeat="depot in locality.depots" icon="pure.red" lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{locality.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
 						<info-window>
 							<span class="name">{{locality.name}}</span>
 							<!-- <span class="type">{{locality.type}}</span>
@@ -207,6 +213,18 @@
 						</info-window>
 					</marker>
 
+					<!-- dodawany przystanek (depot) -->
+					<marker  icon="pure.orange" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
+						<info-window visible="true">
+							<form ng-submit="saveDepot()">
+								Nazwa przystanku: <br/>
+								<input type="text" ng-model="depot.name"></input><br/>
+								<input type="button" value="Anuluj" ng-click="cancelDepot()" />
+								<input type="submit" value="Zapisz"/>
+							</form>
+						</info-window>
+					</marker>
+					
 					<!-- trasa (route) -->
  					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.lat}}" lng="{{stop.lng}}" label="{{$index}}" title="{{stop.locality.name}}, {{stop.depot}}">
 						<info-window>
@@ -215,18 +233,6 @@
 							{{stop.locality.parentName}}
 							<br/>
 							{{stop.depot}}
-						</info-window>
-					</marker>
-					
-					<!-- dodawany przystanek (depot) -->
-					<marker  icon="dot.green" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
-						<info-window visible="true">
-							<form ng-submit="saveDepot()">
-								Nazwa przystanku: <br/>
-								<input type="text" ng-model="depot.name"></input><br/>
-								<input type="button" value="Anuluj" ng-click="cancelDepot()" />
-								<input type="submit" value="Zapisz"/>
-							</form>
 						</info-window>
 					</marker>
 				</div>
