@@ -7,16 +7,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import tpd.crjg.repo.LocalityRepo;
+import tpd.crjg.repo.TownRepo;
 
 @Controller
-@RequestMapping ("/locality")
-public class LocalityController {
+@RequestMapping ("/town")
+public class TownController {
 	
 	private static final String	WOJEWODZTWA	= "wojews";
 	
 	@Autowired
-	private LocalityRepo		repo;
+	private TownRepo		repo;
 	
 	@RequestMapping ("/search")
 	public String search ( Model m ) {

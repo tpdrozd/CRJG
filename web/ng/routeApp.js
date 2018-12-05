@@ -4,7 +4,7 @@ angular.module('routeApp', ['hints', 'gmap', angularDragula(angular)])
 
 function routeCtrl($scope, $http) {
 	$scope.hint = {};
-	$scope.locality = {};
+	$scope.town = {};
 	$scope.stops = [];
 	$scope.depot = {};
 	$scope.gmapCursor = 'default';
@@ -23,7 +23,7 @@ function routeCtrl($scope, $http) {
 	
 	// select hint
 	$scope.$on('selectHint', function(event, hint) {
-		$scope.locality = hint;
+		$scope.town = hint;
 	});
 	
 	// obsługa kursora przy przeciaganiu
@@ -43,7 +43,7 @@ function routeCtrl($scope, $http) {
 
 	// edycja trasy
 	$scope.addStop = function (depot) {
-		var stop = new StopWrapper($scope.locality, depot);
+		var stop = new StopWrapper($scope.town, depot);
 		$scope.stops.push(stop);
 		$scope.$apply('stops');
 	}
@@ -56,13 +56,13 @@ function routeCtrl($scope, $http) {
 		});
 	};
 	
-	$scope.addDepotTo = function (locality) {
-		$scope.depot.localityRefId = locality.id;
+	$scope.addDepotTo = function (town) {
+		$scope.depot.townRefId = town.id;
 		
 		$scope.addingDepot = true;
 		$scope.gmapCursor = 'crosshair';
 
-		console.log('adding depot to: '	+ locality.name);
+		console.log('adding depot to: '	+ town.name);
 	}
 	
 	$scope.markNewDepot = function (coord) {
@@ -107,15 +107,15 @@ function routeCtrl($scope, $http) {
 	
 } // end of routeCtrl
 
-function StopWrapper (locality, depot) {
+function StopWrapper (town, depot) {
 	var hasDepot = angular.isDefined(depot);
 	
 	var depotName = hasDepot ? depot.name : undefined;
-	var lat = hasDepot ? depot.lat : locality.lat;
-	var lng = hasDepot ? depot.lng : locality.lon;
+	var lat = hasDepot ? depot.lat : town.lat;
+	var lng = hasDepot ? depot.lng : town.lon;
 	
 	return {
-		locality: locality,
+		town: town,
 		depot: depotName, 
 		lat: lat,
 		lng: lng

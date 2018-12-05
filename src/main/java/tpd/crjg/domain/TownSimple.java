@@ -1,16 +1,15 @@
 package tpd.crjg.domain;
 
+import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.springframework.data.neo4j.annotation.QueryResult;
 
 /**
  * Nazwy historyczne, oboczne, obce, itp. zredukowane do jednego pola.
  */
 @QueryResult
-public class LocalitySimple {
+public class TownSimple {
 	
 	Long	id;
-	
-	String	idTeryt;
 	
 	String	name;
 	
@@ -26,16 +25,11 @@ public class LocalitySimple {
 	
 	String	wojewodztwo;
 	
-	double	lat;
-	
-	double	lng;
+	@Convert (CoordConverter.class)
+	Coord	coord;
 	
 	public Long getId () {
 		return id;
-	}
-	
-	public String getIdTeryt () {
-		return idTeryt;
 	}
 	
 	public String getName () {
@@ -66,11 +60,8 @@ public class LocalitySimple {
 		return wojewodztwo;
 	}
 	
-	public double getLat () {
-		return lat;
+	public Coord getCoord () {
+		return coord;
 	}
 	
-	public double getLng () {
-		return lng;
-	}
 }

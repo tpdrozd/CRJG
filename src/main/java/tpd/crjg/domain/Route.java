@@ -15,10 +15,10 @@ public class Route {
 	private Long		id;
 	
 	@Relationship (type = "FROM")
-	private Locality	from;
+	private Town	from;
 	
 	@Relationship (type = "TO")
-	private Locality	to;
+	private Town	to;
 	
 	@Relationship (type = "CONTAIN")
 	private List<Stop>	stops;
@@ -31,19 +31,19 @@ public class Route {
 		this.id = id;
 	}
 
-	public Locality getFrom () {
+	public Town getFrom () {
 		return from;
 	}
 
-	public void setFrom ( Locality from ) {
+	public void setFrom ( Town from ) {
 		this.from = from;
 	}
 
-	public Locality getTo () {
+	public Town getTo () {
 		return to;
 	}
 
-	public void setTo ( Locality to ) {
+	public void setTo ( Town to ) {
 		this.to = to;
 	}
 

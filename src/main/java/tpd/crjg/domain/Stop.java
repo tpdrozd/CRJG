@@ -16,7 +16,7 @@ public class Stop {
 	private int			orderIndex;
 	
 	@Relationship (type = "IN")
-	private Locality	locality;
+	private Town	locality;
 	
 	@Relationship (type = "AT")
 	private Depot		depot;
@@ -37,11 +37,11 @@ public class Stop {
 		this.orderIndex = orderIndex;
 	}
 
-	public Locality getLocality () {
+	public Town getLocality () {
 		return locality;
 	}
 
-	public void setLocality ( Locality locality ) {
+	public void setLocality ( Town locality ) {
 		this.locality = locality;
 	}
 

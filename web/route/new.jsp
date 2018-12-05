@@ -10,10 +10,9 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/angular-dragula/1.2.8/dragula.css" rel="stylesheet"/>
 		
-		<link href="<t:url value="/css/localitySearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
+		<link href="<t:url value="/css/townSearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 		<link href="<t:url value="/css/hints.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 		<link href="<t:url value="/css/route.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
-		<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/> -->
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo26SLCVE9QCiEZagBAB47907NjifNYMk&sensitive=false"></script>
@@ -121,7 +120,7 @@
 								<input type="search" name="name" autofocus hints-criteria="name" hnt-auto-thrs="4" hnt-arrdw-thrs="3" hints-auto-trig hints-arrdw-trig hints-nav></input>
 								
 								<!-- list of hints -->
-								<t:url value="/locality/search" var="hintsSearchUrl"/>
+								<t:url value="/town/search" var="hintsSearchUrl"/>
 								<div hints="${hintsSearchUrl}" class="hints" style="top: 44px; left: 5px;">
 									<li hint-item>
 										<span>{{hint.name}}</span>
@@ -186,28 +185,28 @@
 			<div class="rightcolumn">
 				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="markNewDepot(event.latLng)" cursor="{{gmapCursor}}">
 					<!-- zaznaczane podpowiedzi (hinty) -->
-					<marker icon="dot.red" lat="{{hint.lat}}" lng="{{hint.lng}}" title="{{hint.name}}"></marker>
+					<marker icon="dot.red" lat="{{hint.coord.lat}}" lng="{{hint.coord.lng}}" title="{{hint.name}}"></marker>
 
 					<!-- wybrana miejscowość -->
-					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}" dblclick-callback="addStop()">
+					<marker lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}" dblclick-callback="addStop()">
 						<info-window visible="true">
-							<span class="name">{{locality.name}}</span> <span class="type">{{locality.type}}</span> <span class="parent" ng-show="locality.parentName.length > 0">{{locality.parentName}}</span> <br/>
+							<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
 							<span class="cp">punkt centralny</span> <br/>
 							<span title="Dodaj do trasy jako kolejny przystanek">
 								<button type="button" ng-click="addStop()">Do trasy</button>
 							</span>
 							<span title="Utwórz nowy przystanek w tej miejscowości">
-								<button type="button" ng-click="addDepotTo(locality)">Nowy przystanek</button>
+								<button type="button" ng-click="addDepotTo(town)">Nowy przystanek</button>
 							</span>
 						</info-window>
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in locality.depots" icon="pure.red" lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{locality.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
+					<marker ng-repeat="depot in town.depots" icon="pure.red" lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
 						<info-window>
-							<span class="name">{{locality.name}}</span>
-							<!-- <span class="type">{{locality.type}}</span>
-							<span class="parent" ng-show="locality.parentName.length > 0">{{locality.parentName}}</span> -->
+							<span class="name">{{town.name}}</span>
+							<!-- <span class="type">{{town.type}}</span>
+							<span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> -->
 							<br/>
 							<span class="depot">{{depot.name}}</span>
 						</info-window>
@@ -226,11 +225,11 @@
 					</marker>
 					
 					<!-- trasa (route) -->
- 					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.lat}}" lng="{{stop.lng}}" label="{{$index}}" title="{{stop.locality.name}}, {{stop.depot}}">
+ 					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.lat}}" lng="{{stop.lng}}" label="{{$index}}" title="{{stop.town.name}}, {{stop.depot}}">
 						<info-window>
-	 						<b>{{stop.locality.name}}</b>
-							<i>{{stop.locality.type}}</i>
-							{{stop.locality.parentName}}
+	 						<b>{{stop.town.name}}</b>
+							<i>{{stop.town.type}}</i>
+							{{stop.town.parentName}}
 							<br/>
 							{{stop.depot}}
 						</info-window>

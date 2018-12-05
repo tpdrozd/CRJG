@@ -23,7 +23,7 @@ public class BusStop {
 	private String		departure;
 	
 	@Relationship (type = "IN")
-	private Locality	locality;
+	private Town	locality;
 	
 	@Relationship (type = "AT")
 	private Depot		depot;
@@ -60,11 +60,11 @@ public class BusStop {
 		this.departure = departure;
 	}
 	
-	public Locality getLocality () {
+	public Town getLocality () {
 		return locality;
 	}
 	
-	public void setLocality ( Locality locality ) {
+	public void setLocality ( Town locality ) {
 		this.locality = locality;
 	}
 	

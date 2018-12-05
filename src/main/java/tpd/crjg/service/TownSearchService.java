@@ -6,23 +6,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
-import tpd.crjg.domain.LocalitySimple;
+import tpd.crjg.domain.TownSimple;
 import tpd.crjg.pagination.PaginationSearchService;
-import tpd.crjg.repo.LocalitySearchRepo;
+import tpd.crjg.repo.TownSearchRepo;
 
 @Service
 @SessionScope
-public class LocalitySearchService extends PaginationSearchService<LocalitySearchCriteria, LocalitySimple> {
+public class TownSearchService extends PaginationSearchService<TownSearchCriteria, TownSimple> {
 	
 	@Autowired
-	private LocalitySearchRepo repo;
+	private TownSearchRepo repo;
 	
-	public LocalitySearchService () {
-		super("l.name", "l.wojewodztwo", "l.powiat", "l.gmina");
+	public TownSearchService () {
+		super("t.name", "t.wojewodztwo", "t.powiat", "t.gmina");
 	}
 	
 	@Override
-	protected Page<LocalitySimple> retrivePage ( LocalitySearchCriteria c, Pageable pageable ) {
+	protected Page<TownSimple> retrivePage ( TownSearchCriteria c, Pageable pageable ) {
 		if ( c.isMatchingAtStart() )
 			return repo.findSimpleByStartsWith(c.getNameAsLowerCase(), c.isHist(), c.isCollat(), c.isForeign(), c.getKind(), c.getWojew(), pageable);
 		else if ( c.isMatchingAtEnd() )

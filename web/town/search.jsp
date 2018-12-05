@@ -8,13 +8,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link href="<t:url value="/css/localitySearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
+		<link href="<t:url value="/css/townSearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 		<link href="<t:url value="/css/hints.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo26SLCVE9QCiEZagBAB47907NjifNYMk&sensitive=false"></script>
 		
-		<script type="text/javascript" src="<t:url value="/ng/localitySearchApp.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/townSearchApp.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hints.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hintService.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/gmap.js"/>"></script>
@@ -23,7 +23,7 @@
 	</head>
 	
 	<body>
-		<div class="container" ng-app="localitySearchApp" ng-controller="localitySearchCtrl">		
+		<div class="container" ng-app="townSearchApp" ng-controller="townSearchCtrl">		
 			<div class="leftcolumn">
 				
 				<!-- search criteria -->
@@ -116,7 +116,7 @@
 								<input type="search" name="name" autofocus hints-criteria="name" hnt-auto-thrs="4" hnt-arrdw-thrs="3" hints-auto-trig hints-arrdw-trig hints-nav></input>
 								
 								<!-- list of hints -->
-								<t:url value="/locality/search" var="hintsSearchUrl"/>
+								<t:url value="/town/search" var="hintsSearchUrl"/>
 								<div hints="${hintsSearchUrl}" class="hints" style="top: 44px; left: 5px;">
 									<li hint-item>
 										<span>{{hint.name}}</span>
@@ -142,65 +142,65 @@
 					</tbody>
 				</table>
 				
-				<!-- details of choosed locality -->
+				<!-- details of choosed town -->
 				<table class="details" >
 					<tbody>
 						<tr>
 							<td colspan="4">
 								<div>Nazwa:</div>
-								<div>{{locality.name}}</div>
+								<div>{{town.name}}</div>
 							</td>
 							<td colspan="4">
 								<div>Typ:</div>
 								<div>
-									<span>{{locality.type}}</span>
+									<span>{{town.type}}</span>
 								</div>
 							</td>
 							<td colspan="4">
 								<div>Miejsc. nadrz.:</div>
-								<div>{{locality.parentName}}</div>
+								<div>{{town.parentName}}</div>
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="4">
 								<div>Gmina:</div>
-								<div>{{locality.gmina}}</div>
-								<span style="min-height: 15px;">{{locality.gminaType}}</span>
+								<div>{{town.gmina}}</div>
+								<span style="min-height: 15px;">{{town.gminaType}}</span>
 							</td>
 							<td colspan="4">
 								<div>Powiat:</div>
-								<div>{{locality.powiat}}</div>
+								<div>{{town.powiat}}</div>
 							</td>
 							<td colspan="4">
 								<div>Województwo:</div>
-								<div>{{locality.wojewodztwo}}</div>
+								<div>{{town.wojewodztwo}}</div>
 							</td>
 						</tr>	
 						
 						<tr> 
 							<td colspan="6">
 								<div>Nazwa historyczna:</div>
-								<div>{{locality.historicalName}}</div>
-								<span>{{locality.historicalNote}}</span>
+								<div>{{town.historicalName}}</div>
+								<span>{{town.historicalNote}}</span>
 							</td>
 							<td colspan="6">
 								<div>Nazwa oboczna:</div>
-								<div>{{locality.collateralName}}</div>
-								<span>{{locality.collateralNote}}</span>
+								<div>{{town.collateralName}}</div>
+								<span>{{town.collateralNote}}</span>
 							</td>
 						</tr>
 						
 						<tr> 
 							<td colspan="6">
 								<div>Nazwa obca:</div>
-								<div>{{locality.foreignName}}</div>
-								<span>{{locality.foreignLatin}}</span>
+								<div>{{town.foreignName}}</div>
+								<span>{{town.foreignLatin}}</span>
 							</td>
 							<td colspan="6">
 								<div>Język:</div>
-								<div>{{locality.foreignLanguage}}</div>
-								<span>{{locality.foreignLanguageCode}}</span>
+								<div>{{town.foreignLanguage}}</div>
+								<span>{{town.foreignCode}}</span>
 							</td>
 						</tr>
 						
@@ -208,11 +208,11 @@
 							<td colspan="12">
 								<div>Uwagi:</div>
 								<div>
-									<span ng-show="locality.role.length > 0">
-										{{locality.role}}
+									<span ng-show="town.role.length > 0">
+										{{town.role}}
 										<br/>
 									</span>
-									<span>{{locality.mainNote}}</span>
+									<span>{{town.note}}</span>
 								</div>
 							</td>
 						</tr>
@@ -220,39 +220,39 @@
 						<tr>
 							<td colspan="6">
 								<div>Dług. geogr.:</div>
-								<div>{{locality.longitude}}</div>
-								<span>{{locality.lon}}</span>
+								<div>{{town.longitude}}</div>
+								<span>{{town.coord.lng}}</span>
 							</td>
 							<td colspan="6">
 								<div>Szer. geogr.:</div>
-								<div>{{locality.latitude}}</div>
-								<span>{{locality.lat}}</span>
+								<div>{{town.latitude}}</div>
+								<span>{{town.coord.lat}}</span>
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="3">
 								<div>ID:</div>
-								<div>{{locality.id}}</div>
+								<div>{{town.id}}</div>
 							</td>
 							<td colspan="3">
 								<div>ID PRNG:</div>
-								<div>{{locality.idPrng}}</div>
+								<div>{{town.prng}}</div>
 							</td>
 							<td colspan="3">
 								<div>ID TERYT:</div>
-								<div>{{locality.idTeryt}}</div>
+								<div>{{town.teryt}}</div>
 							</td>
 							<td colspan="3">
 								<div>ID JPTK:</div>
-								<div>{{locality.idJptk}}</div>
+								<div>{{town.jptk}}</div>
 							</td>
 						</tr>
 						
 						<tr>
 							<td colspan="12">
 								<div>ID IIP:</div>
-								<div>{{locality.idIip}}</div>
+								<div>{{town.iip}}</div>
 							</td>
 						</tr>
 					</tbody>
@@ -262,13 +262,13 @@
 			<div class="rightcolumn">
 				<div class="gmap" lat="51.764" lng="19.463" zoom="6">
 					<!-- zaznaczane podpowiedzi (hinty) -->
-					<marker lat="{{a.lat}}" lng="{{a.lng}}" title="{{a.name}}" icon="pure.green" label="?"></marker>
+					<marker lat="{{a.coord.lat}}" lng="{{a.coord.lng}}" title="{{a.name}}" icon="pure.green"></marker>
 
 					<!-- wybrana miejscowość -->
- 					<marker lat="{{locality.lat}}" lng="{{locality.lon}}" title="{{locality.name}}" icon="dot.green">
+ 					<marker lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}" icon="dot.green">
 						<info-window>
-	 						<b>{{locality.name}}</b><br/>
-							<i>{{locality.type}}</i> {{locality.parentName}}
+	 						<b>{{town.name}}</b><br/>
+							<i>{{town.type}}</i> {{town.parentName}}
 						</info-window>
 					</marker>
 

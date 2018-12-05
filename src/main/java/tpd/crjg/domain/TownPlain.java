@@ -6,11 +6,9 @@ import org.springframework.data.neo4j.annotation.QueryResult;
  * Nazwy historyczne, oboczne, obce, itp. zachowane jako osobne pola.
  */
 @QueryResult
-public class LocalityPlain {
+public class TownPlain {
 	
 	Long	id;
-	
-	String	idTeryt;
 	
 	String	name;
 	
@@ -34,10 +32,6 @@ public class LocalityPlain {
 	
 	public Long getId () {
 		return id;
-	}
-	
-	public String getIdTeryt () {
-		return idTeryt;
 	}
 	
 	public String getName () {

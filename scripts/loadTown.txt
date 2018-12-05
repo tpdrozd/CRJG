@@ -1,0 +1,123 @@
+// Usuniecie :Town
+MATCH (t:Town) WHERE t.wojewodztwo = 'mazowieckie' DELETE t RETURN count(t) AS del_maz;
+MATCH (t:Town) WHERE t.wojewodztwo = 'lubelskie' DELETE t RETURN count(t) AS del_lub;
+MATCH (t:Town) DELETE t RETURN count(t) AS del_rest;
+
+// Usuniecie indexów na polach lc (Lower Case).
+DROP INDEX ON :Town(lc_name);
+DROP INDEX ON :Town(lc_historicalName);
+DROP INDEX ON :Town(lc_collateralName);
+DROP INDEX ON :Town(lc_foreignName);
+DROP INDEX ON :Town(lc_foreignLatin);
+
+// Usunięcie pozostałych indexów
+DROP INDEX ON :Town(wojewodztwo);
+DROP INDEX ON :Town(coord);
+
+// Załadowanie z pliku CSV
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM 'file:///town_xlsx.csv' AS t
+CREATE (:Town { name: t.name, type: t.type, parentName: t.parentName,
+				gmina: t.gmina, powiat: t.powiat, wojewodztwo: t.wojewodztwo, 
+				role: t.role, note: t.note,
+				historicalName: t.historicalName, historicalNote: t.historicalNote,
+				collateralName: t.collateralName, collateralNote: t.collateralNote,
+				additName: t.additName, additLatin: t.additLatin, additCode: t.additCode, additLanguage: t.additLanguage, additNote: t.additNote,
+				egzonim: t.egzonim, egzonimLatin: t.egzonimLatin, egzonimWriting: t.egzonimWriting, egzonimLanguage: t.egzonimLanguage,
+				endonim: t.endonim, endonimLatin: t.endonimLatin, endonimWriting: t.endonimWriting, endonimLanguage: t.endonimLanguage,
+				latitude: t.latitude, longitude: t.longitude,
+				prng: t.prng, teryt: t.teryt, iip: t.iip, jptk: t.jptk
+		})
+RETURN count(t) AS loaded_Town;
+
+// Poprawa nazwy gminy Ryki
+MATCH (t:Town)
+WHERE t.gmina="Ryki"
+SET t.gmina="Ryki-miasto"
+RETURN count(t) AS gmina_Ryki_miasto;
+
+// Oddzielenie typu gminy od nazwy
+MATCH (t:Town)
+SET t.gminaType = last(split(t.gmina, "-")), t.gmina = substring(t.gmina, 0, size(t.gmina) - size(last(split(t.gmina, "-"))) - 1)
+RETURN count(t) AS typGminy;
+
+// Zmiana nazwy dodatkowej na nazwę obcą
+MATCH (t:Town)
+WHERE exists(t.additName)
+SET t.foreignName = t.additName, t.foreignLatin = t.additLatin, t.foreignCode = t.additCode, t.foreignLanguage = t.additLanguage
+RETURN count(t) AS additName_to_foreigName;
+
+MATCH (t:Town)
+WHERE exists(t.additName)
+REMOVE t.additName, t.additLatin, t.additCode, t.additLanguage, t.additNote
+RETURN count(t) AS removed_additName;
+
+// Zmiana egzonimu na nazwę obcą
+MATCH (t:Town)
+WHERE exists(t.egzonim)
+SET t.foreignName = t.egzonim, t.foreignLatin = t.egzonimLatin, t.foreignCode = t.egzonimWriting, t.foreignLanguage = t.egzonimLanguage
+RETURN count(t) AS egzonim_to_foreignName;
+
+MATCH (t:Town)
+WHERE exists(t.egzonim)
+REMOVE t.egzonim, t.egzonimLatin, t.egzonimWriting, t.egzonimLanguage
+RETURN count(t) AS removed_egzonim;
+
+// Zmiana endonimu na nazwę obcą
+MATCH (t:Town)
+WHERE exists(t.endonim)
+SET t.foreignName = t.endonim, t.foreignLatin = t.endonimLatin, t.foreignCode = t.endonimWriting, t.foreignLanguage = t.endonimLanguage
+RETURN count(t) AS endonim_to_foreignName;
+
+MATCH (t:Town)
+WHERE exists(t.endonim)
+REMOVE t.endonim, t.endonimLatin, t.endonimWriting, t.endonimLanguage
+RETURN count(t) AS removed_endonim;
+
+// Uzupełnienie szerokości i długosci geograficznej o określenie: północna (N) i wschodnia (E).
+MATCH (t:Town)
+SET t.latitude = t.latitude + "N", t.longitude = t.longitude + "E"
+RETURN count(t) AS geo;
+
+// Obliczenie wartości liczbowych długosci i szerokości geograficznej
+MATCH (t:Town)
+WITH substring(t.longitude, 0, 2) AS d, substring(t.longitude, 3, 2) AS dm, substring(t.longitude, 6, 2) AS ds, t AS t
+WITH substring(t.latitude, 0, 2) AS s, substring(t.latitude, 3, 2) AS sm, substring(t.latitude, 6, 2) AS ss, d AS d, dm AS dm, ds AS ds, t AS t
+WITH toFloat(d) + toFloat(dm)/60 + toFloat(ds)/3600 AS lng, toFloat(s) + toFloat(sm)/60 + toFloat(ss)/3600 AS lat, t AS t
+SET t.coord = point({longitude: lng, latitude: lat})
+RETURN count(t) AS coord;
+
+// Dodanie pól do przechowywania nazw pisanych małą literą (Lower Case), do wyszukiwań typu 'ignore case'. Te pola nie są mapowane w obiektach Javy.
+MATCH (t:Town)
+SET t.lc_name = toLower(t.name)
+RETURN count(t) AS name_to_lower;
+
+MATCH (t:Town)
+WHERE exists(t.historicalName)
+SET t.lc_historicalName = toLower(t.historicalName)
+RETURN count(t) AS historicalName_to_lower;
+
+MATCH (t:Town)
+WHERE exists(t.collateralName)
+SET t.lc_collateralName = toLower(t.collateralName)
+RETURN count(t) AS collateralName_to_lower;
+
+MATCH (t:Town)
+WHERE exists(t.foreignName)
+SET t.lc_foreignName = toLower(t.foreignName)
+RETURN count(t) AS foreignName_to_lower;
+
+MATCH (t:Town)
+WHERE exists(t.foreignLatin)
+SET t.lc_foreignLatin = toLower(t.foreignLatin)
+RETURN count(t) AS foreignLatin_to_lower;
+
+// Utworzenie indexu geospatial
+CREATE INDEX ON :Town(coord);
+
+// Utworzenie indexów na polach lc (Lower Case).
+CREATE INDEX ON :Town(lc_name);
+CREATE INDEX ON :Town(lc_historicalName);
+CREATE INDEX ON :Town(lc_collateralName);
+CREATE INDEX ON :Town(lc_foreignName);
+CREATE INDEX ON :Town(lc_foreignLatin);

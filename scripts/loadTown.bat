@@ -1,0 +1,1 @@
+cypher-shell -u crj -p crj < loadTown.txt

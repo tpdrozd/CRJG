@@ -13,8 +13,8 @@
 		Hello World (graph).
 		<br/>
 		
-		<t:url value="/locality/search.mvc" var="localitySearch"/>
-		<a href="${localitySearch}">Baza miejscowości - wyszukiwanie</a> <br/>
+		<t:url value="/town/search.mvc" var="townSearch"/>
+		<a href="${townSearch}">Baza miejscowości - wyszukiwanie</a> <br/>
 		
 		<t:url value="/route/new.mvc" var="routeNew"/>
 		<a href="${routeNew}">Trasa - tworzenie</a> <br/>

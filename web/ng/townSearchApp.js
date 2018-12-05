@@ -1,10 +1,10 @@
-angular.module('localitySearchApp', ['hints', 'gmap'])
+angular.module('townSearchApp', ['hints', 'gmap'])
 
-.controller('localitySearchCtrl', localitySearchCtrl);
+.controller('townSearchCtrl', townSearchCtrl);
 
-function localitySearchCtrl($scope) {
+function townSearchCtrl($scope) {
 	$scope.a = {};
-	$scope.locality = {};
+	$scope.town = {};
 
 	// mark hint
 	$scope.$on('markHint', function (event, hint) {
@@ -23,6 +23,6 @@ function localitySearchCtrl($scope) {
 	// select hint
 	$scope.$on('selectHint', function(event, hint) {
 		console.log('APP received selectHint: ' + hint.name);
-		$scope.locality = hint;
+		$scope.town = hint;
 	});
-} // end of localitySearchCtrl
+} // end of townSearchCtrl

@@ -11,44 +11,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tpd.crjg.domain.Locality;
-import tpd.crjg.domain.LocalitySimple;
+import tpd.crjg.domain.Town;
+import tpd.crjg.domain.TownSimple;
 import tpd.crjg.pagination.SearchRequest;
 import tpd.crjg.pagination.SearchResultPage;
-import tpd.crjg.repo.LocalityRepo;
-import tpd.crjg.service.LocalitySearchCriteria;
-import tpd.crjg.service.LocalitySearchService;
+import tpd.crjg.repo.TownRepo;
+import tpd.crjg.service.TownSearchCriteria;
+import tpd.crjg.service.TownSearchService;
 
 @RestController
-@RequestMapping ("/locality/search")
-public class LocalitySearchControler {
+@RequestMapping ("/town/search")
+public class TownSearchControler {
 	
-	private static Logger			log	= Logger.getLogger(LocalitySearchControler.class.getName());
-	
-	@Autowired
-	private LocalitySearchService	service;
+	private static Logger			log	= Logger.getLogger(TownSearchControler.class.getName());
 	
 	@Autowired
-	private LocalityRepo			repo;
+	private TownSearchService	service;
+	
+	@Autowired
+	private TownRepo			repo;
 	
 	@PostMapping (path = "/firstPage", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public SearchResultPage<LocalitySimple> firstPage ( @RequestBody SearchRequest<LocalitySearchCriteria> request ) {
+	public SearchResultPage<TownSimple> firstPage ( @RequestBody SearchRequest<TownSearchCriteria> request ) {
 		log.info("POST body: " + request.toString());
 		return service.firstPage(request.getCriteria(), request.getPagingSize());
 	}
 	
 	@GetMapping (path = "/nextPage", produces = APPLICATION_JSON_VALUE)
-	public SearchResultPage<LocalitySimple> nextPage () {
+	public SearchResultPage<TownSimple> nextPage () {
 		return service.nextPage();
 	}
 	
 	@GetMapping (path = "/prevPage", produces = APPLICATION_JSON_VALUE)
-	public SearchResultPage<LocalitySimple> prevPage () {
+	public SearchResultPage<TownSimple> prevPage () {
 		return service.prevPage();
 	}
 	
 	@GetMapping (path = "/currPage", produces = APPLICATION_JSON_VALUE)
-	public SearchResultPage<LocalitySimple> currPage () {
+	public SearchResultPage<TownSimple> currPage () {
 		return service.currPage();
 	}
 	
@@ -58,10 +58,10 @@ public class LocalitySearchControler {
 	}
 	
 	@PostMapping (path = "/details", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public Locality details ( @RequestBody Long id ) {
+	public Town details ( @RequestBody Long id ) {
 		log.info("id: " + id);
 		service.releasePages();
-		return repo.findById(id, 1).get();
+		return repo.findById(id).get();
 	}
 	
 }

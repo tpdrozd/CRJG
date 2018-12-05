@@ -4,7 +4,7 @@ import org.springframework.util.StringUtils;
 
 import tpd.crjg.pagination.SearchCriteria;
 
-public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCriteria> {
+public class TownSearchCriteria implements SearchCriteria<TownSearchCriteria> {
 	
 	private boolean		hist, collat, foreign;
 	
@@ -104,7 +104,7 @@ public class LocalitySearchCriteria implements SearchCriteria<LocalitySearchCrit
 	}
 	
 	@Override
-	public boolean differentThen ( LocalitySearchCriteria that ) {
+	public boolean differentThen ( TownSearchCriteria that ) {
 		boolean hasMatching = matching != null;
 		boolean hasKind = kind != null;
 		boolean hasName = StringUtils.hasText(name);
