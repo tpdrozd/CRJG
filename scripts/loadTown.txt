@@ -112,9 +112,6 @@ WHERE exists(t.foreignLatin)
 SET t.lc_foreignLatin = toLower(t.foreignLatin)
 RETURN count(t) AS foreignLatin_to_lower;
 
-// Utworzenie indexu geospatial
-// CREATE INDEX ON :Town(coord);
-
 // Utworzenie indexów na polach lc (Lower Case).
 CREATE INDEX ON :Town(lc_name);
 CREATE INDEX ON :Town(lc_historicalName);
