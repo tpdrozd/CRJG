@@ -66,7 +66,7 @@ public class Town {
 	/** Długość geograficzna */
 	private String		longitude;
 	
-	// @Index - tworzony w skrypcie, bo OGM nie tworzy poprawnie indexu
+	@Index
 	@Convert (CoordConverter.class)
 	private Coord		coord;
 	

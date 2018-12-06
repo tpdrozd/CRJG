@@ -2,28 +2,26 @@ package tpd.crjg.domain;
 
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Transient;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
 
 @NodeEntity (label = "Depot")
 public class Depot {
 	
 	@Id
 	@GeneratedValue
-	private Long		id;
+	private Long	id;
 	
-	@Property
-	private String		name;
+	private String	name;
 	
-	@Property
-	private double		lat;
-	
-	@Property
-	private double		lng;
+	@Index
+	@Convert (CoordConverter.class)
+	private Coord	coord;
 	
 	@Transient
-	private Long		localityRefId;
+	private Long	localityRefId;
 	
 	public Long getId () {
 		return id;
@@ -41,20 +39,12 @@ public class Depot {
 		this.name = name;
 	}
 	
-	public double getLat () {
-		return lat;
+	public Coord getCoord () {
+		return coord;
 	}
 	
-	public void setLat ( double lat ) {
-		this.lat = lat;
-	}
-	
-	public double getLng () {
-		return lng;
-	}
-	
-	public void setLng ( double lng ) {
-		this.lng = lng;
+	public void setCoord ( Coord coord ) {
+		this.coord = coord;
 	}
 	
 	public Long getLocalityRefId () {
