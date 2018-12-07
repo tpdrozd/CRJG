@@ -222,7 +222,7 @@
 								<input type="submit" value="Zapisz"/>
 							</form>
 						</info-window>
-					</marker>
+					</marker> <!-- -->
 					
 					<!-- trasa (route) -->
  					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.lat}}" lng="{{stop.lng}}" label="{{$index}}" title="{{stop.town.name}}, {{stop.depot}}">

@@ -43,9 +43,11 @@ function routeCtrl($scope, $http) {
 
 	// edycja trasy
 	$scope.addStop = function (depot) {
+		console.log('addStop');
+		
 		var stop = new StopWrapper($scope.town, depot);
 		$scope.stops.push(stop);
-		$scope.$apply('stops');
+//		$scope.$apply('stops');
 	}
 	
 	$scope.remove = function (index) {

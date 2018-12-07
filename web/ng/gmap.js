@@ -421,25 +421,27 @@ function InfoWindow($compile) {
 				infoWindow.open(mapRef, markerRef);
 				opened = true;
 			}
+			var render = function () {
+				var content = $compile($element.html())($scope);
+				console.log('InfoWindow render :' + content + '	totalElements :' + content.length);
+				if (content.length == 1) {
+					infoWindow.setContent(content[0]);
+				}
+				else {
+					var div = document.createElement('div');
+					angular.forEach (content, function (element, index) {
+						this.append(element);
+					}, div);
+					infoWindow.setContent(div);
+				}
+			}
 			
 			this.$onInit = function () {
 				infoWindow = new google.maps.InfoWindow();
-				
-				var form = $compile($element.html())($scope);
-				infoWindow.setContent(form[0]);
-//				infoWindow.setContent($element.html());
-				
-				var observer = new MutationObserver(function (mutationList) {
-					infoWindow.setContent($element.html()); // tu skończyłem
-				});
-				observer.observe($element[0], {
-					characterData: true,
-					subtree: true
-				})
-				
 				google.maps.event.addListener(infoWindow, 'closeclick', function() {
 					opened = false;
 				});
+				render();
 			}
 
 			this.$postLink = function () {
