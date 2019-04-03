@@ -9,21 +9,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import tpd.crjg.domain.Depot;
+import tpd.crjg.cntrl.request.AddDepot;
 import tpd.crjg.domain.Town;
-import tpd.crjg.service.DepotService;
+import tpd.crjg.service.TownService;
 
 @Controller
 @RequestMapping ("/depot")
 public class DepotCtrl {
+
 	
 	@Autowired
-	private DepotService depotService;
+	private TownService townService;
 	
 	@PutMapping (path = "/save", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public @ResponseBody Town saveDepot ( @RequestBody Depot depot ) {
-		Town l = depotService.save(depot);
-		return l;
+	public @ResponseBody Town saveDepot ( @RequestBody AddDepot addingDepot ) {
+		Town t = townService.addDepot(addingDepot.getTownId(), addingDepot.getDepot());
+		return t;
 	}
 	
 }
+

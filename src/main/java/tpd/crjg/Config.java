@@ -14,12 +14,11 @@ public class Config {
 	
 	@Bean
 	public org.neo4j.ogm.config.Configuration configuration () {
-//		ConfigurationSource source = new ClasspathConfigurationSource("");
-//		org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration.Builder(source).build();
 		org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration.Builder()
 			.uri("bolt://localhost")
 			.credentials("crj", "crj")
 			.autoIndex("update")
+			.useNativeTypes()
 			.build();
 		return config;
 	}
@@ -27,6 +26,8 @@ public class Config {
 	@Bean
 	public SessionFactory sessionFactory () {
 		SessionFactory factory = new SessionFactory(configuration(), "tpd.crjg.domain");
+		Listener listener = new Listener();
+		factory.register(listener);
 		return factory;
 	}
 	

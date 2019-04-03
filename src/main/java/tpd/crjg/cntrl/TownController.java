@@ -23,7 +23,8 @@ public class TownController {
 		List<String> wojewodztwa = repo.extractWojewodztwa();
 		m.addAttribute(WOJEWODZTWA, wojewodztwa);
 		m.addAttribute("wojew", "");
-		return "search.jsp";
+//		return "search.jsp";
+		return "/depot/edit.jsp";
 	}
 	
 }

@@ -4,8 +4,9 @@ import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Transient;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
+
+import tpd.crjg.domain.converter.CoordConverter;
 
 @NodeEntity (label = "Depot")
 public class Depot {
@@ -19,9 +20,6 @@ public class Depot {
 	@Index
 	@Convert (CoordConverter.class)
 	private Coord	coord;
-	
-	@Transient
-	private Long	localityRefId;
 	
 	public Long getId () {
 		return id;
@@ -45,14 +43,6 @@ public class Depot {
 	
 	public void setCoord ( Coord coord ) {
 		this.coord = coord;
-	}
-	
-	public Long getLocalityRefId () {
-		return localityRefId;
-	}
-	
-	public void setLocalityRefId ( Long localityRefId ) {
-		this.localityRefId = localityRefId;
 	}
 	
 }

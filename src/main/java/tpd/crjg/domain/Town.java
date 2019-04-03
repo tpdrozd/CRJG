@@ -9,6 +9,8 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
 
+import tpd.crjg.domain.converter.CoordConverter;
+
 @NodeEntity
 public class Town {
 	

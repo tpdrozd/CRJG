@@ -3,6 +3,8 @@ package tpd.crjg.domain;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.springframework.data.neo4j.annotation.QueryResult;
 
+import tpd.crjg.domain.converter.CoordConverter;
+
 /**
  * Nazwy historyczne, oboczne, obce, itp. zredukowane do jednego pola.
  */
