@@ -18,9 +18,21 @@ function depotCtrl($scope, $http) {
 	
 	// obsługa wyboru miejscowosci
 	$scope.town = {};
+	$scope.depots = []; 
 
 	$scope.$on('selectHint', function(event, hint) {
 		$scope.town = hint;
+		
+		// pobranie przystanków w wybranej miejscowosci
+		console.log('list depots: ' + hint.id);
+		$http.post('/crjg/depot/list.mvc', hint.id).then(
+			function success(response) {
+				console.log('	success: ' + response.statusText);
+				$scope.depots = response.data;
+			},
+			function error(response) {
+				console.log('	error: ' + response.statusText);
+			});
 	});
 
 	// obsługa dodawania przystanku
