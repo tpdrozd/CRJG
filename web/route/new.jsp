@@ -213,7 +213,7 @@
 					</marker>
 
 					<!-- dodawany przystanek (depot) -->
-					<marker  icon="pure.orange" lat="{{depot.lat}}" lng="{{depot.lng}}" dragend-callback="markNewDepot(event.latLng)">
+					<marker  icon="pure.orange" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" dragend-callback="markNewDepot(event.latLng)">
 						<info-window visible="true">
 							<form ng-submit="saveDepot()">
 								Nazwa przystanku: <br/>

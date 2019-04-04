@@ -1,12 +1,9 @@
 package tpd.crjg.domain;
 
-import java.util.List;
-
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
 
 import tpd.crjg.domain.converter.CoordConverter;
@@ -16,74 +13,71 @@ public class Town {
 	
 	@Id
 	@GeneratedValue
-	private Long		id;
+	private Long	id;
 	
-	private String		name;
+	private String	name;
 	
 	/** Rodzaj miejscowości */
-	private String		type;			//26 typów
+	private String	type;			//26 typów
 	
 	/** Nazwa miejscowości nadrzędnej, której częścią jest ta miejscowość */
-	private String		parentName;
+	private String	parentName;
 	
-	private String		gmina;
+	private String	gmina;
 	
-	private String		gminaType;		//5 typów
+	private String	gminaType;		//5 typów
 	
-	private String		powiat;
+	private String	powiat;
 	
 	@Index
-	private String		wojewodztwo;
+	private String	wojewodztwo;
 	
 	/** Funkcja, jaką pełni miejscowość w strukturze administracyjnej */
-	private String		role;
+	private String	role;
 	
-	private String		note;
+	private String	note;
 	
 	/** Nazwa historyczna, już nie obowiązująca */
-	private String		historicalName;
+	private String	historicalName;
 	
-	private String		historicalNote;
+	private String	historicalNote;
 	
 	/** Nazwa oboczna, używana obok nazwy podstawowej */
-	private String		collateralName;
+	private String	collateralName;
 	
-	private String		collateralNote;
+	private String	collateralNote;
 	
 	/** Nazwa w obcym języku */
-	private String		foreignName;
+	private String	foreignName;
 	
 	/** Latynizacja (zapis w alfabecie łacińskim) nazwy obcej, tylko jeśli język obcy nie używa alfabetu łacińskiego */
-	private String		foreignLatin;
+	private String	foreignLatin;
 	
 	/** Kod jezyka nazwy obcej */
-	private String		foreignCode;
+	private String	foreignCode;
 	
 	/** Język nazwy obcej */
-	private String		foreignLanguage;
+	private String	foreignLanguage;
 	
 	/** Szerokość geograficzna */
-	private String		latitude;
+	private String	latitude;
 	
 	/** Długość geograficzna */
-	private String		longitude;
+	private String	longitude;
 	
 	@Index
 	@Convert (CoordConverter.class)
-	private Coord		coord;
+	private Coord	coord;
 	
 	/** Idetyfikator w Publicznym Rejestrze Nazw Geograficznych */
-	private String		prng;
+	private String	prng;
 	
-	private String		teryt;
+	private String	teryt;
 	
-	private String		iip;
+	private String	iip;
 	
 	/** Identyfikator Jednostki Podziału Terytorialnego Kraju */
-	private String		jptk;
-	
-	@Relationship (type = "HAS")
-	private List<Depot>	depots;
+	private String	jptk;
 	
 	public Long getId () {
 		return id;
@@ -283,14 +277,6 @@ public class Town {
 	
 	public void setJptk ( String jptk ) {
 		this.jptk = jptk;
-	}
-	
-	public List<Depot> getDepots () {
-		return depots;
-	}
-	
-	public void setDepots ( List<Depot> depots ) {
-		this.depots = depots;
 	}
 	
 }

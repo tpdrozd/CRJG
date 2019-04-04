@@ -1,7 +1,5 @@
 package tpd.crjg.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,32 +7,31 @@ import org.springframework.stereotype.Service;
 
 import tpd.crjg.domain.Depot;
 import tpd.crjg.domain.Town;
+import tpd.crjg.repo.DepotRepo;
 import tpd.crjg.repo.TownRepo;
 
 @Service
-public class TownService {
+public class DepotService {
 	
-	private static final Logger log = Logger.getLogger(TownService.class.getName());
+	private static final Logger	log	= Logger.getLogger(DepotService.class.getName());
 	
 	@Autowired
-	private TownRepo townRepo;
+	private TownRepo			townRepo;
 	
-	public Town addDepot ( Long townId, Depot depot ) {
+	@Autowired
+	private DepotRepo			depotRepo;
+	
+	public Depot addDepot ( Long townId, Depot depot ) {
 		Town town = townRepo.findById(townId).get();
 		
-		List<Depot> depots = town.getDepots();
-		if ( depots == null ) {
-			depots = new ArrayList<Depot> ();
-			town.setDepots(depots);
-		}
-		
 		// TODO sprawdzić unikalność nazwy dodawanego przystanku
-		depots.add(depot);
-		Town t = townRepo.save(town, 1);
+		
+		depot.setTown(town);
+		Depot d = depotRepo.save(depot, 1);
 		
 		log.info(depot.getName() + " " + depot.getCoord().getLat() + " " + depot.getCoord().getLng());
 		
-		return t;
+		return d;
 	} // end of save
 	
 } // end of DepotService

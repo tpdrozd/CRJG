@@ -59,7 +59,7 @@ function routeCtrl($scope, $http) {
 	};
 	
 	$scope.addDepotTo = function (town) {
-		$scope.depot.townRefId = town.id;
+//		$scope.depot.townRefId = town.id;
 		
 		$scope.addingDepot = true;
 		$scope.gmapCursor = 'crosshair';
@@ -69,25 +69,30 @@ function routeCtrl($scope, $http) {
 	
 	$scope.markNewDepot = function (coord) {
 		if ($scope.addingDepot) {
-			$scope.depot.lat = coord.lat();
-			$scope.depot.lng = coord.lng();
+//			$scope.depot.coord = coord;
+			$scope.depot.coord = {};
+			$scope.depot.coord.lat = coord.lat();
+			$scope.depot.coord.lng = coord.lng();
 			$scope.gmapCursor = 'default';
 			$scope.$apply('depot');
 			
 			console.log('mark new depot: '
-				+ $scope.depot.lat + ' '
-				+ $scope.depot.lng);
+				+ $scope.depot.coord.lat + ' '
+				+ $scope.depot.coord.lng);
 		}
 	}
 	
 	$scope.saveDepot = function () {
 		console.log('saving depot: '
 				+ $scope.depot.name + ' '
-				+ $scope.depot.lat + ' '
-				+ $scope.depot.lng);
+				+ $scope.depot.coord.lat + ' '
+				+ $scope.depot.coord.lng);
 		
 		// save depot to db
-		$http.put("/crjg/depot/save.mvc", $scope.depot).then(
+		$http.put("/crjg/depot/save.mvc", {
+			'townId': $scope.town.id,
+			'depot' : $scope.depot
+		}).then(
 			function success (response) {
 				console.log('save depot success: ' + response.statusText);
 				// tu skończyłem

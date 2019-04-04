@@ -4,6 +4,7 @@ import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
 
 import tpd.crjg.domain.converter.CoordConverter;
@@ -20,6 +21,9 @@ public class Depot {
 	@Index
 	@Convert (CoordConverter.class)
 	private Coord	coord;
+	
+	@Relationship (type = "WITHIN")
+	private Town	town;
 	
 	public Long getId () {
 		return id;
@@ -43,6 +47,14 @@ public class Depot {
 	
 	public void setCoord ( Coord coord ) {
 		this.coord = coord;
+	}
+	
+	public Town getTown () {
+		return town;
+	}
+	
+	public void setTown ( Town town ) {
+		this.town = town;
 	}
 	
 }

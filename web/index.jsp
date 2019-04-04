@@ -18,5 +18,8 @@
 		
 		<t:url value="/route/new.mvc" var="routeNew"/>
 		<a href="${routeNew}">Trasa - tworzenie</a> <br/>
+		
+		<t:url value="/depot/edit.mvc" var="depotEdit"/>
+		<a href="${depotEdit}">Przystanki - edycja</a> <br/>
 	</body>
 </html>
