@@ -21,12 +21,12 @@ public class CoordConverter implements AttributeConverter<Coord, Object> { // to
 	@Override
 	public Coord toEntityAttribute ( Object point ) {
 		if (point instanceof Point) {
-			log.info("toEntity instance of Point");
+//			log.info("toEntity instance of Point");
 			Point p = (Point)point;
 			return point != null ? new Coord(p.y(), p.x()) : null;
 		}
 		else { // instanceof GeographicPoint2d
-			log.info("toEntity instance of GeographicPoint2d");
+//			log.info("toEntity instance of GeographicPoint2d");
 			GeographicPoint2d p = (GeographicPoint2d) point;
 			return point != null ? new Coord(p.getLatitude(), p.getLongitude()) : null;
 		}

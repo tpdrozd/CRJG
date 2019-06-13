@@ -19,6 +19,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-dragula/1.2.8/angular-dragula.js"></script>
 		
 		<script type="text/javascript" src="<t:url value="/ng/depotApp.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/depot.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hints.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hintService.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/gmap.js"/>"></script>
@@ -146,20 +147,40 @@
 					</tbody>
 				</table>
 				
-				<!-- route -->
-				<table class="town">
-					<caption>Wybrana miejscowość</caption>
+				<table class="details" >
 					<tbody>
 						<tr>
-							<td>{{town.name}}</td>
-							<td>{{town.type}}</td>
-							<td>{{town.parentName}}</td>
+							<td colspan="4">
+								<div>Nazwa:</div>
+								<div>{{town.name}}</div>
+							</td>
+							<td colspan="4">
+								<div>Typ:</div>
+								<div>
+									<span>{{town.type}}</span>
+								</div>
+							</td>
+							<td colspan="4">
+								<div>Miejsc. nadrz.:</div>
+								<div>{{town.parentName}}</div>
+							</td>
 						</tr>
+						
 						<tr>
-							<td>{{town.gmina}}</td>
-							<td>{{town.powiat}}</td>
-							<td>{{town.wojewodztwo}}</td>
-						</tr>
+							<td colspan="4">
+								<div>Gmina:</div>
+								<div>{{town.gmina}}</div>
+								<span style="min-height: 15px;">{{town.gminaType}}</span>
+							</td>
+							<td colspan="4">
+								<div>Powiat:</div>
+								<div>{{town.powiat}}</div>
+							</td>
+							<td colspan="4">
+								<div>Województwo:</div>
+								<div>{{town.wojewodztwo}}</div>
+							</td>
+						</tr>	
 					</tbody>
 				</table>
 				
@@ -176,22 +197,36 @@
 				
 				<table>
 					<tr ng-repeat="depot in depots">
-						<td>{{depot.name}}</td>
-						<td><button>Usuń</button></td>
-					</tr>
-					<tr>
-						<td><button ng-click="startAdding()">Nowy przystanek</button></td>
-						<td></td>
-					</tr>
-					<tr>
 						<td>
-							Nazwa przystanku: <br/>
-							<input type="text" ng-model="depot.name"/>
+							<div ng-show="isInReadMode(depot)">
+								{{depot.name}}
+							</div>
+							
+							<div ng-show="isInEditMode(depot)">
+								<input type="text" ng-model="model.name"></input>
+							</div>
+							
+							<div ng-show="isInRemoveMode(depot)">
+								{{depot.name}}
+							</div>
 						</td>
-						<td>{{depot.coord.lat}} {{depot.coord.lng}}</td>
+						
 						<td>
-							<button ng-click="saveDepot()">Zapisz</button>
-							<button ng-click="cancelAdding()">Anuluj</button>
+							<div ng-show="isInReadMode(depot)">
+								<button ng-click="startEdit(depot)">Edytuj</button>
+								<button ng-click="startRemove(depot)">Usuń</button>
+							</div>
+
+							<div ng-show="isInEditMode(depot)">
+								<button ng-click="confirmEdit()">Zapisz</button>
+								<button ng-click="cancelEdit()">Anuluj</button>
+							</div>
+
+							<div ng-show="isInRemoveMode(depot)">
+								Usunąć?
+								<button ng-click="confirmRemove()">Potwierdź</button>
+								<button ng-click="cancelRemove()">Anuluj</button>
+							</div>
 						</td>
 					</tr>
 				</table>
@@ -208,13 +243,13 @@
 							<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
 							<span class="cp">punkt centralny</span> <br/>
 							<span title="Utwórz nowy przystanek w tej miejscowości">
-								<button type="button" ng-click="addDepotTo(town)">Nowy przystanek</button>
+								<button type="button" ng-click="startAdd()">Nowy przystanek</button>
 							</span>
 						</info-window>
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in town.depots" icon="pure.red" lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
+					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
 						<info-window>
 							<span class="name">{{town.name}}</span>
 							<!-- <span class="type">{{town.type}}</span>
@@ -225,13 +260,12 @@
 					</marker>
 
 					<!-- dodawany przystanek (depot) -->
-					<marker  icon="pure.orange" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" dragend-callback="mooveDepot(event.latLng)">
+					<marker  icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" dragend-callback="dragDepot(event.latLng)">
 						<info-window visible="true">
 							<form ng-submit="saveDepot()">
-								Nazwa przystanku: <br/>
-								<input type="text" ng-model="depot.name"></input><br/>
-								<input type="button" value="Anuluj" ng-click="cancelDepot()" />
-								<input type="submit" value="Zapisz"/>
+								<input type="text" ng-model="newDepot.name" placeholder="Nazwa nowego przystanku"></input><br/>
+								<button ng-click="confirmAdd()">Zapisz</button>
+								<button ng-click="cancelAdd()">Anuluj</button>
 							</form>
 						</info-window>
 					</marker> <!-- -->

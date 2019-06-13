@@ -21,7 +21,7 @@ public class DepotService {
 	@Autowired
 	private DepotRepo			depotRepo;
 	
-	public Depot addDepot ( Long townId, Depot depot ) {
+	public Depot add ( Long townId, Depot depot ) {
 		Town town = townRepo.findById(townId).get();
 		
 		// TODO sprawdzić unikalność nazwy dodawanego przystanku
@@ -33,5 +33,11 @@ public class DepotService {
 		
 		return d;
 	} // end of save
+
+	public Depot save ( Depot depot ) {
+		// TODO sprawdzić unikalność nazwy modyfikowanego przystanku
+		Depot d = depotRepo.save(depot, 0);
+		return d;
+	}
 
 } // end of DepotService

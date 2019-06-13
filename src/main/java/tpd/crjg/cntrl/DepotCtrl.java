@@ -7,6 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,16 +43,28 @@ public class DepotCtrl {
 		return "edit.jsp";
 	}
 	
-	@PostMapping (path = "/list", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Depot> getDepots ( @RequestBody Long townId ) {
+	@GetMapping (path = "/{townId}", produces = APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Depot> listForTown ( @PathVariable Long townId ) {
 		List<Depot> depots = depotRepo.getDepots(townId);
 		return depots;
 	}
 	
-	@PutMapping (path = "/save", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public @ResponseBody Depot saveDepot ( @RequestBody AddDepot addDepot ) {
-		Depot depot = depotService.addDepot(addDepot.getTownId(), addDepot.getDepot());
+	@PostMapping (consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+	public @ResponseBody Depot add ( @RequestBody AddDepot addDepot ) {
+		Depot depot = depotService.add(addDepot.getTownId(), addDepot.getDepot());
 		return depot;
+	}
+	
+	@PutMapping (consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+	public @ResponseBody Depot save ( @RequestBody Depot depot ) {
+		Depot d = depotService.save(depot);
+		return d;
+	}
+	
+	@DeleteMapping (path = "/{depotId}", produces = APPLICATION_JSON_VALUE)
+	public @ResponseBody String delete ( @PathVariable Long depotId ) {
+		depotRepo.deleteById(depotId);
+		return "";
 	}
 	
 }
