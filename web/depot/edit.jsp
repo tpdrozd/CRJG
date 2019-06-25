@@ -196,6 +196,28 @@
 					</thead> --%>
 				
 				<table>
+					<tr ng-hide="isInAddMode()">
+						<td colspan="4">
+							<button ng-click="startAdd()">Dodaj nowy przystanek</button>
+						</td>
+					</tr>
+					
+					<tr ng-show="isInAddMode()">
+						<td>
+							<input type="text" ng-model="newDepot.name" placeholders="Nazwa nowego przystanku"></input>
+						</td>
+						<td>
+							{{newDepot.latitude}}
+						</td>
+						<td>
+							{{newDepot.longitude}}
+						</td>
+						<td>
+							<button ng-click="confirmAdd()">Zapisz</button>
+							<button ng-click="cancelAdd()">Anuluj</button>
+						</td>
+					</tr>
+					
 					<tr ng-repeat="depot in depots">
 						<td>
 							<div ng-show="isInReadMode(depot)">
@@ -209,6 +231,14 @@
 							<div ng-show="isInRemoveMode(depot)">
 								{{depot.name}}
 							</div>
+						</td>
+						
+						<td>
+							{{depot.latitude}}
+						</td>
+						
+						<td>
+							{{depot.longitude}}
 						</td>
 						
 						<td>
@@ -238,7 +268,7 @@
 					<marker icon="dot.red" lat="{{hint.coord.lat}}" lng="{{hint.coord.lng}}" title="{{hint.name}}"></marker>
 
 					<!-- wybrana miejscowość -->
-					<marker lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}" dblclick-callback="addStop()">
+					<marker lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}">
 						<info-window visible="true">
 							<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
 							<span class="cp">punkt centralny</span> <br/>
@@ -249,7 +279,7 @@
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
+					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}">
 						<info-window>
 							<span class="name">{{town.name}}</span>
 							<!-- <span class="type">{{town.type}}</span>
@@ -260,13 +290,11 @@
 					</marker>
 
 					<!-- dodawany przystanek (depot) -->
-					<marker  icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" dragend-callback="dragDepot(event.latLng)">
+					<marker icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" dragend-callback="dragDepot(event.latLng)">
 						<info-window visible="true">
-							<form ng-submit="saveDepot()">
-								<input type="text" ng-model="newDepot.name" placeholder="Nazwa nowego przystanku"></input><br/>
-								<button ng-click="confirmAdd()">Zapisz</button>
-								<button ng-click="cancelAdd()">Anuluj</button>
-							</form>
+							<input type="text" ng-model="newDepot.name" placeholder="Nazwa nowego przystanku"></input><br/>
+							<button ng-click="confirmAdd()">Zapisz</button>
+							<button ng-click="cancelAdd()">Anuluj</button>
 						</info-window>
 					</marker> <!-- -->
 				</div>

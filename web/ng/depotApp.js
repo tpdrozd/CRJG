@@ -33,6 +33,7 @@ function depotCtrl($scope, depotApi) {
 	
 // edycja (save)
 	var editMode		= false;
+	$scope.model		= {};
 	$scope.isInEditMode	= isInEditMode;
 	
 	$scope.startEdit	= startEdit;
@@ -46,14 +47,28 @@ function depotCtrl($scope, depotApi) {
 	$scope.startRemove		= startRemove;
 	$scope.cancelRemove		= cancelRemove;
 	$scope.confirmRemove	= confirmRemove;
+
+// dodawanie (add)
+	var addMode				= false;
+	$scope.newDepot			= {};
+	$scope.isInAddMode		= isInAddMode;
+	$scope.isInPointMode	= isInPointMode;
 	
+	$scope.startAdd		= startAdd;
+	$scope.pointDepot	= pointDepot;
+	$scope.dragDepot	= dragDepot;
+	$scope.cancelAdd	= cancelAdd;
+	$scope.confirmAdd	= confirmAdd;
+
+	$scope.gmapCursor = 'default';
+
 	
 // obsługa przeglądania
 	function isInReadMode (depot) {
 		return selectedId != depot.id;
 	}
 	
-// edytowanie
+// obsługa edytowania
 	function isInEditMode(depot) {
 		return editMode && selectedId == depot.id;
 	}
@@ -87,7 +102,7 @@ function depotCtrl($scope, depotApi) {
 			});
 	}
 	
-// usuwanie
+// obsługa usuwania
 	function isInRemoveMode(depot) {
 		return removeMode && selectedId == depot.id;
 	}
@@ -113,27 +128,19 @@ function depotCtrl($scope, depotApi) {
 	}
 	
 	
-	// obsługa dodawania przystanku
-	$scope.newDepot			= {};
-	$scope.addMode			= false;
-	$scope.isInPointMode	= isInPointMode;
+// obsługa dodawania
+	function isInAddMode () {
+		return addMode;
+	}
 	
-	$scope.startAdd		= startAdd;
-	$scope.pointDepot	= pointDepot;
-	$scope.dragDepot	= dragDepot;
-	$scope.confirmAdd	= confirmAdd;
-	$scope.cancelAdd	= cancelAdd;
-
-	$scope.gmapCursor = 'default';
-
 	function isInPointMode () {
-		return $scope.addMode && !angular.isDefined($scope.newDepot.coord);
+		return addMode && !angular.isDefined($scope.newDepot.coord);
 	}
 	
 	function startAdd () {
 		$scope.newDepot = {};
 		$scope.gmapCursor = 'crosshair';
-		$scope.addMode = true;
+		addMode = true;
 	}
 
 	function pointDepot (coord) {
@@ -142,6 +149,8 @@ function depotCtrl($scope, depotApi) {
 			$scope.newDepot.coord = {};
 			$scope.newDepot.coord.lat = coord.lat();
 			$scope.newDepot.coord.lng = coord.lng();
+			$scope.newDepot.latitude = lat2latitude(coord.lat());
+			$scope.newDepot.longitude = lng2longitude(coord.lng());
 			$scope.$apply('newDepot');
 			
 			$scope.gmapCursor = 'default';
@@ -151,28 +160,27 @@ function depotCtrl($scope, depotApi) {
 	function dragDepot (coord) {
 		$scope.newDepot.coord.lat = coord.lat();
 		$scope.newDepot.coord.lng = coord.lng();
-		//$scope.$apply('depot');
+		$scope.newDepot.latitude = lat2latitude(coord.lat());
+		$scope.newDepot.longitude = lng2longitude(coord.lng());
+		$scope.$apply('newDepot');
+	}
+	
+	function cancelAdd () {
+		addMode = false;
+		$scope.gmapCursor = 'default';
+		$scope.newDepot = {};
 	}
 	
 	function confirmAdd () {
 		depotApi.add($scope.town.id, $scope.newDepot).then(
 			function success (response) {
 				refreshDepots();
-				$scope.addMode = false;
-				$scope.gmapCursor = 'default';
-				$scope.newDepot = {};
+				cancelAdd();
 			},
 			function error (response) {
-				
 			});
 	}
 	
-	function cancelAdd () {
-		$scope.addMode = false;
-		$scope.gmapCursor = 'default';
-		$scope.newDepot = {};
-	}
-
 	// odświezanie list przystanków (depots)
 	var refreshDepots = function () {
 		depotApi.listForTown($scope.town.id).then(
@@ -183,5 +191,33 @@ function depotCtrl($scope, depotApi) {
 				console.log('	error: ' + response.statusText);
 			});
 	}
+	
+	function coord2str (val) {
+		// deg
+		var value = val < 0 ? -val : val;
+		var fraction = value % 1;
+		var deg = value - fraction;
 
+		// min
+		value = 60 * fraction;
+		fraction = value % 1;
+		var min = value - fraction;
+
+		// sec
+		value = 60 * fraction;
+		var sec = value.toFixed(0);
+
+		return deg.toString()+'°'+min.toString()+'\''+sec.toString()+'"';
+	}
+	
+	var lat2latitude = function (lat) {
+		var hs = lat < 0 ? 'S' : 'N';
+		return coord2str(lat) + hs;
+	}
+	
+	var lng2longitude = function (lng) {
+		var hs = lng < 0 ? 'W' : 'E';
+		return coord2str(lng) + hs;
+	}
+	
 } // end of depotCtrl

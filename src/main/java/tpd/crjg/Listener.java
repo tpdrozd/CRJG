@@ -23,6 +23,8 @@ public class Listener extends EventListenerAdapter {
 		
 		else if ( object instanceof Depot ) {
 			Depot d = (Depot) object;
+			d.setLatitude(d.getCoord().formatLat());
+			d.setLongitude(d.getCoord().formatLng());
 			log.info("preSave Depot " + d.getName());
 		}
 	}
