@@ -67,8 +67,23 @@ TABLE.depots TR.newDepot TD {
 TABLE.depots TR.newDepot TD:first-child {
 	border-left-color: #ffe6cc;
 }
+/* Wspó³rzêdne */
+TABLE.depots TR.newDepot TD:nth-child(3) {
+	text-align: center;
+	color: #b33c00;
+	font-size: 14px;
+	font-style: italic;
+}
+/* Akcja 1 (przycisk Add) */ 
+TABLE.depots TR.newDepot TD:nth-child(4) {
+	padding: 1px 2px;
+	text-align: center;
+}
+/* Akcja 2 (przycisk Cancel) */
 TABLE.depots TR.newDepot TD:last-child {
 	border-right-color: #ffe6cc;
+	padding: 1px 2px;
+	text-align: center;
 }
 
 TABLE.depots TR.newDepot:hover {
@@ -146,9 +161,10 @@ TABLE.depots TR.depot:hover TD:last-child {
 }
 
 /* edycja Nazwy */
-TABLE.depots TR.depot TD INPUT[type=text] {
+TABLE.depots TR.depot TD INPUT[type=text],
+TABLE.depots TR.newDepot TD INPUT[type=text] {
 	display: block;
-	width: 100%;
+	width: 98%;
 	padding: 1px 2px;
 	color: maroon;
 	font-size: small;
@@ -157,10 +173,12 @@ TABLE.depots TR.depot TD INPUT[type=text] {
 	border-radius: 3px;
 }
 
-TABLE.depots TR.depot TD INPUT[type=text]:hover {
+TABLE.depots TR.depot TD INPUT[type=text]:hover,
+TABLE.depots TR.newDepot TD INPUT[type=text]:hover {
 	border-style: solid;
 }
-TABLE.depots TR.depot TD INPUT[type=text]:focus {
+TABLE.depots TR.depot TD INPUT[type=text]:focus,
+TABLE.depots TR.newDepot TD INPUT[type=text]:focus {
 	outline-color: #ee9344 !important;
 }
 
