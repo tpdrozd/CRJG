@@ -1,0 +1,306 @@
+/* LISTA PRZYSTANKÓW */
+TABLE.depots {
+	width: 100%;
+	max-width: 100%;
+	margin: 5px 0px;
+	border: none;
+	border-collapse: separate;
+	border-spacing: 0px 6px;
+	background-color: white;
+	table-layout: auto;
+}
+
+/* NAG£ÓWEK */
+TABLE.depots TH {
+/*	width: 24px; 440px; 78px; 40px */
+	color: maroon;
+	font-size: 15px;
+}
+
+/* WIERSZ OGÓLNY (przycisk: Dodaj przystanek) */
+TABLE.depots TR {
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px white;
+	background-color: white;
+}
+TABLE.depots TR TD {
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+	padding: 1px 2px;
+	vertical-align: middle;
+	font-family: sans-serif;
+	font-weight: normal;
+	font-style: normal;
+}
+TABLE.depots TR TD:first-child {
+	border-left: 1px solid white;
+	border-radius: 5px 0px 0px 5px;
+	width: 24px;
+	padding: 0px 6px 0px 4px;
+	color: white;
+	font-size: x-large;
+	}
+TABLE.depots TR TD:last-child {
+	border-right: 1px solid white;
+	border-radius: 0px 5px 5px 0px;
+	text-align: right;
+}
+
+TABLE.depots TR:hover {
+}
+
+TABLE.depots TR:hover TD {
+}
+TABLE.depots TR:hover TD:first-child {
+}
+TABLE.depots TR:hover TD:last-child {
+}
+
+/* NOWY PRZYSTANEK */
+TABLE.depots TR.newDepot {
+	box-shadow: 2px 2px 2px #ffe6cc;
+}
+TABLE.depots TR.newDepot TD {
+	border-top-color: #ffe6cc;
+	border-bottom-color: #ffe6cc;
+}
+TABLE.depots TR.newDepot TD:first-child {
+	border-left-color: #ffe6cc;
+}
+TABLE.depots TR.newDepot TD:last-child {
+	border-right-color: #ffe6cc;
+}
+
+TABLE.depots TR.newDepot:hover {
+	box-shadow: 2px 2px 2px #ee9344;
+	background-color: #ffe6cc;
+}
+TABLE.depots TR.newDepot:hover TD {
+	border-top-color: #ee9344;
+	border-bottom-color: #ee9344;
+}
+TABLE.depots TR.newDepot:hover TD:first-child {
+	border-left-color: #ee9344;
+	color: #ffe6cc;
+}
+TABLE.depots TR.newDepot:hover TD:last-child {
+	border-right-color: #ee9344;
+}
+
+/* PRZYSTANEK */
+TABLE.depots TR.depot {
+	box-shadow: 2px 2px 2px #ee9344;
+	background-color: #ffe6cc;
+}
+TABLE.depots TR.depot TD {
+	border-top-color: #ee9344;
+	border-bottom-color: #ee9344;
+}
+/* Lp. */
+TABLE.depots TR.depot TD:first-child {
+	border-left-color: #ee9344;
+	color: #ee9344;
+}
+/* Nazwa */
+TABLE.depots TR.depot TD:nth-child(2) {
+	width: 250px;
+	color: maroon;
+	font-size: small;
+	font-weight: bold;
+}
+/* Wspó³rzêdne */
+TABLE.depots TR.depot TD:nth-child(3) {
+	text-align: center;
+	color: #b33c00;
+	font-size: 14px;
+	font-style: italic;
+}
+/* Akcja 1 (przycisk Edit/Confirm) */
+TABLE.depots TR.depot TD:nth-child(4) {
+	width: 80px;
+	padding: 1px 2px;
+	text-align: center;
+}
+/* Akcja 2 (przycisk Remove/Cancel) */
+TABLE.depots TR.depot TD:last-child {
+	width: 70px;
+	border-right: 1px solid #ee9344;
+	border-radius: 0px 5px 5px 0px;
+	padding: 1px 2px;
+	text-align: center;
+}
+
+TABLE.depots TR.depot:hover {
+	box-shadow: 2px 2px 2px maroon;
+}
+TABLE.depots TR.depot:hover TD {
+	border-top-color: maroon;
+	border-bottom-color: maroon;
+}
+TABLE.depots TR.depot:hover TD:first-child {
+	border-left-color: maroon;
+	color: maroon;
+}
+TABLE.depots TR.depot:hover TD:last-child {
+	border-right-color: maroon;
+}
+
+/* edycja Nazwy */
+TABLE.depots TR.depot TD INPUT[type=text] {
+	display: block;
+	width: 100%;
+	padding: 1px 2px;
+	color: maroon;
+	font-size: small;
+	font-weight: bold;
+	border: 1px dotted maroon;
+	border-radius: 3px;
+}
+
+TABLE.depots TR.depot TD INPUT[type=text]:hover {
+	border-style: solid;
+}
+TABLE.depots TR.depot TD INPUT[type=text]:focus {
+	outline-color: #ee9344 !important;
+}
+
+
+
+/* typ */
+TR.stop SPAN.type {
+	color: #b33c00;
+	font-weight: normal;
+	font-style: italic;
+}
+/* parent */
+TR.stop SPAN.parent {
+	color: #b33c00;
+	font-weight: bold;
+	font-style: italic;
+}
+/* przystanek */
+TR.stop SPAN.depot {
+	font-family: monospace;
+	font-size: 14.6px;
+	font-weight: normal;
+}
+TR.stop SPAN.totalDistance {
+	font-family: monospace;
+	font-size: 14.6px;
+	font-weight: bold;
+}
+
+/* przycisk usuniêcia */
+TR.stop SPAN.x {
+	width: 33px;
+	height: 33px;
+	display: inline-block;
+	border: dotted 1px #b33c00;
+	border-radius: 5px;
+	color: white;
+	background-color: tomato;
+	text-align: center;
+	font-family: monospace;
+	font-size: x-large;
+	font-weight: bolder;
+	cursor: pointer;
+}
+TR.stop SPAN.x:hover {
+	border-style: solid;
+	border-color: maroon;
+	color: maroon;
+	background-color: red;
+}
+
+
+/* PRZYSTANEK */
+LI.stop {
+	margin: 5px 0px;
+	cursor: grab;
+	list-style-type: none;
+}
+LI.stop:hover {
+	border-style: solid;
+	background-color: #ffc184;
+}
+/* nazwa */
+LI.stop SPAN {
+	font-family: sans-serif;
+	font-size: small;
+	font-weight: bold;
+	font-style: normal;
+}
+/* typ */
+LI.stop SPAN.type {
+	color: #b33c00;
+	font-weight: normal;
+	font-style: italic;
+}
+/* parent */
+LI.stop SPAN.parent {
+	color: #b33c00;
+	font-weight: bold;
+	font-style: italic;
+}
+/* przystanek */
+LI.stop SPAN.depot {
+	font-family: monospace;
+	font-size: medium;
+	font-weight: normal;
+}
+/* liczba porz¹dkowa */
+LI.stop SPAN.lp: {
+	width: 36px;
+	height: 36px;
+	float: left;
+	padding: 0px 6px 0px 4px;
+	color: #ee9344;
+	text-align: right;
+	font-size: xx-large;
+}
+LI.stop:hover SPAN.lp {
+	color: white;
+}
+/* przycisk dodania przystanku */
+LI.stop SPAN.add {
+	width: 34px;
+	height: 34px;
+	float: right;
+	margin-right: 2px;
+	border: dotted 1px blue;
+	border-radius: 5px;
+	color: white;
+	background-color: skyblue;
+	text-align: center;
+	font-family: monospace;
+	font-size: xx-large;
+	font-weight: bolder;
+	cursor: pointer;
+}
+LI.stop SPAN.add:hover {
+	border-style: solid;
+	border-color: darkblue;
+	color: darkblue;
+	background-color: royalblue;
+}
+/* przycisk usuniêcia */
+LI.stop SPAN.x {
+	width: 34px;
+	height: 34px;
+	float: right;
+	border: dotted 1px #b33c00;
+	border-radius: 5px;
+	color: white;
+	background-color: tomato;
+	text-align: center;
+	font-family: monospace;
+	font-size: x-large;
+	font-weight: bolder;
+	cursor: pointer;
+}
+LI.stop SPAN.x:hover {
+	border-style: solid;
+	border-color: maroon;
+	color: maroon;
+	background-color: red;
+}

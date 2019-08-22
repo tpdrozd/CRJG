@@ -12,6 +12,7 @@
 		
 		<link href="<t:url value="/css/townSearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 		<link href="<t:url value="/css/hints.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
+		<link href="<t:url value="/css/depots.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 		<link href="<t:url value="/css/infoWindow.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
@@ -195,70 +196,102 @@
 						</tr>
 					</thead> --%>
 				
-				<table>
-					<tr ng-hide="isInAddMode()">
-						<td colspan="4">
-							<button ng-click="startAdd()">Dodaj nowy przystanek</button>
-						</td>
-					</tr>
+				<table class="depots">
+					<thead>
+						<tr>
+							<th>Lp.</th>
+							<th>Nazwa</th>
+							<th>Współrzędne</th>
+							<th colspan="2">Akcje</th>
+						</tr>
+					</thead>
 					
-					<tr ng-show="isInAddMode()">
-						<td>
-							<input type="text" ng-model="newDepot.name" placeholders="Nazwa nowego przystanku"></input>
-						</td>
-						<td>
-							{{newDepot.latitude}}
-						</td>
-						<td>
-							{{newDepot.longitude}}
-						</td>
-						<td>
-							<button ng-click="confirmAdd()">Zapisz</button>
-							<button ng-click="cancelAdd()">Anuluj</button>
-						</td>
-					</tr>
-					
-					<tr ng-repeat="depot in depots">
-						<td>
-							<div ng-show="isInReadMode(depot)">
-								{{depot.name}}
-							</div>
+					<tbody>
+						<tr ng-hide="isInAddMode()">
+							<td>0</td>
+							<td></td>
+							<td colspan="3">
+								<button ng-click="startAdd()">Dodaj nowy przystanek</button>
+							</td>
+						</tr>
+						
+						<tr ng-show="isInAddMode()" class="newDepot">
+							<td>0</td>
+							<td>
+								<input type="text" placeholder="Nazwa nowego przystanku" ng-model="newDepot.name"></input>
+							</td>
+							<td>
+								{{newDepot.latitude}}
+								{{newDepot.longitude}}
+							</td>
+							<td>
+								<button ng-click="confirmAdd()">Dodaj</button>
+							</td>
+							<td>
+								<button ng-click="cancelAdd()">Anuluj</button>
+							</td>
+						</tr>
+						
+						<tr ng-repeat="depot in depots" class="depot">
+							<!-- liczba porządkowa -->
+							<td>
+								{{$index + 1}}
+							</td>
+						
+							<!-- nazwa -->
+							<td>
+								<div ng-show="isInReadMode(depot) || isInRemoveMode(depot)">
+									{{depot.name}}
+								</div>
+								
+								<div ng-show="isInEditMode(depot)">
+									<input type="text" ng-model="model.name"></input>
+								</div>
+							</td>
+	
+							<!-- współrzędne -->
+							<td>
+								<div ng-show="isInReadMode(depot) || isInEditMode(depot)">
+									{{depot.latitude}}
+									{{depot.longitude}}
+								</div>
+								
+								<div ng-show="isInRemoveMode(depot)" style="color: red;">
+									Usunąć?
+								</div>
+							</td>
 							
-							<div ng-show="isInEditMode(depot)">
-								<input type="text" ng-model="model.name"></input>
-							</div>
+							<!-- akcja 1 (przycisk Edit/Confirm) -->
+							<td>
+								<div ng-show="isInReadMode(depot)">
+									<button ng-click="startEdit(depot)">Edytuj</button>
+								</div>
+
+								<div ng-show="isInEditMode(depot)">
+									<button ng-click="confirmEdit()">Zapisz</button>
+								</div>
+
+								<div ng-show="isInRemoveMode(depot)">
+									<button ng-click="confirmRemove()">Potwierdź</button>
+								</div>
+							</td>
 							
-							<div ng-show="isInRemoveMode(depot)">
-								{{depot.name}}
-							</div>
-						</td>
-						
-						<td>
-							{{depot.latitude}}
-						</td>
-						
-						<td>
-							{{depot.longitude}}
-						</td>
-						
-						<td>
-							<div ng-show="isInReadMode(depot)">
-								<button ng-click="startEdit(depot)">Edytuj</button>
-								<button ng-click="startRemove(depot)">Usuń</button>
-							</div>
+							<!-- akcja 2 (przycisk Remove/Cancel) -->
+							<td>
+								<div ng-show="isInReadMode(depot)">
+									<button ng-click="startRemove(depot)">Usuń</button>
+								</div>
 
-							<div ng-show="isInEditMode(depot)">
-								<button ng-click="confirmEdit()">Zapisz</button>
-								<button ng-click="cancelEdit()">Anuluj</button>
-							</div>
+								<div ng-show="isInEditMode(depot)">
+									<button ng-click="cancelEdit()">Anuluj</button>
+								</div>
 
-							<div ng-show="isInRemoveMode(depot)">
-								Usunąć?
-								<button ng-click="confirmRemove()">Potwierdź</button>
-								<button ng-click="cancelRemove()">Anuluj</button>
-							</div>
-						</td>
-					</tr>
+								<div ng-show="isInRemoveMode(depot)">
+									<button ng-click="cancelRemove()">Anuluj</button>
+								</div>
+							</td>
+						</tr>
+					</tbody>
 				</table>
 			</div><!-- end of left column -->
 			

@@ -164,10 +164,10 @@
 						<tr ng-repeat="stop in stops" class="stop" ng-mousedown="mousedown($event)" ng-mouseup="mouseup($event)">
 							<td>{{$index}}</td>
 							<td>
-								<span>{{stop.locality.name}}</span>
-								<span class="type">{{stop.locality.type}}</span> <span class="parent">{{stop.locality.parentName}}</span>
+								<span>{{stop.town.name}}</span>
+								<span class="type">{{stop.town.type}}</span> <span class="parent">{{stop.town.parentName}}</span>
 								<br />
-								<span class="depot">{{stop.depot}}</span>
+								<span class="depot">{{stop.depot}} Skrzyżowanie</span>
 							</td>
 							<td>
 								<span class="distance">12,7 km</span> <br/>
