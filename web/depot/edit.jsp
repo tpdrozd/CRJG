@@ -232,7 +232,7 @@
 							</td>
 						</tr>
 						
-						<tr ng-repeat="depot in depots" class="depot">
+						<tr ng-repeat="depot in depots" class="depot" ng-mouseover="startAnimation(depot)" ng-mouseleave="stopAnimation(depot)">
 							<!-- liczba porządkowa -->
 							<td>
 								{{$index + 1}}
@@ -312,12 +312,9 @@
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}">
+					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" animation="{{getAnimation(depot)}}">
 						<info-window>
-							<span class="name">{{town.name}}</span>
-							<!-- <span class="type">{{town.type}}</span>
-							<span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> -->
-							<br/>
+							<span class="name">{{town.name}}</span>	<br/>
 							<span class="depot">{{depot.name}}</span>
 						</info-window>
 					</marker>

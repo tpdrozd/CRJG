@@ -60,6 +60,12 @@ function depotCtrl($scope, depotApi) {
 	$scope.cancelAdd	= cancelAdd;
 	$scope.confirmAdd	= confirmAdd;
 
+// animacja markerów
+	var animation			= {};
+	$scope.startAnimation	= startAnimation;
+	$scope.stopAnimation	= stopAnimation;
+	$scope.getAnimation		= getAnimation;
+	
 	$scope.gmapCursor = 'default';
 
 	
@@ -181,7 +187,20 @@ function depotCtrl($scope, depotApi) {
 			});
 	}
 	
-	// odświezanie list przystanków (depots)
+// obsługa animacji
+	function startAnimation (depot) {
+		animation[depot.id] = 'bounce';
+	}
+	
+	function stopAnimation (depot) {
+		animation[depot.id] = '';
+	}
+	
+	function getAnimation (depot) {
+		return animation[depot.id];
+	}
+	
+	// odświeżanie list przystanków (depots)
 	var refreshDepots = function () {
 		depotApi.listForTown($scope.town.id).then(
 			function success(response) {

@@ -276,11 +276,12 @@ function Marker(markerOptions) {
 		require: '^^gmap',
 		transclude: false,
 		scope: {
-			lat:	'@',
-			lng:	'@',
-			title:	'@',
-			icon:	'@',
-			label:	'@',
+			lat:		'@',
+			lng:		'@',
+			title:		'@',
+			icon:		'@',
+			label:		'@',
+			animation:	'@',
 			
 			dragendCallback: '&?',
 			dblclickCallback: '&?'
@@ -368,6 +369,20 @@ function Marker(markerOptions) {
 					// title
 					if (angular.isDefined(chng.title)) {
 						this.marker.setTitle(chng.title.currentValue);
+					}
+					
+					// animation
+					if (angular.isDefined(chng.animation)) {
+						console.log('$onChanges animation ' + chng.animation.previousValue + ' -> ' + chng.animation.currentValue);
+						if (chng.animation.currentValue == 'bounce') {
+							this.marker.setAnimation(google.maps.Animation.BOUNCE);
+						}
+						else if (chng.animation.currentValue == 'drop') {
+							this.marker.setAnimation(google.maps.Animation.DROP);
+						}
+						else {
+							this.marker.setAnimation(null);
+						}
 					}
 				}
 			}
