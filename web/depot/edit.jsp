@@ -320,7 +320,7 @@
 					</marker>
 
 					<!-- dodawany przystanek (depot) -->
-					<marker icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" dragend-callback="dragDepot(event.latLng)">
+					<marker icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" animation="drop" dragend-callback="dragDepot(event.latLng)">
 						<info-window visible="true">
 							<input type="text" ng-model="newDepot.name" placeholder="Nazwa nowego przystanku"></input><br/>
 							<button ng-click="confirmAdd()">Zapisz</button>

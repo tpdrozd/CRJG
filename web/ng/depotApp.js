@@ -160,6 +160,7 @@ function depotCtrl($scope, depotApi) {
 			$scope.$apply('newDepot');
 			
 			$scope.gmapCursor = 'default';
+			$scope.$apply('gmapCursor');
 		}
 	}
 

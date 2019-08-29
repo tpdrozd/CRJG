@@ -374,15 +374,7 @@ function Marker(markerOptions) {
 					// animation
 					if (angular.isDefined(chng.animation)) {
 						console.log('$onChanges animation ' + chng.animation.previousValue + ' -> ' + chng.animation.currentValue);
-						if (chng.animation.currentValue == 'bounce') {
-							this.marker.setAnimation(google.maps.Animation.BOUNCE);
-						}
-						else if (chng.animation.currentValue == 'drop') {
-							this.marker.setAnimation(google.maps.Animation.DROP);
-						}
-						else {
-							this.marker.setAnimation(null);
-						}
+						this.playAnimation();
 					}
 				}
 			}
@@ -408,8 +400,20 @@ function Marker(markerOptions) {
 					var position = new google.maps.LatLng(lat, lng);
 					this.marker.setPosition(position);
 				}
-				if (this.marker.getVisible() != isInRange)
+				if (this.marker.getVisible() != isInRange) {
+					if (isInRange)
+						this.playAnimation();
 					this.marker.setVisible(isInRange);
+				}
+			}
+			
+			this.playAnimation = function () {
+				if (this.animation == 'bounce')
+					this.marker.setAnimation(google.maps.Animation.BOUNCE);
+				else if (this.animation == 'drop')
+					this.marker.setAnimation(google.maps.Animation.DROP);
+				else
+					this.marker.setAnimation(null);
 			}
 		}, // end of controller
 		link: function (scope, element, attrs, gmapCtrl) {
