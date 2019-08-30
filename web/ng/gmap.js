@@ -282,6 +282,7 @@ function Marker(markerOptions) {
 			icon:		'@',
 			label:		'@',
 			animation:	'@',
+			draggable:	'@',
 			
 			dragendCallback: '&?',
 			dblclickCallback: '&?'
@@ -317,11 +318,19 @@ function Marker(markerOptions) {
 				// title
 				this.marker.setTitle(this.title);
 				
-				// dragend-callback
-				if (angular.isFunction(this.dragendCallback)) {
+				// dragable
+				if (angular.isDefined(this.draggable) && this.draggable == 'true') {
 					this.marker.setDraggable(true);
 					this.marker.setCursor('grab');
-					
+				}
+				
+				// dragend-callback
+				if (angular.isFunction(this.dragendCallback)) {
+					if (!angular.isDefined(this.draggable)) {
+						this.marker.setDraggable(true);
+						this.marker.setCursor('grab');
+					}
+
 					var mrk = this.marker;
 					var dragCalb = this.dragendCallback;
 					
@@ -373,8 +382,21 @@ function Marker(markerOptions) {
 					
 					// animation
 					if (angular.isDefined(chng.animation)) {
-						console.log('$onChanges animation ' + chng.animation.previousValue + ' -> ' + chng.animation.currentValue);
+						//console.log('$onChanges animation ' + chng.animation.previousValue + ' -> ' + chng.animation.currentValue);
 						this.playAnimation();
+					}
+					
+					// draggable
+					if (angular.isDefined(chng.draggable)) {
+						if (this.draggable == 'true') {
+							this.marker.setDraggable(true);
+							this.marker.setCursor('grab');
+						}
+						else {
+							this.marker.setDraggable(false);
+							this.marker.setCursor('pointer');
+							this.renderPosition();
+						}
 					}
 				}
 			}

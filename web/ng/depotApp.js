@@ -37,6 +37,7 @@ function depotCtrl($scope, depotApi) {
 	$scope.isInEditMode	= isInEditMode;
 	
 	$scope.startEdit	= startEdit;
+	$scope.dragDepot	= dragDepot;
 	$scope.cancelEdit	= cancelEdit;
 	$scope.confirmEdit	= confirmEdit;
 	
@@ -54,11 +55,11 @@ function depotCtrl($scope, depotApi) {
 	$scope.isInAddMode		= isInAddMode;
 	$scope.isInPointMode	= isInPointMode;
 	
-	$scope.startAdd		= startAdd;
-	$scope.pointDepot	= pointDepot;
-	$scope.dragDepot	= dragDepot;
-	$scope.cancelAdd	= cancelAdd;
-	$scope.confirmAdd	= confirmAdd;
+	$scope.startAdd			= startAdd;
+	$scope.pointNewDepot	= pointNewDepot;
+	$scope.dragNewDepot		= dragNewDepot;
+	$scope.cancelAdd		= cancelAdd;
+	$scope.confirmAdd		= confirmAdd;
 
 // animacja markerów
 	var animation			= {};
@@ -87,9 +88,20 @@ function depotCtrl($scope, depotApi) {
 			'coord': {
 				'lat': depot.coord.lat,
 				'lng': depot.coord.lng
-			}
+			},
+			'latitude': depot.latitude,
+			'longitude': depot.longitude
 		};
 		editMode = true;
+	}
+	
+	function dragDepot (coord) {
+		$scope.model.coord = {};
+		$scope.model.coord.lat = coord.lat();
+		$scope.model.coord.lng = coord.lng();
+		$scope.model.latitude = lat2latitude(coord.lat());
+		$scope.model.longitude = lng2longitude(coord.lng());
+		$scope.$apply('model');
 	}
 	
 	function cancelEdit() {
@@ -149,7 +161,7 @@ function depotCtrl($scope, depotApi) {
 		addMode = true;
 	}
 
-	function pointDepot (coord) {
+	function pointNewDepot (coord) {
 		if ($scope.isInPointMode()) {
 			console.log('pointDepot');
 			$scope.newDepot.coord = {};
@@ -164,7 +176,7 @@ function depotCtrl($scope, depotApi) {
 		}
 	}
 
-	function dragDepot (coord) {
+	function dragNewDepot (coord) {
 		$scope.newDepot.coord.lat = coord.lat();
 		$scope.newDepot.coord.lng = coord.lng();
 		$scope.newDepot.latitude = lat2latitude(coord.lat());

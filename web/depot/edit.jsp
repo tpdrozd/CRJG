@@ -251,9 +251,14 @@
 	
 							<!-- współrzędne -->
 							<td>
-								<div ng-show="isInReadMode(depot) || isInEditMode(depot)">
+								<div ng-show="isInReadMode(depot)">
 									{{depot.latitude}}
 									{{depot.longitude}}
+								</div>
+								
+								<div ng-show="isInEditMode(depot)">
+									{{model.latitude}}
+									{{model.longitude}}
 								</div>
 								
 								<div ng-show="isInRemoveMode(depot)" style="color: red;">
@@ -296,7 +301,7 @@
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">
-				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="pointDepot(event.latLng)" cursor="{{gmapCursor}}">
+				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="pointNewDepot(event.latLng)" cursor="{{gmapCursor}}">
 					<!-- zaznaczane podpowiedzi (hinty) -->
 					<marker icon="dot.red" lat="{{hint.coord.lat}}" lng="{{hint.coord.lng}}" title="{{hint.name}}"></marker>
 
@@ -312,7 +317,7 @@
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" animation="{{getAnimation(depot)}}">
+					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" animation="{{getAnimation(depot)}}" dragend-callback="dragDepot(event.latLng)" draggable="{{isInEditMode(depot)}}">
 						<info-window>
 							<span class="name">{{town.name}}</span>	<br/>
 							<span class="depot">{{depot.name}}</span>
@@ -320,7 +325,7 @@
 					</marker>
 
 					<!-- dodawany przystanek (depot) -->
-					<marker icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" animation="drop" dragend-callback="dragDepot(event.latLng)">
+					<marker icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" animation="drop" dragend-callback="dragNewDepot(event.latLng)">
 						<info-window visible="true">
 							<input type="text" ng-model="newDepot.name" placeholder="Nazwa nowego przystanku"></input><br/>
 							<button ng-click="confirmAdd()">Zapisz</button>
