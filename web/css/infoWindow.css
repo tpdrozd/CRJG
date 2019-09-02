@@ -12,10 +12,81 @@ DIV.gm-style-iw SPAN.parent {
 	font-weight: bold;
 	font-style: italic;
 }
-/* depot */
-DIV.gm-style-iw SPAN.depot {
-}
 /* punkt centralny */
 DIV.gm-style-iw SPAN.cp {
 	font-style: italic;
+}
+
+/* DEPOT */
+/* town */
+DIV.gm-style-iw DIV.depot SPAN.town {
+	color: #b33c00;
+	font-family: sans-serif;
+	font-size: small;
+	font-weight: normal;
+}
+/* name */
+DIV.gm-style-iw DIV.depot SPAN.name {
+	color: maroon;
+	font-family: monospace;
+	font-size: 14.6px;
+	font-weight: bold;
+}
+/* name - edycja */
+DIV.gm-style-iw DIV.depot INPUT[type=text].name {
+	display: inline;
+	border: 1px dotted maroon;
+	border-radius: 3px;
+	width: auto;
+	padding: 1px 2px;
+	color: maroon;
+	font-family: monospace;
+	font-size: 14.6px;
+	font-weight: bold;
+}
+DIV.gm-style-iw DIV.depot INPUT[type=text].name:hover {
+	border-style: solid;
+}
+DIV.gm-style-iw DIV.depot INPUT[type=text].name:focus {
+	outline-color: #ee9344 !important;
+}
+/* remove */
+DIV.gm-style-iw DIV.depot SPAN.remove {
+	color: red;
+	font-family: sans-serif;
+	font-size: small;
+	font-weight: bold;
+	font-style: italic;
+}
+
+/* LINKI */
+DIV.gm-style-iw A {
+	margin-right: 5px;
+	color: #427fed;
+	font-family: monospace;
+	font-size: 13.4px;
+	cursor: pointer;
+}
+DIV.gm-style-iw A:last-child {
+	margin-right: 0px;
+}
+DIV.gm-style-iw A:hover {
+	color: #124db8;
+	text-decoration: underline;
+}
+
+/* link anuluj */
+DIV.gm-style-iw A.cancel {
+	color: #00d200;
+}
+DIV.gm-style-iw A.cancel:hover {
+	color: green;
+}
+
+/* link usuñ */
+DIV.gm-style-iw A.remove {
+	color: red;
+}
+DIV.gm-style-iw A.remove:hover {
+	color: #d70000;
 }

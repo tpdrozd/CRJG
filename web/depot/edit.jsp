@@ -119,7 +119,7 @@
 							<td colspan="9" style="position: relative;">
 								Fragment nazwy: <br/>
 								<%-- <input type="search" name="name" autofocus hints-criteria="name" hints-auto-trig="4" hints-arrdw-trig="3" hints-nav></input> --%>
-								<input type="search" name="name" autofocus hints-criteria="name" hnt-auto-thrs="4" hnt-arrdw-thrs="3" hints-auto-trig hints-arrdw-trig hints-nav></input>
+								<input type="search" name="name" autofocus autocomplete="off" hints-criteria="name" hnt-auto-thrs="4" hnt-arrdw-thrs="3" hints-auto-trig hints-arrdw-trig hints-nav></input>
 								
 								<!-- list of hints -->
 								<t:url value="/town/search" var="hintsSearchUrl"/>
@@ -319,17 +319,38 @@
 					<!-- przystanki w wybranej miejscowości -->
 					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" animation="{{getAnimation(depot)}}" dragend-callback="dragDepot(event.latLng)" draggable="{{isInEditMode(depot)}}">
 						<info-window>
-							<span class="name">{{town.name}}</span>	<br/>
-							<span class="depot">{{depot.name}}</span>
+							<div ng-show="isInReadMode(depot)" class="depot">
+								<span class="town">{{town.name}}</span>	<br/>
+								<span class="name">{{depot.name}}</span> <br/>
+								<a ng-click="startEdit(depot)">Edytuj</a>
+								<a ng-click="startRemove(depot)" class="remove">Usuń</a>
+							</div>
+							
+							<div ng-show="isInEditMode(depot)" class="depot">
+								<span class="town">{{town.name}}</span>	<br/>
+								<input type="text" ng-model="model.name" class="name"></input> <br/>
+								<a ng-click="confirmEdit()">Zapisz</a>
+								<a ng-click="cancelEdit()" class="cancel">Anuluj</a>
+							</div>
+							
+							<div ng-show="isInRemoveMode(depot)" class="depot">
+								<span class="remove">Usunąć:</span>	<br/>
+								<span class="name">{{depot.name}}</span><span class="remove">?</span> <br/>
+								<a ng-click="confirmRemove()" class="remove">Tak</a>
+								<a ng-click="cancelRemove()" class="cancel">Nie</a>
+							</div>
 						</info-window>
 					</marker>
 
 					<!-- dodawany przystanek (depot) -->
 					<marker icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" animation="drop" dragend-callback="dragNewDepot(event.latLng)">
 						<info-window visible="true">
-							<input type="text" ng-model="newDepot.name" placeholder="Nazwa nowego przystanku"></input><br/>
-							<button ng-click="confirmAdd()">Zapisz</button>
-							<button ng-click="cancelAdd()">Anuluj</button>
+							<div class="depot">
+								<span class="town">{{town.name}}</span>	<br/>
+								<input type="text" ng-model="newDepot.name" placeholder="Nazwa nowego przystanku" class="name"></input><br/>
+								<a ng-click="confirmAdd()">Dodaj</a>
+								<a ng-click="cancelAdd()" class="cancel">Anuluj</a>
+							</div>
 						</info-window>
 					</marker> <!-- -->
 				</div>
