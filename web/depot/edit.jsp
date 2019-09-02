@@ -308,11 +308,11 @@
 					<!-- wybrana miejscowość -->
 					<marker lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}">
 						<info-window visible="true">
-							<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
-							<span class="cp">punkt centralny</span> <br/>
-							<span title="Utwórz nowy przystanek w tej miejscowości">
-								<button type="button" ng-click="startAdd()">Nowy przystanek</button>
-							</span>
+							<div class="town">
+								<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
+								<!-- <a ng-click="" title="Wyświetla przystanki w tej miejscowości">Przystanki</a> -->
+								<a ng-click="startAdd()" title="Tworzy nowy przystanek w tej miejscowości">Dodaj</a>
+							</div>
 						</info-window>
 					</marker>
 					
@@ -322,8 +322,8 @@
 							<div ng-show="isInReadMode(depot)" class="depot">
 								<span class="town">{{town.name}}</span>	<br/>
 								<span class="name">{{depot.name}}</span> <br/>
-								<a ng-click="startEdit(depot)">Edytuj</a>
-								<a ng-click="startRemove(depot)" class="remove">Usuń</a>
+								<a ng-click="startEdit(depot)" title="Pozwala zmienić nazwę i położenie przystanku">Edytuj</a>
+								<a ng-click="startRemove(depot)" title="Pozwala usunąć przystanek z bazy danych" class="remove">Usuń</a>
 							</div>
 							
 							<div ng-show="isInEditMode(depot)" class="depot">
@@ -347,7 +347,7 @@
 						<info-window visible="true">
 							<div class="depot">
 								<span class="town">{{town.name}}</span>	<br/>
-								<input type="text" ng-model="newDepot.name" placeholder="Nazwa nowego przystanku" class="name"></input><br/>
+								<input type="text" ng-model="newDepot.name" placeholder="Nazwa przystanku" class="name"></input><br/>
 								<a ng-click="confirmAdd()">Dodaj</a>
 								<a ng-click="cancelAdd()" class="cancel">Anuluj</a>
 							</div>

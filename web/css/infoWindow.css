@@ -1,19 +1,24 @@
 /* INFO-WINDOW */
+
+/* TOWN */
 /* nazwa */
-DIV.gm-style-iw SPAN.name {
+DIV.gm-style-iw DIV.town SPAN.name {
+	color: maroon;
+	font-family: sans-serif;
 	font-weight: bold;
 }
 /* typ */
-DIV.gm-style-iw SPAN.type {
-	font-style: italic;
-}
-/* parent */
-DIV.gm-style-iw SPAN.parent {
+DIV.gm-style-iw DIV.town SPAN.type {
+	color: #b33c00;
+	font-family: sans-serif;
 	font-weight: bold;
 	font-style: italic;
 }
-/* punkt centralny */
-DIV.gm-style-iw SPAN.cp {
+/* parent */
+DIV.gm-style-iw DIV.town SPAN.parent {
+	color: maroon;
+	font-family: sans-serif;
+	font-weight: bold;
 	font-style: italic;
 }
 
@@ -74,16 +79,14 @@ DIV.gm-style-iw A:hover {
 	color: #124db8;
 	text-decoration: underline;
 }
-
-/* link anuluj */
+/* anuluj */
 DIV.gm-style-iw A.cancel {
 	color: #00d200;
 }
 DIV.gm-style-iw A.cancel:hover {
 	color: green;
 }
-
-/* link usuñ */
+/* usuñ */
 DIV.gm-style-iw A.remove {
 	color: red;
 }
