@@ -26,7 +26,7 @@ function routeCtrl($scope, $http) {
 		$scope.town = hint;
 	});
 	
-	// obsługa kursora przy przeciaganiu
+	// obsługa kursora przy przeciąganiu
 	$scope.mousedown = function (event) {
 		if (event.button == 0)
 			event.currentTarget.classList.add('drag');
@@ -45,7 +45,7 @@ function routeCtrl($scope, $http) {
 	$scope.addStop = function (depot) {
 		console.log('addStop');
 		
-		var stop = new StopWrapper($scope.town, depot);
+		var stop = new Stop($scope.town, depot);
 		$scope.stops.push(stop);
 //		$scope.$apply('stops');
 	}
@@ -114,12 +114,12 @@ function routeCtrl($scope, $http) {
 	
 } // end of routeCtrl
 
-function StopWrapper (town, depot) {
+function Stop (town, depot) {
 	var hasDepot = angular.isDefined(depot);
 	
 	var depotName = hasDepot ? depot.name : undefined;
-	var lat = hasDepot ? depot.lat : town.lat;
-	var lng = hasDepot ? depot.lng : town.lon;
+	var lat = hasDepot ? depot.coord.lat : town.coord.lat;
+	var lng = hasDepot ? depot.coord.lng : town.coord.lng;
 	
 	return {
 		town: town,

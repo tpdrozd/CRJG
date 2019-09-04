@@ -117,7 +117,7 @@
 							<td colspan="9" style="position: relative;">
 								Fragment nazwy: <br/>
 								<%-- <input type="search" name="name" autofocus hints-criteria="name" hints-auto-trig="4" hints-arrdw-trig="3" hints-nav></input> --%>
-								<input type="search" name="name" autofocus hints-criteria="name" hnt-auto-thrs="4" hnt-arrdw-thrs="3" hints-auto-trig hints-arrdw-trig hints-nav></input>
+								<input type="search" name="name" autofocus autocomplete="off" hints-criteria="name" hnt-auto-thrs="4" hnt-arrdw-thrs="3" hints-auto-trig hints-arrdw-trig hints-nav></input>
 								
 								<!-- list of hints -->
 								<t:url value="/town/search" var="hintsSearchUrl"/>
