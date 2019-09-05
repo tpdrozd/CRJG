@@ -185,7 +185,7 @@
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">
-				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="markNewDepot(event.latLng)" cursor="{{gmapCursor}}">
+				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="pointNewDepot(event.latLng)" cursor="{{gmapCursor}}">
 					<!-- zaznaczane podpowiedzi (hinty) -->
 					<marker icon="dot.red" lat="{{hint.coord.lat}}" lng="{{hint.coord.lng}}" title="{{hint.name}}"></marker>
 
@@ -196,7 +196,7 @@
 								<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
 								<a ng-click="addStop()" title="Dodaje do trasy jako kolejny przystanek">Do trasy</a>
 								<a ng-click="showDepots(town)" title="Wyświetla przystanki w tej miejscowości">Przystanki</a>
-								<a ng-click="addDepotTo(town)" title="Tworzy nowy przystanek w tej miejscowości">Dodaj</a>
+								<a ng-click="startAddDepot(town)" title="Tworzy nowy przystanek w tej miejscowości">Dodaj</a>
 							</div>
 						</info-window>
 					</marker>
@@ -213,14 +213,14 @@
 					</marker>
 
 					<!-- dodawany przystanek (depot) -->
-					<marker  icon="pure.orange" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" dragend-callback="markNewDepot(event.latLng)">
+					<marker  icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" animation="drop" dragend-callback="dragNewDepot(event.latLng)">
 						<info-window visible="true">
-							<form ng-submit="saveDepot()">
-								Nazwa przystanku: <br/>
-								<input type="text" ng-model="depot.name"></input><br/>
-								<input type="button" value="Anuluj" ng-click="cancelDepot()" />
-								<input type="submit" value="Zapisz"/>
-							</form>
+							<div class="depot">
+								<span class="town">{{town.name}}</span> <br/>
+								<input type="text" ng-model="newDepot.name" placeholder="Nazwa przystanku" class="name"></input> <br/>
+								<a ng-click="confirmAddDepot()">Dodaj</a>
+								<a ng-click="cancelAddDepot()" class="cancel">Anuluj</a>
+							</div>
 						</info-window>
 					</marker> <!-- -->
 					

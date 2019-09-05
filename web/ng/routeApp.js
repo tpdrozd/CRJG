@@ -29,11 +29,13 @@ function routeCtrl($scope, depotApi) {
 	$scope.showDepots	= showDepots;
 	
 // tworzenie nowego przystanku
-	$scope.depot = {};
-	$scope.addDepotTo	= addDepotTo;
-	$scope.markNewDepot	= markNewDepot;
-	$scope.saveDepot	= saveDepot;
-	$scope.cancelDepot	= cancelDepot;
+	var addDepotMode		= false;
+	$scope.newDepot			= {};
+	$scope.startAddDepot	= startAddDepot;
+	$scope.pointNewDepot	= pointNewDepot;
+	$scope.dragNewDepot		= dragNewDepot;
+	$scope.cancelAddDepot	= cancelAddDepot;
+	$scope.confirmAddDepot	= confirmAddDepot;
 	
 // edycja trasy
 	$scope.stops		= [];
@@ -57,52 +59,49 @@ function routeCtrl($scope, depotApi) {
 	}
 	
 // obsługa tworzenia nowego przystanku
-	function addDepotTo (town) {
-		$scope.addingDepot = true;
-		$scope.gmapCursor = 'crosshair';
-
-		console.log('adding depot to: '	+ town.name);
+	function startAddDepot (town) {
+		$scope.newDepot		= {};
+		$scope.gmapCursor	= 'crosshair';
+		addDepotMode		= true;
 	}
 	
-	function markNewDepot (coord) {
-		if ($scope.addingDepot) {
-			$scope.depot.coord = {};
-			$scope.depot.coord.lat = coord.lat();
-			$scope.depot.coord.lng = coord.lng();
-			$scope.gmapCursor = 'default';
-			$scope.$apply('depot');
+	function pointNewDepot (coord) {
+		if (addDepotMode && !angular.isDefined($scope.newDepot.coord)) {
+			$scope.newDepot.coord		= {};
+			$scope.newDepot.coord.lat	= coord.lat();
+			$scope.newDepot.coord.lng	= coord.lng();
+			//$scope.newDepot.latitude = ...
+			//$scope.newDepot.longitude = ...
+			$scope.$apply('newDepot');
 			
-			console.log('mark new depot: '
-				+ $scope.depot.coord.lat + ' '
-				+ $scope.depot.coord.lng);
+			$scope.gmapCursor = 'default';
+			$scope.$apply('gmapCursor');
 		}
 	}
 	
-	function saveDepot () {
-		console.log('saving depot: '
-				+ $scope.depot.name + ' '
-				+ $scope.depot.coord.lat + ' '
-				+ $scope.depot.coord.lng);
-		
-		// save depot to db
-		$http.put("/crjg/depot/save.mvc", {
-			'townId': $scope.town.id,
-			'depot' : $scope.depot
-		}).then(
-			function success (response) {
-				console.log('save depot success: ' + response.statusText);
-				// tu skończyłem
-			},
-			function error (response) {
-				console.log('save depot error: ' + response.statusText);
-			});
-		
-		$scope.depot = {};
-		$scope.addingDepot = false;
+	function dragNewDepot (coord) {
+		$scope.newDepot.coord.lat = coord.lat();
+		$scope.newDepot.coord.lng = coord.lng();
+		//$scope.newDepot.latitude = ...
+		//$scope.newDepot.longitude = ...
+		$scope.$apply('newDepot');
 	}
 	
-	function cancelDepot () {
-		console.log('cancel depot');
+	function cancelAddDepot () {
+		addDepotMode		= false;
+		$scope.gmapCursor	= 'default'
+		$scope.newDepot		= {};
+	}
+	
+	function confirmAddDepot () {
+		depotApi.add($scope.town.id, $scope.newDepot).then(
+			function success (response) {
+				showDepots($scope.town); // ??
+				cancelAddDepot();
+			},
+			function error (response) {
+				console.log('confirmAddDepot error: ' + response.statusText);
+			});
 		
 		$scope.depot = {};
 		$scope.addingDepot = false;
