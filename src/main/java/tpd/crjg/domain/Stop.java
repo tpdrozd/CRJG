@@ -10,45 +10,45 @@ import org.neo4j.ogm.annotation.Relationship;
 public class Stop {
 	
 	@Id @GeneratedValue
-	private Long		id;
+	private Long	id;
 	
 	@Property
-	private int			orderIndex;
+	private int		orderIndex;
 	
 	@Relationship (type = "IN")
-	private Town	locality;
+	private Town	town;
 	
 	@Relationship (type = "AT")
-	private Depot		depot;
-
+	private Depot	depot;
+	
 	public Long getId () {
 		return id;
 	}
-
+	
 	public void setId ( Long id ) {
 		this.id = id;
 	}
-
+	
 	public int getOrderIndex () {
 		return orderIndex;
 	}
-
+	
 	public void setOrderIndex ( int orderIndex ) {
 		this.orderIndex = orderIndex;
 	}
-
-	public Town getLocality () {
-		return locality;
+	
+	public Town getTown () {
+		return town;
 	}
-
-	public void setLocality ( Town locality ) {
-		this.locality = locality;
+	
+	public void setTown ( Town town ) {
+		this.town = town;
 	}
-
+	
 	public Depot getDepot () {
 		return depot;
 	}
-
+	
 	public void setDepot ( Depot depot ) {
 		this.depot = depot;
 	}

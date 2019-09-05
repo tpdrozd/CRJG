@@ -13,6 +13,7 @@
 		<link href="<t:url value="/css/townSearch.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 		<link href="<t:url value="/css/hints.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 		<link href="<t:url value="/css/route.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
+		<link href="<t:url value="/css/infoWindow.css"/>" type="text/css" rel="stylesheet" charset="UTF-8"/>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo26SLCVE9QCiEZagBAB47907NjifNYMk&sensitive=false"></script>
@@ -22,6 +23,7 @@
 		<script type="text/javascript" src="<t:url value="/ng/hints.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/hintService.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/gmap.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/depot.js"/>"></script>
 		
 		<title>CRJG - nowa trasa</title>
 	</head>
@@ -167,7 +169,7 @@
 								<span>{{stop.town.name}}</span>
 								<span class="type">{{stop.town.type}}</span> <span class="parent">{{stop.town.parentName}}</span>
 								<br />
-								<span class="depot">{{stop.depot}} Skrzyżowanie</span>
+								<span class="depot">{{stop.depot}}</span>
 							</td>
 							<td>
 								<span class="distance">12,7 km</span> <br/>
@@ -175,7 +177,7 @@
 							</td>
 							<td>
 								<!-- <span class="add" title="Dodaj przystanek" ng-click="addDepotTo(stop)">+</span> -->
-								<span class="x" title="Usuń" ng-click="remove($index)">&#9587;</span>
+								<span class="x" title="Usuń" ng-click="removeStop($index)">&#9587;</span>
 							</td>
 						</tr>
 					</tbody>
@@ -190,25 +192,23 @@
 					<!-- wybrana miejscowość -->
 					<marker lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}" dblclick-callback="addStop()">
 						<info-window visible="true">
-							<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
-							<span class="cp">punkt centralny</span> <br/>
-							<span title="Dodaj do trasy jako kolejny przystanek">
-								<button type="button" ng-click="addStop()">Do trasy</button>
-							</span>
-							<span title="Utwórz nowy przystanek w tej miejscowości">
-								<button type="button" ng-click="addDepotTo(town)">Nowy przystanek</button>
-							</span>
+							<div class="town">
+								<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
+								<a ng-click="addStop()" title="Dodaje do trasy jako kolejny przystanek">Do trasy</a>
+								<a ng-click="showDepots(town)" title="Wyświetla przystanki w tej miejscowości">Przystanki</a>
+								<a ng-click="addDepotTo(town)" title="Tworzy nowy przystanek w tej miejscowości">Dodaj</a>
+							</div>
 						</info-window>
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in town.depots" icon="pure.red" lat="{{depot.lat}}" lng="{{depot.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
+					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
 						<info-window>
-							<span class="name">{{town.name}}</span>
-							<!-- <span class="type">{{town.type}}</span>
-							<span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> -->
-							<br/>
-							<span class="depot">{{depot.name}}</span>
+							<div class="depot">
+								<span class="town">{{town.name}}</span> <br/>
+								<span class="name">{{depot.name}}</span> <br/>
+								<a ng-click="addStop(depot)" title="Dodaje do trasy jako kolejny przystanek">Do trasy</a>
+							</div>
 						</info-window>
 					</marker>
 

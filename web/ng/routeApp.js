@@ -1,12 +1,10 @@
-angular.module('routeApp', ['hints', 'gmap', angularDragula(angular)])
+angular.module('routeApp', ['hints', 'gmap', 'depot', angularDragula(angular)])
 
 .controller('routeCtrl', routeCtrl);
 
-function routeCtrl($scope, $http) {
+function routeCtrl($scope, depotApi) {
 	$scope.hint = {};
 	$scope.town = {};
-	$scope.stops = [];
-	$scope.depot = {};
 	$scope.gmapCursor = 'default';
 
 	// mark hint
@@ -26,50 +24,48 @@ function routeCtrl($scope, $http) {
 		$scope.town = hint;
 	});
 	
-	// obsługa kursora przy przeciąganiu
-	$scope.mousedown = function (event) {
-		if (event.button == 0)
-			event.currentTarget.classList.add('drag');
-	}
+// wyświetlanie przystanków dla wybranej miejscowości
+	$scope.depots		= [];
+	$scope.showDepots	= showDepots;
 	
-	$scope.mouseup = function (event) {
-		if (event.button == 0)
-			event.currentTarget.classList.remove('drag');
-	}
+// tworzenie nowego przystanku
+	$scope.depot = {};
+	$scope.addDepotTo	= addDepotTo;
+	$scope.markNewDepot	= markNewDepot;
+	$scope.saveDepot	= saveDepot;
+	$scope.cancelDepot	= cancelDepot;
 	
-	$scope.$parent.$on('route.drag', function (el, source) {
-		source.removeClass('drag');
-	});
+// edycja trasy
+	$scope.stops		= [];
+	$scope.addStop		= addStop;
+	$scope.removeStop	= removeStop;
 
-	// edycja trasy
-	$scope.addStop = function (depot) {
-		console.log('addStop');
-		
-		var stop = new Stop($scope.town, depot);
-		$scope.stops.push(stop);
-//		$scope.$apply('stops');
+// zmiana kursora przy przeciąganiu elementu trasy 
+	$scope.mousedown	= mousedown;
+	$scope.mouseup		= mouseup;
+	$scope.$parent.$on('route.drag', dragRoute);
+	
+// obsługa wyświetlania przystanków dla wybranej miejscowości
+	function showDepots (town) {
+		depotApi.listForTown(town.id).then(
+			function success(response) {
+				$scope.depots = response.data;
+			},
+			function error(response) {
+				console.log('	error: ' + response.statusText);
+			});
 	}
 	
-	$scope.remove = function (index) {
-		console.log('remove ' + index);
-		delete $scope.stops[index];
-		$scope.stops = $scope.stops.filter(function (value) {
-			return value != undefined;
-		});
-	};
-	
-	$scope.addDepotTo = function (town) {
-//		$scope.depot.townRefId = town.id;
-		
+// obsługa tworzenia nowego przystanku
+	function addDepotTo (town) {
 		$scope.addingDepot = true;
 		$scope.gmapCursor = 'crosshair';
 
 		console.log('adding depot to: '	+ town.name);
 	}
 	
-	$scope.markNewDepot = function (coord) {
+	function markNewDepot (coord) {
 		if ($scope.addingDepot) {
-//			$scope.depot.coord = coord;
 			$scope.depot.coord = {};
 			$scope.depot.coord.lat = coord.lat();
 			$scope.depot.coord.lng = coord.lng();
@@ -82,7 +78,7 @@ function routeCtrl($scope, $http) {
 		}
 	}
 	
-	$scope.saveDepot = function () {
+	function saveDepot () {
 		console.log('saving depot: '
 				+ $scope.depot.name + ' '
 				+ $scope.depot.coord.lat + ' '
@@ -105,11 +101,41 @@ function routeCtrl($scope, $http) {
 		$scope.addingDepot = false;
 	}
 	
-	$scope.cancelDepot = function () {
+	function cancelDepot () {
 		console.log('cancel depot');
 		
 		$scope.depot = {};
 		$scope.addingDepot = false;
+	}
+	
+// obsługa edycji trasy
+	function addStop (depot) {
+		console.log('addStop');
+		var stop = new Stop($scope.town, depot);
+		$scope.stops.push(stop);
+	}
+	
+	function removeStop (index) {
+		console.log('removeStop ' + index);
+		delete $scope.stops[index];
+		$scope.stops = $scope.stops.filter(function (value) {
+			return value != undefined;
+		});
+	};
+	
+// obsługa zmiany kursora przy przeciąganiu elementu trasy
+	function mousedown (event) {
+		if (event.button == 0)
+			event.currentTarget.classList.add('drag');
+	}
+	
+	function mouseup (event) {
+		if (event.button == 0)
+			event.currentTarget.classList.remove('drag');
+	}
+	
+	function dragRoute (el, source) {
+		source.removeClass('drag');
 	}
 	
 } // end of routeCtrl
