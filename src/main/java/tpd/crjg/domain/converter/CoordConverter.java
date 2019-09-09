@@ -2,7 +2,7 @@ package tpd.crjg.domain.converter;
 
 import java.util.logging.Logger;
 
-import org.neo4j.driver.v1.types.Point;
+import org.neo4j.driver.types.Point;
 import org.neo4j.ogm.typeconversion.AttributeConverter;
 import org.neo4j.ogm.types.spatial.GeographicPoint2d;
 
