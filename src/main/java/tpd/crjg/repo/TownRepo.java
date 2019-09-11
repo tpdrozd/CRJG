@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import tpd.crjg.domain.Town;
@@ -16,5 +17,8 @@ public interface TownRepo extends Neo4jRepository<Town, Long> {
 	
 	@Query ("MATCH (t:Town) RETURN DISTINCT t.wojewodztwo AS wojew ORDER BY wojew")
 	public List<String> extractWojewodztwa ();
+
+	@Query ("MATCH (t:Town) WHERE distance(t.coord, point({latitude: {lat}, longitude: {lng}})) <= {radius} RETURN t")
+	public List<Town> findSpatial (@Param ("lat") double lat, @Param("lng") double lng, @Param("radius") int radius);
 	
 }

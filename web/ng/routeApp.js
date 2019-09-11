@@ -1,8 +1,8 @@
-angular.module('routeApp', ['hints', 'gmap', 'depot', angularDragula(angular)])
+angular.module('routeApp', ['hints', 'gmap', 'depot', 'spatial', angularDragula(angular)])
 
 .controller('routeCtrl', routeCtrl);
 
-function routeCtrl($scope, depotApi) {
+function routeCtrl($scope, depotApi, spatialApi) {
 	$scope.hint = {};
 	$scope.town = {};
 	$scope.gmapCursor = 'default';
@@ -23,6 +23,11 @@ function routeCtrl($scope, depotApi) {
 	$scope.$on('selectHint', function(event, hint) {
 		$scope.town = hint;
 	});
+	
+// wyszukiwanie geospatial
+	$scope.sptTowns			= [];
+	$scope.sptDepots		= [];
+	$scope.spatialSearch	= spatialSearch;
 	
 // wyświetlanie przystanków dla wybranej miejscowości
 	$scope.depots		= [];
@@ -46,6 +51,17 @@ function routeCtrl($scope, depotApi) {
 	$scope.mousedown	= mousedown;
 	$scope.mouseup		= mouseup;
 	$scope.$parent.$on('route.drag', dragRoute);
+
+// obsługa wyszukiwania geospatial
+	function spatialSearch (coord) {
+		spatialApi.findTowns(coord, 3000).then(
+			function success(response) {
+				$scope.sptTowns = response.data;
+			},
+			function error(response) {
+				console.log('	error: ' + response.statusText);
+			});
+	}
 	
 // obsługa wyświetlania przystanków dla wybranej miejscowości
 	function showDepots (town) {

@@ -24,6 +24,7 @@
 		<script type="text/javascript" src="<t:url value="/ng/hintService.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/gmap.js"/>"></script>
 		<script type="text/javascript" src="<t:url value="/ng/depot.js"/>"></script>
+		<script type="text/javascript" src="<t:url value="/ng/spatial.js"/>"></script>
 		
 		<title>CRJG - nowa trasa</title>
 	</head>
@@ -185,7 +186,7 @@
 			</div><!-- end of left column -->
 			
 			<div class="rightcolumn">
-				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="pointNewDepot(event.latLng)" cursor="{{gmapCursor}}">
+				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="pointNewDepot(event.latLng)" rightclick-callback="spatialSearch(event.latLng)" cursor="{{gmapCursor}}">
 					<!-- zaznaczane podpowiedzi (hinty) -->
 					<marker icon="dot.red" lat="{{hint.coord.lat}}" lng="{{hint.coord.lng}}" title="{{hint.name}}"></marker>
 
@@ -197,6 +198,15 @@
 								<a ng-click="addStop()" title="Dodaje do trasy jako kolejny przystanek">Do trasy</a>
 								<a ng-click="showDepots(town)" title="Wyświetla przystanki w tej miejscowości">Przystanki</a>
 								<a ng-click="startAddDepot(town)" title="Tworzy nowy przystanek w tej miejscowości">Dodaj</a>
+							</div>
+						</info-window>
+					</marker>
+					
+					<!-- wyszukane miejscowości -->
+					<marker ng-repeat="town in sptTowns" icon="dot.blue" lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}">
+						<info-window>
+							<div class="town">
+								<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span>
 							</div>
 						</info-window>
 					</marker>

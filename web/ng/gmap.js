@@ -216,6 +216,7 @@ function Gmap(mapStyle) {
 		transclude: true,
 		scope: {
 			clickCallback: '&?',
+			rightclickCallback: '&?',
 			cursor: '@'
 		},
 		controller: function ($scope, $element, $attrs) {
@@ -243,9 +244,18 @@ function Gmap(mapStyle) {
 				}
 				
 				// click-callback
-				if (angular.isDefined($scope.clickCallback)) {
+				if (angular.isFunction($scope.clickCallback)) {
 					google.maps.event.addListener(map, 'click', function (event) {
 						$scope.clickCallback({event: event});
+					});
+				}
+				
+				// rightclick-callback
+				if (angular.isFunction($scope.rightclickCallback)) {
+					google.maps.event.addListener(map, 'rightclick', function (event) {
+						event.stop();
+						console.log('rightclick ' + event.latLng.lat() + ' ' + event.latLng.lng());
+						$scope.rightclickCallback({event: event});
 					});
 				}
 				
