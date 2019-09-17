@@ -21,15 +21,16 @@ function routeCtrl($scope, depotApi, spatialApi) {
 	
 	// select hint
 	$scope.$on('selectHint', function(event, hint) {
-		$scope.town = hint;
+		$scope.towns = [];
+		$scope.towns.push(hint);
 	});
 	
 // wyszukiwanie geospatial
-	$scope.sptTowns			= [];
-	$scope.sptDepots		= [];
+	$scope.towns			= [];
 	$scope.spatialSearch	= spatialSearch;
 	
 // wyświetlanie przystanków dla wybranej miejscowości
+	$scope.town			= {};
 	$scope.depots		= [];
 	$scope.showDepots	= showDepots;
 	
@@ -54,9 +55,9 @@ function routeCtrl($scope, depotApi, spatialApi) {
 
 // obsługa wyszukiwania geospatial
 	function spatialSearch (coord) {
-		spatialApi.findTowns(coord, 3000).then(
+		spatialApi.findTowns(coord, 2000).then(
 			function success(response) {
-				$scope.sptTowns = response.data;
+				$scope.towns = response.data;
 			},
 			function error(response) {
 				console.log('	error: ' + response.statusText);
@@ -65,6 +66,7 @@ function routeCtrl($scope, depotApi, spatialApi) {
 	
 // obsługa wyświetlania przystanków dla wybranej miejscowości
 	function showDepots (town) {
+		$scope.town = town;
 		depotApi.listForTown(town.id).then(
 			function success(response) {
 				$scope.depots = response.data;
@@ -76,6 +78,7 @@ function routeCtrl($scope, depotApi, spatialApi) {
 	
 // obsługa tworzenia nowego przystanku
 	function startAddDepot (town) {
+		$scope.town			= town;
 		$scope.newDepot		= {};
 		$scope.gmapCursor	= 'crosshair';
 		addDepotMode		= true;
@@ -124,9 +127,9 @@ function routeCtrl($scope, depotApi, spatialApi) {
 	}
 	
 // obsługa edycji trasy
-	function addStop (depot) {
+	function addStop (town, depot) {
 		console.log('addStop');
-		var stop = new Stop($scope.town, depot);
+		var stop = new Stop(town, depot);
 		$scope.stops.push(stop);
 	}
 	
@@ -158,14 +161,15 @@ function routeCtrl($scope, depotApi, spatialApi) {
 function Stop (town, depot) {
 	var hasDepot = angular.isDefined(depot);
 	
-	var depotName = hasDepot ? depot.name : undefined;
-	var lat = hasDepot ? depot.coord.lat : town.coord.lat;
-	var lng = hasDepot ? depot.coord.lng : town.coord.lng;
-	
 	return {
 		town: town,
-		depot: depotName, 
-		lat: lat,
-		lng: lng
+		hasDepot: hasDepot,
+		depot: hasDepot ? depot : undefined,
+		coord: function () {
+			return hasDepot ? depot.coord : town.coord;
+		},
+		title: function () {
+			return hasDepot ? town.name+', '+depot.name : town.name;
+		}
 	}
 }

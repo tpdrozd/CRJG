@@ -1,17 +1,17 @@
 angular.module('depot', [])
 
-.constant('apiUrl', '/crjg/depot')
-.constant('apiSuffix', '.mvc')
+.constant('depotApiUrl', '/crjg/depot')
+.constant('depotApiSuffix', '.mvc')
 
 .factory('depotApi', depotApi);
 
-function depotApi($http, apiUrl, apiSuffix) {
+function depotApi($http, depotApiUrl, depotApiSuffix) {
 	
 	function url(id) {
 		if (id == null || angular.isUndefined(id))
-			return apiUrl + apiSuffix;
+			return depotApiUrl + depotApiSuffix;
 		else
-			return apiUrl + '/' + id + apiSuffix;
+			return depotApiUrl + '/' + id + depotApiSuffix;
 	}
 	
 	function req(method, id, data) {

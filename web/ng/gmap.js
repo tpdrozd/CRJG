@@ -254,7 +254,6 @@ function Gmap(mapStyle) {
 				if (angular.isFunction($scope.rightclickCallback)) {
 					google.maps.event.addListener(map, 'rightclick', function (event) {
 						event.stop();
-						console.log('rightclick ' + event.latLng.lat() + ' ' + event.latLng.lng());
 						$scope.rightclickCallback({event: event});
 					});
 				}
@@ -368,6 +367,13 @@ function Marker(markerOptions) {
 			this.$onChanges = function (chng) {
 				if (angular.isDefined(this.marker)) {
 					
+					// icon
+					if (angular.isDefined(chng.icon)) {
+						var options = markerOptions.getOptions(this.icon);
+						this.marker.setOptions(options);
+						//this.marker = new google.maps.Marker(options);
+					}
+					
 					// label
 					if (angular.isDefined(chng.label)) {
 						var labelOpt = this.marker.getLabel();
@@ -382,7 +388,6 @@ function Marker(markerOptions) {
 					// position
 					if (angular.isDefined(chng.lat) || angular.isDefined(chng.lng)) {
 						this.renderPosition();
-						console.log('$onChanges position ' + this.lat + ' ' + this.lng);
 					}
 
 					// title
@@ -392,7 +397,6 @@ function Marker(markerOptions) {
 					
 					// animation
 					if (angular.isDefined(chng.animation)) {
-						//console.log('$onChanges animation ' + chng.animation.previousValue + ' -> ' + chng.animation.currentValue);
 						this.playAnimation();
 					}
 					
@@ -474,7 +478,6 @@ function InfoWindow($compile) {
 			}
 			var render = function () {
 				var content = $compile($element.html())($scope);
-				console.log('InfoWindow render :' + content + '	totalElements :' + content.length);
 				if (content.length == 1) {
 					infoWindow.setContent(content[0]);
 				}

@@ -170,11 +170,11 @@
 								<span>{{stop.town.name}}</span>
 								<span class="type">{{stop.town.type}}</span> <span class="parent">{{stop.town.parentName}}</span>
 								<br />
-								<span class="depot">{{stop.depot}}</span>
+								<span ng-show="stop.hasDepot" class="depot">{{stop.depot.name}}</span>
 							</td>
 							<td>
-								<span class="distance">12,7 km</span> <br/>
-								<span class="totalDistance">32,4 km</span>
+								<span class="distance" title="Odległość od poprzedniego przystanku (w lini prostej)">12,7 km</span> <br/>
+								<span class="totalDistance" title="Odległość od pierwszego przystanku (suma odległości pomiedzy poprzednimi przystankami w lini prostej)">32,4 km</span>
 							</td>
 							<td>
 								<!-- <span class="add" title="Dodaj przystanek" ng-click="addDepotTo(stop)">+</span> -->
@@ -188,10 +188,10 @@
 			<div class="rightcolumn">
 				<div class="gmap" lat="51.764" lng="19.463" zoom="6" click-callback="pointNewDepot(event.latLng)" rightclick-callback="spatialSearch(event.latLng)" cursor="{{gmapCursor}}">
 					<!-- zaznaczane podpowiedzi (hinty) -->
-					<marker icon="dot.red" lat="{{hint.coord.lat}}" lng="{{hint.coord.lng}}" title="{{hint.name}}"></marker>
+					<marker icon="{{hint.parentName.length > 0 ? 'dot.yellow' : 'dot.green'}}" lat="{{hint.coord.lat}}" lng="{{hint.coord.lng}}" title="{{hint.name}}"></marker>
 
-					<!-- wybrana miejscowość -->
-					<marker lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}" dblclick-callback="addStop()">
+					<!-- wybrana miejscowość 
+					<marker icon="{{town.parentName.length > 0 ? 'dot.yellow' : 'dot.green'}}" lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}" dblclick-callback="addStop()">
 						<info-window visible="true">
 							<div class="town">
 								<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
@@ -201,29 +201,33 @@
 							</div>
 						</info-window>
 					</marker>
+					-->
 					
 					<!-- wyszukane miejscowości -->
-					<marker ng-repeat="town in sptTowns" icon="dot.blue" lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}">
+					<marker ng-repeat="town in towns" icon="{{town.parentName.length > 0 ? 'dot.yellow' : 'dot.green'}}" lat="{{town.coord.lat}}" lng="{{town.coord.lng}}" title="{{town.name}}">
 						<info-window>
 							<div class="town">
-								<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span>
+								<span class="name">{{town.name}}</span> <span class="type">{{town.type}}</span> <span class="parent" ng-show="town.parentName.length > 0">{{town.parentName}}</span> <br/>
+								<a ng-click="addStop(town)" title="Dodaje do trasy jako kolejny przystanek">Do trasy</a>
+								<a ng-click="showDepots(town)" title="Wyświetla przystanki w tej miejscowości">Przystanki</a>
+								<a ng-click="startAddDepot(town)" title="Tworzy nowy przystanek w tej miejscowości">Dodaj</a>
 							</div>
 						</info-window>
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in depots" icon="pure.red" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
+					<marker ng-repeat="depot in depots" icon="{{town.parentName.length > 0 ? 'pure.yellow' : 'pure.green'}}" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
 						<info-window>
 							<div class="depot">
 								<span class="town">{{town.name}}</span> <br/>
 								<span class="name">{{depot.name}}</span> <br/>
-								<a ng-click="addStop(depot)" title="Dodaje do trasy jako kolejny przystanek">Do trasy</a>
+								<a ng-click="addStop(town, depot)" title="Dodaje do trasy jako kolejny przystanek">Do trasy</a>
 							</div>
 						</info-window>
 					</marker>
 
 					<!-- dodawany przystanek (depot) -->
-					<marker  icon="pure.orange" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" animation="drop" dragend-callback="dragNewDepot(event.latLng)">
+					<marker  icon="pure.grey" lat="{{newDepot.coord.lat}}" lng="{{newDepot.coord.lng}}" animation="drop" dragend-callback="dragNewDepot(event.latLng)">
 						<info-window visible="true">
 							<div class="depot">
 								<span class="town">{{town.name}}</span> <br/>
@@ -235,13 +239,17 @@
 					</marker> <!-- -->
 					
 					<!-- trasa (route) -->
- 					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.lat}}" lng="{{stop.lng}}" label="{{$index}}" title="{{stop.town.name}}, {{stop.depot}}">
+ 					<marker ng-repeat="stop in stops" icon="lbl.orange" lat="{{stop.coord().lat}}" lng="{{stop.coord().lng}}" label="{{$index}}" title="{{stop.title()}}">
 						<info-window>
-	 						<b>{{stop.town.name}}</b>
-							<i>{{stop.town.type}}</i>
-							{{stop.town.parentName}}
-							<br/>
-							{{stop.depot}}
+							<div class="stop">
+		 						<span class="town">{{stop.town.name}}</span>
+		 						<!--
+		 						<span class="type">{{stop.town.type}}</span>
+		 						<span class="parent" ng-show="stop.town.parentName.length > 0">{{stop.town.parentName}}</span> 
+		 						-->	<br/>
+								<span ng-show="stop.hasDepot" class="depot">{{stop.depot.name}}</span> <br ng-show="stop.hasDepot" />
+								<a ng-click="removeStop($index)" class="remove">Usuń</a>
+							</div>
 						</info-window>
 					</marker>
 				</div>

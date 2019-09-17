@@ -1,17 +1,17 @@
 angular.module('spatial', [])
 
-.constant('apiUrl', '/crjg/spatial')
-.constant('apiSuffix', '.mvc')
+.constant('spatialApiUrl', '/crjg/spatial')
+.constant('spatialApiSuffix', '.mvc')
 
 .factory('spatialApi', spatialApi);
 
-function spatialApi ($http, apiUrl, apiSuffix) {
+function spatialApi ($http, spatialApiUrl, spatialApiSuffix) {
 	
 	function url(path) {
 		if (path == null || angular.isUndefined(path))
-			return apiUrl + apiSuffix;
+			return spatialApiUrl + spatialApiSuffix;
 		else
-			return apiUrl + '/' + path + apiSuffix;
+			return spatialApiUrl + '/' + path + spatialApiSuffix;
 	}
 	
 	function req(path, coord, radius) {

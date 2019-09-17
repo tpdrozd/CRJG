@@ -64,6 +64,22 @@ DIV.gm-style-iw DIV.depot SPAN.remove {
 	font-style: italic;
 }
 
+/* STOP */
+/* town */
+DIV.gm-style-iw DIV.stop SPAN.town {
+	color: maroon;
+	font-family: sans-serif;
+	font-size: small;
+	font-weight: bold;
+}
+/* depot */
+DIV.gm-style-iw DIV.stop SPAN.depot {
+	color: maroon;
+	font-family: monospace;
+	font-size: 14.6px;
+	font-weight: normal;
+}
+
 /* LINKI */
 DIV.gm-style-iw A {
 	margin-right: 5px;
