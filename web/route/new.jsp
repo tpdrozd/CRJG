@@ -173,7 +173,7 @@
 								<span ng-show="stop.hasDepot" class="depot">{{stop.depot.name}}</span>
 							</td>
 							<td>
-								<span class="distance" title="Odległość od poprzedniego przystanku (w lini prostej)">12,7 km</span> <br/>
+								<span class="distance" title="Odległość od poprzedniego przystanku (w lini prostej)">{{stop.distance}}</span> <br/>
 								<span class="totalDistance" title="Odległość od pierwszego przystanku (suma odległości pomiedzy poprzednimi przystankami w lini prostej)">32,4 km</span>
 							</td>
 							<td>

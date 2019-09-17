@@ -14,21 +14,21 @@ function spatialApi ($http, spatialApiUrl, spatialApiSuffix) {
 			return spatialApiUrl + '/' + path + spatialApiSuffix;
 	}
 	
-	function req(path, coord, radius) {
+	function putReq(path, data) {
 		var config = {
 			method: 'PUT',
 			url: url(path),
-			data: {
-				coord:	coord,
-				radius:	radius
-			}
+			data: data
 		}
 		return $http(config);
 	}
 
 	return {
 		findTowns: function(coord, radius) {
-			return req('towns', coord, radius);
+			return putReq('towns', {
+				coord:	coord,
+				radius:	radius
+			});
 		},
 		
 		findDepots: function(coord, radius) {
@@ -37,6 +37,13 @@ function spatialApi ($http, spatialApiUrl, spatialApiSuffix) {
 		
 		findAll: function(coord, radius) {
 			
+		},
+		
+		distance: function(placeAId, placeBId) {
+			return putReq('distance', {
+				placeAId: placeAId,
+				placeBId: placeBId
+			});
 		}
 	}
 	

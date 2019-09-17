@@ -130,6 +130,16 @@ function routeCtrl($scope, depotApi, spatialApi) {
 	function addStop (town, depot) {
 		console.log('addStop');
 		var stop = new Stop(town, depot);
+		if ($scope.stops.length > 0) {
+			var prevStop = $scope.stops[$scope.stops.length - 1];
+			spatialApi.distance(stop.placeId(), prevStop.placeId()).then(
+				function success(response) {
+					stop.distance = response.data;
+				},
+				function error(response) {
+					console.log('	error: ' + response.statusText);
+				});
+		}
 		$scope.stops.push(stop);
 	}
 	
@@ -170,6 +180,9 @@ function Stop (town, depot) {
 		},
 		title: function () {
 			return hasDepot ? town.name+', '+depot.name : town.name;
+		},
+		placeId: function () {
+			return hasDepot ? depot.id : town.id;
 		}
 	}
 }
