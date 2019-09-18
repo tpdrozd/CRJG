@@ -128,18 +128,26 @@ function routeCtrl($scope, depotApi, spatialApi) {
 	
 // obsługa edycji trasy
 	function addStop (town, depot) {
-		console.log('addStop');
 		var stop = new Stop(town, depot);
-		if ($scope.stops.length > 0) {
+		
+		if ($scope.stops.length == 0) {
+			stop.dist = 0;
+			stop.totalDist = 0;
+		}
+		else {
 			var prevStop = $scope.stops[$scope.stops.length - 1];
+			var totalDist = prevStop.totalDist;
 			spatialApi.distance(stop.placeId(), prevStop.placeId()).then(
 				function success(response) {
-					stop.distance = response.data;
+					stop.dist = response.data;
+					stop.totalDist = totalDist + stop.dist;
+					console.log('addStop '+stop.dist+' '+stop.totalDist);
 				},
 				function error(response) {
 					console.log('	error: ' + response.statusText);
 				});
 		}
+		
 		$scope.stops.push(stop);
 	}
 	
@@ -175,6 +183,8 @@ function Stop (town, depot) {
 		town: town,
 		hasDepot: hasDepot,
 		depot: hasDepot ? depot : undefined,
+		dist: 0,
+		totalDist: 0,
 		coord: function () {
 			return hasDepot ? depot.coord : town.coord;
 		},
@@ -183,6 +193,19 @@ function Stop (town, depot) {
 		},
 		placeId: function () {
 			return hasDepot ? depot.id : town.id;
+		},
+		distance: function () {
+			var d = (this.dist/1000).toFixed(1).replace('.', ',') + ' km';
+			//console.log('distance '+d);
+			return d;
+		},
+		totalDistance: function () {
+			var td = (this.totalDist/1000).toFixed(1).replace('.', ',') + ' km';
+			//console.log('totalDistance '+td);
+			return td;
+		},
+		hasDistance: function () {
+			return this.totalDist > 0;
 		}
 	}
 }
