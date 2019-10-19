@@ -182,7 +182,7 @@
 							</td>
 							<td>
 								<!-- <span class="add" title="Dodaj przystanek" ng-click="addDepotTo(stop)">+</span> -->
-								<span class="x" title="Usuń" ng-click="removeStop($index)">&#9587;</span>
+								<span class="x" title="Usuń" ng-click="removeStop(stop)">&#9587;</span>
 							</td>
 						</tr>
 					</tbody>
@@ -220,7 +220,7 @@
 					</marker>
 					
 					<!-- przystanki w wybranej miejscowości -->
-					<marker ng-repeat="depot in depots" icon="{{town.parentName.length > 0 ? 'pure.yellow' : 'pure.green'}}" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(depot)">
+					<marker ng-repeat="depot in depots" icon="{{town.parentName.length > 0 ? 'pure.yellow' : 'pure.green'}}" lat="{{depot.coord.lat}}" lng="{{depot.coord.lng}}" title="{{town.name}}, {{depot.name}}" dblclick-callback="addStop(town, depot)">
 						<info-window>
 							<div class="depot">
 								<span class="town">{{town.name}}</span> <br/>
@@ -252,7 +252,7 @@
 		 						<span class="parent" ng-show="stop.town.parentName.length > 0">{{stop.town.parentName}}</span> 
 		 						-->	<br/>
 								<span ng-show="stop.hasDepot" class="depot">{{stop.depot.name}}</span> <br ng-show="stop.hasDepot" />
-								<a ng-click="removeStop($index)" class="remove">Usuń</a>
+								<a ng-click="removeStop(stop)" class="remove">Usuń</a>
 							</div>
 						</info-window>
 					</marker>

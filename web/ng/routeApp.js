@@ -130,6 +130,7 @@ function routeCtrl($scope, depotApi, spatialApi) {
 	function addStop (town, depot) {
 		var stop = new Stop(town, depot);
 		
+		// obliczenie odległosci
 		if ($scope.stops.length == 0) {
 			stop.dist = 0;
 			stop.totalDist = 0;
@@ -141,22 +142,42 @@ function routeCtrl($scope, depotApi, spatialApi) {
 				function success(response) {
 					stop.dist = response.data;
 					stop.totalDist = totalDist + stop.dist;
-					console.log('addStop '+stop.dist+' '+stop.totalDist);
+					//console.log('addStop '+stop.dist+' '+stop.totalDist);
 				},
 				function error(response) {
 					console.log('	error: ' + response.statusText);
 				});
 		}
 		
+		// ukrycie markera miejscowosci/przystanu
+		if (stop.hasDepot) {
+			var indx = $scope.depots.indexOf(depot);
+			$scope.depots.splice(indx, 1);
+		}
+		else {
+			var indx = $scope.towns.indexOf(town);
+			$scope.towns.splice(indx, 1);
+		}
+		
 		$scope.stops.push(stop);
 	}
 	
-	function removeStop (index) {
-		console.log('removeStop ' + index);
-		delete $scope.stops[index];
-		$scope.stops = $scope.stops.filter(function (value) {
-			return value != undefined;
-		});
+	function removeStop (stop) {
+		//console.log('removeStop ' + index);
+		var indx = $scope.stops.indexOf(stop);
+		$scope.stops.splice(indx, 1);
+		
+		// pokazanie markera miejscowosci/przystanku
+		if (stop.hasDepot) {
+			if (stop.town.id == $scope.town.id) {
+				var depot = stop.depot;
+				$scope.depots.push(depot);
+			}
+		}
+		else {
+			var town = stop.town;
+			$scope.towns.push(town);
+		}
 	};
 	
 // obsługa zmiany kursora przy przeciąganiu elementu trasy
@@ -181,8 +202,8 @@ function Stop (town, depot) {
 	
 	return {
 		town: town,
-		hasDepot: hasDepot,
 		depot: hasDepot ? depot : undefined,
+		hasDepot: hasDepot,
 		dist: 0,
 		totalDist: 0,
 		coord: function () {
