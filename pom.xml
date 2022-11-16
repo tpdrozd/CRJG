@@ -35,7 +35,7 @@
 		<spring.version>5.0.3.RELEASE</spring.version>
 		<spring.data.version>5.0.3.RELEASE</spring.data.version>
 		<neo4j.ogm.version>3.1.0</neo4j.ogm.version>
-		<jackson.version>2.9.4</jackson.version>
+		<jackson.version>2.12.7.1</jackson.version>
 	</properties>
 	
 	<dependencies>
